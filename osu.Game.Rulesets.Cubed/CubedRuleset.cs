@@ -3,9 +3,11 @@ using osu.Framework.Input.Bindings;
 using osu.Game.Beatmaps;
 using osu.Game.Rulesets.Cubed.Beatmaps;
 using osu.Game.Rulesets.Cubed.Mods;
+using osu.Game.Rulesets.Cubed.Scoring;
 using osu.Game.Rulesets.Cubed.UI;
 using osu.Game.Rulesets.Difficulty;
 using osu.Game.Rulesets.Mods;
+using osu.Game.Rulesets.Scoring;
 using osu.Game.Rulesets.UI;
 using System;
 using System.Collections.Generic;
@@ -17,6 +19,8 @@ namespace osu.Game.Rulesets.Cubed {
         public override string PlayingVerb => "Tapping cubes";
 
         public override DrawableRuleset CreateDrawableRulesetWith(IBeatmap beatmap, IReadOnlyList<Mod> mods = null) => new DrawableCubedRuleset(this, beatmap, mods);
+
+        public override ScoreProcessor CreateScoreProcessor() => new CubedScoreProcessor(this);
 
         public override IBeatmapConverter CreateBeatmapConverter(IBeatmap beatmap) => new CubedBeatmapConverter(beatmap, this);
 
