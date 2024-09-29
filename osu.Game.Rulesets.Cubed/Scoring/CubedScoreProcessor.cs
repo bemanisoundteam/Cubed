@@ -4,7 +4,7 @@ namespace osu.Game.Rulesets.Cubed.Scoring {
     public class CubedScoreProcessor : ScoreProcessor {
         public CubedScoreProcessor(Ruleset ruleset) : base(ruleset) {}
 
-        protected override double DefaultComboPortion => 0;
-        protected override double DefaultAccuracyPortion => 1;
+        // TODO This function is just to make so it compiles again, score needs to be implemented better !!!!!!
+        protected override double ComputeTotalScore(double comboProgress, double accuracyProgress, double bonusPortion) => 1000000 * accuracyProgress;
     }
 }
