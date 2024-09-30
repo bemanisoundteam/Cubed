@@ -8,24 +8,24 @@ namespace osu.Game.Rulesets.Cubed {
     }
 
     public enum CubedAction {
-        [Description("01 - Row 1, Col 1")] X0Y0,
-        [Description("02 - Row 1, Col 2")] X1Y0,
-        [Description("03 - Row 1, Col 3")] X2Y0,
-        [Description("04 - Row 1, Col 4")] X3Y0,
+        [Description("01 - Row 1, Column 1")] X0Y0,
+        [Description("02 - Row 1, Column 2")] X1Y0,
+        [Description("03 - Row 1, Column 3")] X2Y0,
+        [Description("04 - Row 1, Column 4")] X3Y0,
 
-        [Description("05 - Row 2, Col 1")] X0Y1,
-        [Description("06 - Row 2, Col 2")] X1Y1,
-        [Description("07 - Row 2, Col 3")] X2Y1,
-        [Description("08 - Row 2, Col 4")] X3Y1,
+        [Description("05 - Row 2, Column 1")] X0Y1,
+        [Description("06 - Row 2, Column 2")] X1Y1,
+        [Description("07 - Row 2, Column 3")] X2Y1,
+        [Description("08 - Row 2, Column 4")] X3Y1,
 
-        [Description("09 - Row 3, Col 1")] X0Y2,
-        [Description("10 - Row 3, Col 2")] X1Y2,
-        [Description("11 - Row 3, Col 3")] X2Y2,
-        [Description("12 - Row 3, Col 4")] X3Y2,
+        [Description("09 - Row 3, Column 1")] X0Y2,
+        [Description("10 - Row 3, Column 2")] X1Y2,
+        [Description("11 - Row 3, Column 3")] X2Y2,
+        [Description("12 - Row 3, Column 4")] X3Y2,
 
-        [Description("13 - Row 4, Col 1")] X0Y3,
-        [Description("14 - Row 4, Col 2")] X1Y3,
-        [Description("15 - Row 4, Col 3")] X2Y3,
-        [Description("16 - Row 4, Col 4")] X3Y3
+        [Description("13 - Row 4, Column 1")] X0Y3,
+        [Description("14 - Row 4, Column 2")] X1Y3,
+        [Description("15 - Row 4, Column 3")] X2Y3,
+        [Description("16 - Row 4, Column 4")] X3Y3
     }
 }
