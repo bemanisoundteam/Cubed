@@ -4,7 +4,7 @@ using osu.Framework.Graphics.Textures;
 using osu.Framework.Platform;
 
 namespace osu.Game.Rulesets.Cubed {
-    public class ConciergeIcon : Sprite {
+    public partial class ConciergeIcon : Sprite {
         private readonly CubedRuleset ruleset;
 
         public ConciergeIcon(CubedRuleset ruleset) {
