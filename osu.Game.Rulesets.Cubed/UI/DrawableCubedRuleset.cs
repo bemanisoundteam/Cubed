@@ -18,6 +18,8 @@ namespace osu.Game.Rulesets.Cubed.UI {
 
         protected override Playfield CreatePlayfield() => new CubedPlayfield();
 
+        public override PlayfieldAdjustmentContainer CreatePlayfieldAdjustmentContainer() => new CubedPlayfieldAdjustmentContainer();
+
         protected override ReplayInputHandler CreateReplayInputHandler(Replay replay) => new CubedFramedReplayInputHandler(replay);
 
         public override DrawableHitObject<CubedHitObject> CreateDrawableRepresentation(CubedHitObject h) => new DrawableCubedHitObject(h);
