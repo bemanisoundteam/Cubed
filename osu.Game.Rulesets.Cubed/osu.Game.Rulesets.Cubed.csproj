@@ -7,9 +7,7 @@
     <RootNamespace>osu.Game.Rulesets.Cubed</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\**" />
-  </ItemGroup>
-  <ItemGroup>
+    <EmbeddedResource Include="Resources/**" />
     <PackageReference Include="ppy.osu.Game" Version="2024.911.0" />
   </ItemGroup>
 </Project>
