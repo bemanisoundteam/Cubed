@@ -5,6 +5,7 @@ using osu.Game.Rulesets.Objects.Types;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System;
 
 namespace osu.Game.Rulesets.Cubed.Beatmaps {
     public class CubedBeatmapConverter : BeatmapConverter<CubedHitObject> {
@@ -12,12 +13,14 @@ namespace osu.Game.Rulesets.Cubed.Beatmaps {
 
         public override bool CanConvert() => Beatmap.HitObjects.Any(o => o is IHasPosition);
 
-        protected override IEnumerable<CubedHitObject> ConvertHitObject(HitObject original, IBeatmap beatmap, CancellationToken cancellationToken) {
-            if (original is not IHasPosition) yield break;
+        protected override IEnumerable<CubedHitObject> ConvertHitObject(HitObject hitObject, IBeatmap beatmap, CancellationToken cancellationToken) {
+            if (hitObject is not IHasPosition objPos) yield break;
 
-            yield return new CubedHitObject {
-                Samples = original.Samples,
-                StartTime = original.StartTime,
+            yield return new Cube {
+                Samples = hitObject.Samples,
+                StartTime = hitObject.StartTime,
+                Column = Math.Min((int) (objPos.X / 128), 3),
+                Row = Math.Min((int) (objPos.Y / 96), 3)
             };
         }
     }
