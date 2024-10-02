@@ -22,7 +22,7 @@ namespace osu.Game.Rulesets.Cubed.UI {
 
         protected override ReplayInputHandler CreateReplayInputHandler(Replay replay) => new CubedFramedReplayInputHandler(replay);
 
-        public override DrawableHitObject<CubedHitObject> CreateDrawableRepresentation(CubedHitObject h) => new DrawableCubedHitObject(h);
+        public override DrawableHitObject<CubedHitObject> CreateDrawableRepresentation(CubedHitObject h) => null;
 
         protected override PassThroughInputManager CreateInputManager() => new CubedInputManager(Ruleset?.RulesetInfo);
     }
