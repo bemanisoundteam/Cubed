@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 namespace osu.Game.Rulesets.Cubed {
     public partial class CubedRuleset : Ruleset {
-        public override string Description => "Concierge !";
+        public override string Description => "Cubed";
         public override string ShortName => "cubedruleset";
         public override string PlayingVerb => "Tapping cubes";
 
