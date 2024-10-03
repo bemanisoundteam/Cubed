@@ -7,6 +7,8 @@ namespace osu.Game.Rulesets.Cubed.Objects {
         public int Column { get; set; }
         public int Row { get; set; }
 
+        public CubedAction Action => (CubedAction) (Column + Row * 4);
+
         protected override HitWindows CreateHitWindows() => new CubedHitWindows();
     }
 }
