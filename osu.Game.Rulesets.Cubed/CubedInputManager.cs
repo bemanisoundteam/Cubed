@@ -1,8 +1,10 @@
-﻿using osu.Framework.Input.Bindings;
+﻿using osu.Framework.Allocation;
+using osu.Framework.Input.Bindings;
 using osu.Game.Rulesets.UI;
 using System.ComponentModel;
 
 namespace osu.Game.Rulesets.Cubed {
+    [Cached]  // Used for touch/mouse input
     public partial class CubedInputManager : RulesetInputManager<CubedAction> {
         public CubedInputManager(RulesetInfo ruleset) : base(ruleset, 0, SimultaneousBindingMode.Unique) {}
     }

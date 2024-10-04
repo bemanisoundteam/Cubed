@@ -17,9 +17,17 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
         }
 
         protected override void CheckForResult(bool userTriggered, double timeOffset) {
-            if (timeOffset >= 0)
-                // todo: implement judgement logic
-                ApplyResult(HitResult.Perfect);
+            if (!userTriggered) {
+                if (!HitObject.HitWindows.CanBeHit(timeOffset))
+                    ApplyResult(HitResult.Miss);
+                return;
+            }
+
+            HitResult result = HitObject.HitWindows.ResultFor(timeOffset);
+            if (result == HitResult.None)
+                return;
+
+            ApplyResult(result);
         }
 
         protected override void UpdateHitStateTransforms(ArmedState state) {
