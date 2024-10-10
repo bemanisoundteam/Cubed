@@ -13,27 +13,24 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
         [BackgroundDependencyLoader]
         private void load() {
             Alpha = 0;
-            RelativePositionAxes = Axes.Both;
+            Anchor = Anchor.Centre;
+            Origin = Anchor.Centre;
             RelativeSizeAxes = Axes.Both;
-            Size = new Vector2(0.25f);
+            Scale = Vector2.Zero;
 
             AddInternal(inputHandlerPiece = new CubedInputHandlerPiece() {
-                Scale = Vector2.Zero,
                 Hit = () => UpdateResult(true)
             });
         }
 
         protected override void OnApply() {
             base.OnApply();
-            X = HitObject.Column / 4f;
-            Y = HitObject.Row / 4f;
             inputHandlerPiece.Action = HitObject.Action;
         }
 
         protected override void UpdateInitialTransforms() {
             this.FadeInFromZero(250, Easing.OutQuint);
-            foreach (Drawable drawable in this.InternalChildren)
-                drawable.ScaleTo(0.9f, 500);
+            this.ScaleTo(1, 500);
         }
     }
 }
