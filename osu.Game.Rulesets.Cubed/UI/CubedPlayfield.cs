@@ -21,7 +21,9 @@ namespace osu.Game.Rulesets.Cubed.UI {
                     AddNested(Cells[i][j] = new CubedCell() {
                         Scale = new Vector2(0.9f),
                         Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre
+                        Origin = Anchor.Centre,
+
+                        Action = (CubedAction) (i * 4 + j)
                     });
             }
 
