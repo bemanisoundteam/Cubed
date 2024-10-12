@@ -19,9 +19,9 @@ namespace osu.Game.Rulesets.Cubed.UI {
         }
 
         private bool Press() {
-            var _ = (HitObjectContainer.AliveObjects.First(obj => !obj.Judged) as DrawableCubedHitObject)!;
+            var _ = (HitObjectContainer.AliveObjects.FirstOrDefault(obj => !obj.Judged) as DrawableCubedHitObject)!;
             heldObject = _;
-            return _.OnHit();
+            return _?.OnHit() ?? false;
         }
 
         private void Release() {
