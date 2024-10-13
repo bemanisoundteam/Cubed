@@ -4,7 +4,6 @@ using osu.Game.Beatmaps;
 using osu.Game.Input.Handlers;
 using osu.Game.Replays;
 using osu.Game.Rulesets.Cubed.Objects;
-using osu.Game.Rulesets.Cubed.Objects.Drawables;
 using osu.Game.Rulesets.Cubed.Replays;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Objects.Drawables;
