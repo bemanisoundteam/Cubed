@@ -42,5 +42,21 @@ namespace osu.Game.Rulesets.Cubed.UI {
             if (e.Action == Action && !(Clock as IGameplayClock)!.IsRewinding)
                 Release();
         }
+
+        protected override bool OnMouseDown(MouseDownEvent e) =>
+            !(Clock as IGameplayClock)!.IsRewinding && Press();
+
+        protected override void OnMouseUp(MouseUpEvent e) {
+            if (!(Clock as IGameplayClock)!.IsRewinding)
+                Release();
+        }
+
+        protected override bool OnTouchDown(TouchDownEvent e) =>
+            !(Clock as IGameplayClock)!.IsRewinding && Press();
+
+        protected override void OnTouchUp(TouchUpEvent e) {
+            if (!(Clock as IGameplayClock)!.IsRewinding)
+                Release();
+        }
     }
 }
