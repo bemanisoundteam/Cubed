@@ -11,6 +11,7 @@ using osuTK;
 namespace osu.Game.Rulesets.Cubed.UI {
     [Cached]
     public partial class CubedPlayfield : Playfield {
+        public override bool UpdateSubTreeMasking() => false;
         private readonly CubedCell[][] Cells = new CubedCell[4][];
 
         [BackgroundDependencyLoader]
