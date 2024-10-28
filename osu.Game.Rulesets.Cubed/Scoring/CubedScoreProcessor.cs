@@ -1,13 +1,15 @@
-﻿using osu.Framework.Bindables;
+﻿using osu.Framework.Allocation;
+using osu.Framework.Bindables;
 using osu.Game.Rulesets.Judgements;
 using osu.Game.Rulesets.Scoring;
+using osu.Game.Screens.Play;
 using System.Reflection;
 
 namespace osu.Game.Rulesets.Cubed.Scoring {
     public partial class CubedScoreProcessor : ScoreProcessor {
         private readonly BindableDouble bonus = new();
         private double bonusDivisor;
-        private bool applyBonus => JudgedHits == MaxHits;
+        private bool applyBonus;
 
         public CubedScoreProcessor(Ruleset ruleset) : base(ruleset) {
             bonus.BindValueChanged((e) =>
@@ -15,6 +17,9 @@ namespace osu.Game.Rulesets.Cubed.Scoring {
             bonus.BindValueChanged((e) =>
                 bonus.Value = System.Math.Clamp(e.NewValue, 0, 1024));
         }
+
+        [Resolved]
+        private Player Player { get; set; }
 
         protected override double ComputeTotalScore(double comboProgress, double accuracyProgress, double bonusPortion) =>
             900000 * Accuracy.Value * accuracyProgress +
@@ -37,6 +42,9 @@ namespace osu.Game.Rulesets.Cubed.Scoring {
 
         protected override void ApplyScoreChange(JudgementResult result) {
             bonus.Value += GetBonusScoreChange(result);
+
+            if (JudgedHits != 0 && JudgedHits == MaxHits)
+                Scheduler.AddDelayed(ApplyBonusAndMoveOn, 2000);
         }
 
         protected override void RemoveScoreChange(JudgementResult result) =>
@@ -52,5 +60,18 @@ namespace osu.Game.Rulesets.Cubed.Scoring {
             bonusDivisor = System.Math.Min(MaxHits / 1024f, 1);
             bonus.Value = 0;
         }
+
+        private void ApplyBonusAndMoveOn() {
+            // This might happen if the user rewinds
+            if (JudgedHits != MaxHits)
+                return;
+
+            applyBonus = true;
+            typeof(ScoreProcessor).GetMethod("updateScore", BindingFlags.Instance | BindingFlags.NonPublic)!.Invoke(this, null);
+            PopulateScore(Player.Score.ScoreInfo);
+            base.Update();
+        }
+
+        protected override void Update() {}
     }
 }
