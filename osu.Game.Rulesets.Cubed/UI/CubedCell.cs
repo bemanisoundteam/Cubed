@@ -14,6 +14,10 @@ namespace osu.Game.Rulesets.Cubed.UI {
         private DrawableCubedHitObject heldObject;
         private CellGlow glow;
 
+        [Resolved]
+        private CubedInputManager InputManager { get; set; }
+        private KeyBindingContainer<CubedAction> KeyBindingContainer => InputManager.KeyBindingContainer;
+
         [BackgroundDependencyLoader]
         private void load() {
             AddInternal(glow = new CellGlow() { Alpha = 0 });
@@ -43,20 +47,20 @@ namespace osu.Game.Rulesets.Cubed.UI {
                 Release();
         }
 
-        protected override bool OnMouseDown(MouseDownEvent e) =>
-            !(Clock as IGameplayClock)!.IsRewinding && Press();
-
-        protected override void OnMouseUp(MouseUpEvent e) {
-            if (!(Clock as IGameplayClock)!.IsRewinding)
-                Release();
+        protected override bool OnMouseDown(MouseDownEvent e) {
+            KeyBindingContainer.TriggerPressed(Action);
+            return true;
         }
 
-        protected override bool OnTouchDown(TouchDownEvent e) =>
-            !(Clock as IGameplayClock)!.IsRewinding && Press();
+        protected override void OnMouseUp(MouseUpEvent e) =>
+            KeyBindingContainer.TriggerReleased(Action);
 
-        protected override void OnTouchUp(TouchUpEvent e) {
-            if (!(Clock as IGameplayClock)!.IsRewinding)
-                Release();
+        protected override bool OnTouchDown(TouchDownEvent e) {
+            KeyBindingContainer.TriggerPressed(Action);
+            return true;
         }
+
+        protected override void OnTouchUp(TouchUpEvent e) =>
+            KeyBindingContainer.TriggerReleased(Action);
     }
 }
