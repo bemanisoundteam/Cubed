@@ -22,6 +22,8 @@ namespace osu.Game.Rulesets.Cubed {
 
         public override ScoreProcessor CreateScoreProcessor() => new CubedScoreProcessor(this);
 
+        public override HealthProcessor CreateHealthProcessor(double drainStartTime) => new CubedHealthProcessor();
+
         public override IBeatmapConverter CreateBeatmapConverter(IBeatmap beatmap) => new CubedBeatmapConverter(beatmap, this);
 
         public override DifficultyCalculator CreateDifficultyCalculator(IWorkingBeatmap beatmap) => new CubedDifficultyCalculator(RulesetInfo, beatmap);
