@@ -4,9 +4,8 @@ using osu.Game.Rulesets.Objects.Drawables;
 using osuTK;
 
 namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
-    public abstract partial class DrawableCubedHitObject : DrawableHitObject<CubedHitObject> {
-
-        public DrawableCubedHitObject(CubedHitObject hitObject) : base(hitObject) { }
+    public abstract partial class DrawableCubedHitObject(CubedHitObject hitObject) : DrawableHitObject<CubedHitObject>(hitObject) {
+        protected override double InitialLifetimeOffset => HitObject.TimePreempt;
 
         [BackgroundDependencyLoader]
         private void load() {
