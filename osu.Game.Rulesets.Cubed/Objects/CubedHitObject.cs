@@ -12,6 +12,6 @@ namespace osu.Game.Rulesets.Cubed.Objects {
 
         protected override HitWindows CreateHitWindows() => new CubedHitWindows();
 
-        public double TimePreempt => 1000;
+        public double TimePreempt => 500;
     }
 }
