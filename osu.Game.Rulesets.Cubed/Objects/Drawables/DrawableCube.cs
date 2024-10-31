@@ -10,9 +10,11 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
         public DrawableCube() : this(null) { } // Required for pooling
         public DrawableCube(Cube cube) : base(cube) { }
 
+        public CubePiece Piece { get; private set; }
+
         [BackgroundDependencyLoader]
         private void load() {
-            AddInternal(new CubePiece());
+            AddInternal(Piece = new CubePiece());
         }
 
         protected override void CheckForResult(bool userTriggered, double timeOffset) {
@@ -29,11 +31,19 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
             ApplyResult(result);
         }
 
+        protected override void UpdateInitialTransforms() {
+            base.UpdateInitialTransforms();
+            Piece.Approach.ScaleTo(1, InitialLifetimeOffset).Then().FadeOut();
+        }
+
         protected override void UpdateHitStateTransforms(ArmedState state) {
             const double duration = 250;
 
             switch (state) {
                 case ArmedState.Hit:
+                    // Piece.Approach.Alpha = 0;  this is disabled because I fade the entire object and not it's individual parts, causing approaches to never appear
+                    // Instead I scale it down to zero (has the same effect in terms of making it invisible and making IsPresent false)
+                    Piece.Approach.ScaleTo(1);
                     this.FadeOut(duration).Expire();
                     this.ScaleTo(1.5f, duration, Easing.OutQuint);
                     break;
