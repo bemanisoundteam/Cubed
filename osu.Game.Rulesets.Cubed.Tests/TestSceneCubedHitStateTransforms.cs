@@ -34,20 +34,18 @@ namespace osu.Game.Rulesets.Cubed.Tests {
         public void TestPerfect() {
             AddStep("Schedule perfect hit", () => Scheduler.AddDelayed(HitCube, drawableCube.HitObject.StartTime - Time.Current));
             AddUntilStep("Object is Judged", () => drawableCube.Judged);
-            AddAssert("Approach is invisible", () => !drawableCube.Piece.Approach.IsPresent);
-            AddAssert("Marker is not (invisible)", () => drawableCube.Piece.Marker.IsPresent);
+            AddAssert("Approach is invisible", () => !drawableCube.Approach.IsPresent);
             AddAssert("Result is Perfect", () => drawableCube.Result.Type == HitResult.Perfect);
             AddUntilStep("Object Expired", (() => drawableCube.LifetimeEnd < Time.Current));
             AddStep("Finish transforms", () => drawableCube.FinishTransforms());
-            AddAssert("Object's scale is 1.5", () => drawableCube.Scale.Equals(new Vector2(1.5f)));
+            AddAssert("Marker's scale is 1.5", () => drawableCube.Marker.Scale.Equals(new Vector2(1.5f)));
             AddAssert("Object is invisible", () => !drawableCube.IsPresent);
         }
 
         [Test]
         public void TestMiss() {
             AddUntilStep("Object is Judged", () => drawableCube.Judged);
-            AddAssert("Approach is invisible", () => !drawableCube.Piece.Approach.IsPresent);
-            AddAssert("Marker is not (invisible)", () => drawableCube.Piece.Marker.IsPresent);
+            AddAssert("Approach is invisible", () => !drawableCube.Approach.IsPresent);
             AddAssert("Result is Miss", () => drawableCube.Result.Type == HitResult.Miss);
             AddAssert("Object is Red", () => drawableCube.Colour == osuTK.Graphics.Color4.Red);
             AddUntilStep("Object Expired", () => drawableCube.LifetimeEnd < Time.Current);
