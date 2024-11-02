@@ -12,8 +12,7 @@ namespace osu.Game.Rulesets.Cubed {
         }
 
         [BackgroundDependencyLoader]
-        private void load(GameHost host) {
-            Texture = new TextureStore(host.Renderer, new TextureLoaderStore(ruleset.CreateResourceStore())).Get("Cubed-logo");
-        }
+        private void load(GameHost host) =>
+            Texture = new TextureStore(host.Renderer, new TextureLoaderStore(ruleset.CreateResourceStore())).Get("Textures/Cubed-logo");
     }
 }
