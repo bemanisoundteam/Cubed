@@ -14,12 +14,11 @@ namespace osu.Game.Rulesets.Cubed.UI {
         private DrawableCubedHitObject heldObject;
         private CellGlow glow;
 
-        [Resolved]
-        private CubedInputManager InputManager { get; set; }
-        private KeyBindingContainer<CubedAction> KeyBindingContainer => InputManager.KeyBindingContainer;
+        private KeyBindingContainer<CubedAction> KeyBindingContainer;
 
         [BackgroundDependencyLoader]
-        private void load() {
+        private void load(CubedInputManager manager) {
+            KeyBindingContainer = manager.KeyBindingContainer;
             AddInternal(glow = new CellGlow() { Alpha = 0 });
 
             // TODO put numbers that make sense for std (~6*) converts here
