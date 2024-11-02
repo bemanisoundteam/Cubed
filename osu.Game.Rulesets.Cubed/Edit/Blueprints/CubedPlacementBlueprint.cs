@@ -1,0 +1,37 @@
+﻿using osu.Framework.Input.Events;
+using osu.Game.Rulesets.Cubed.Objects;
+using osu.Game.Rulesets.Cubed.UI;
+using osu.Game.Rulesets.Edit;
+using osuTK.Input;
+
+namespace osu.Game.Rulesets.Cubed.Edit.Blueprints {
+    public partial class CubedPlacementBlueprint(CubedHitObject hitObject) : HitObjectPlacementBlueprint(hitObject) {
+        protected new CubedHitObject HitObject => (CubedHitObject) base.HitObject;
+
+        private CubedCell cell;
+        protected CubedCell Cell {
+            get => cell;
+            set {
+                if (value == cell) return;
+
+                cell = value;
+                HitObject.Action = cell.Action;
+            }
+        }
+
+        protected override bool OnMouseDown(MouseDownEvent e) {
+            if (e.Button != MouseButton.Left || Cell == null)
+                return false;
+
+            BeginPlacement(true);
+            return true;
+        }
+
+        public override void UpdateTimeAndPosition(SnapResult result) {
+            base.UpdateTimeAndPosition(result);
+
+            if (result.Playfield is CubedCell targetCell && PlacementActive == PlacementState.Waiting)
+                Cell = targetCell;
+        }
+    }
+}

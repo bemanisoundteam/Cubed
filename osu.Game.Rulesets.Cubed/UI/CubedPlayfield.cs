@@ -7,6 +7,7 @@ using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.UI;
 using osuTK;
+using System.Linq;
 
 namespace osu.Game.Rulesets.Cubed.UI {
     [Cached]
@@ -32,6 +33,13 @@ namespace osu.Game.Rulesets.Cubed.UI {
                 RelativeSizeAxes = Axes.Both,
                 Content = Cells
             });
+        }
+
+        public CubedCell GetCell(Vector2 pos) {
+            foreach (CubedCell cell in Cells.SelectMany(c => c))
+                if (cell.ReceivePositionalInputAt(pos))
+                    return cell;
+            return null;
         }
 
         public override void Add(HitObject haj) {
