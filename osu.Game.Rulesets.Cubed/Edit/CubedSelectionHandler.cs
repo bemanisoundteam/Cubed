@@ -1,4 +1,5 @@
 ﻿using osu.Framework.Allocation;
+using osu.Framework.Graphics;
 using osu.Game.Rulesets.Cubed.Objects;
 using osu.Game.Rulesets.Cubed.UI;
 using osu.Game.Rulesets.Edit;
@@ -38,6 +39,45 @@ namespace osu.Game.Rulesets.Cubed.Edit {
                 hitObject.Column += deltaCol;
                 hitObject.Row += deltaRow;
                 playfield.Add(hitObject);
+            }
+
+            return true;
+        }
+
+        public override bool HandleFlip(Direction direction, bool flipOverOrigin) {
+            if (SelectedItems.Count == 0)
+                return false;
+
+            switch (direction) {
+                case Direction.Horizontal:
+                    if (SelectedItems.Select(obj => ((CubedHitObject) obj).Row).Distinct().Count() < 2)
+                        return false;
+
+                    int minCol = flipOverOrigin ? 0 : SelectedItems.Min(obj => ((CubedHitObject) obj).Column);
+                    int maxCol = flipOverOrigin ? 3 : SelectedItems.Max(obj => ((CubedHitObject) obj).Column);
+
+                    foreach (CubedHitObject hitObject in SelectedItems) {
+                        playfield.Remove(hitObject);
+                        hitObject.Column = minCol + (maxCol - hitObject.Column);
+                        playfield.Add(hitObject);
+                    }
+
+                    break;
+
+                case Direction.Vertical:
+                    if (SelectedItems.Select(obj => ((CubedHitObject) obj).Column).Distinct().Count() < 2)
+                        return false;
+
+                    int minRow = flipOverOrigin ? 0 : SelectedItems.Min(obj => ((CubedHitObject) obj).Row);
+                    int maxRow = flipOverOrigin ? 3 : SelectedItems.Max(obj => ((CubedHitObject) obj).Row);
+
+                    foreach (CubedHitObject hitObject in SelectedItems) {
+                        playfield.Remove(hitObject);
+                        hitObject.Row = minRow + (maxRow - hitObject.Row);
+                        playfield.Add(hitObject);
+                    }
+
+                    break;
             }
 
             return true;
