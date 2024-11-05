@@ -4,6 +4,7 @@ using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Game.Rulesets.Cubed.Objects;
 using osu.Game.Rulesets.Cubed.Objects.Drawables;
+using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.UI;
 using osu.Game.Screens.Play;
 using System.Linq;
@@ -24,6 +25,8 @@ namespace osu.Game.Rulesets.Cubed.UI {
             // TODO put numbers that make sense for std (~6*) converts here
             RegisterPool<Cube, DrawableCube>(20, 100);
         }
+
+        protected override HitObjectLifetimeEntry CreateLifetimeEntry(HitObject hitObject) => new CubedHitObjectLifetimeEntry((CubedHitObject) hitObject);
 
         private bool Press() {
             glow.FadeIn();
