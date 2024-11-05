@@ -5,9 +5,7 @@ using osu.Game.Rulesets.Edit;
 using osuTK.Input;
 
 namespace osu.Game.Rulesets.Cubed.Edit.Blueprints {
-    public partial class CubedPlacementBlueprint(CubedHitObject hitObject) : HitObjectPlacementBlueprint(hitObject) {
-        protected new CubedHitObject HitObject => (CubedHitObject) base.HitObject;
-
+    public abstract partial class CubedPlacementBlueprint(CubedHitObject hitObject) : HitObjectPlacementBlueprint(hitObject) {
         private CubedCell cell;
         protected CubedCell Cell {
             get => cell;
@@ -15,7 +13,7 @@ namespace osu.Game.Rulesets.Cubed.Edit.Blueprints {
                 if (value == cell) return;
 
                 cell = value;
-                HitObject.Action = cell.Action;
+                ((CubedHitObject) HitObject).Action = cell.Action;
             }
         }
 
