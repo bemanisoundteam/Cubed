@@ -5,6 +5,7 @@ using osu.Game.Rulesets.Cubed.UI;
 using osu.Game.Rulesets.Edit;
 using osu.Game.Rulesets.Objects;
 using osu.Game.Screens.Edit.Compose.Components;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace osu.Game.Rulesets.Cubed.Edit {
@@ -14,6 +15,14 @@ namespace osu.Game.Rulesets.Cubed.Edit {
         [BackgroundDependencyLoader]
         private void load(HitObjectComposer composer) =>
             playfield = (CubedPlayfield) composer.Playfield;
+
+        protected override void OnSelectionChanged() {
+            SelectionBox.CanFlipX = canFlipX(SelectedItems);
+            SelectionBox.CanFlipY = canFlipY(SelectedItems);
+        }
+
+        private static bool canFlipX(IReadOnlyList<HitObject> selected) => selected.Select(obj => ((CubedHitObject) obj).Column).Distinct().Count() > 1;
+        private static bool canFlipY(IReadOnlyList<HitObject> selected) => selected.Select(obj => ((CubedHitObject) obj).Row).Distinct().Count() > 1;
 
         public override bool HandleMovement(MoveSelectionEvent<HitObject> moveEvent) {
             CubedCell cell = playfield.GetCell(moveEvent.Blueprint.ScreenSpaceSelectionPoint + moveEvent.ScreenSpaceDelta);
@@ -50,7 +59,7 @@ namespace osu.Game.Rulesets.Cubed.Edit {
 
             switch (direction) {
                 case Direction.Horizontal:
-                    if (SelectedItems.Select(obj => ((CubedHitObject) obj).Row).Distinct().Count() < 2)
+                    if (canFlipX(SelectedItems) == false)
                         return false;
 
                     int minCol = flipOverOrigin ? 0 : SelectedItems.Min(obj => ((CubedHitObject) obj).Column);
@@ -65,7 +74,7 @@ namespace osu.Game.Rulesets.Cubed.Edit {
                     break;
 
                 case Direction.Vertical:
-                    if (SelectedItems.Select(obj => ((CubedHitObject) obj).Column).Distinct().Count() < 2)
+                    if (canFlipY(SelectedItems) == false)
                         return false;
 
                     int minRow = flipOverOrigin ? 0 : SelectedItems.Min(obj => ((CubedHitObject) obj).Row);
