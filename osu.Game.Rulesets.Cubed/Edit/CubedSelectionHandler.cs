@@ -4,6 +4,7 @@ using osu.Game.Rulesets.Cubed.UI;
 using osu.Game.Rulesets.Edit;
 using osu.Game.Rulesets.Objects;
 using osu.Game.Screens.Edit.Compose.Components;
+using System.Linq;
 
 namespace osu.Game.Rulesets.Cubed.Edit {
     public partial class CubedSelectionHandler : EditorSelectionHandler {
@@ -23,24 +24,12 @@ namespace osu.Game.Rulesets.Cubed.Edit {
             if (deltaCol == 0 && deltaRow == 0)
                 return false;
 
-            int minCol = int.MaxValue;
-            int minRow = int.MaxValue;
-            int maxCol = int.MinValue;
-            int maxRow = int.MinValue;
-
-            foreach (CubedHitObject hitObject in SelectedItems) {
-                if (hitObject.Column < minCol)
-                    minCol = hitObject.Column;
-                if (hitObject.Column > maxCol)
-                    maxCol = hitObject.Column;
-                if (hitObject.Row < minRow)
-                    minRow = hitObject.Row;
-                if (hitObject.Row > maxRow)
-                    maxRow = hitObject.Row;
-            }
-
-            deltaCol = System.Math.Clamp(deltaCol, -minCol, 3 - maxCol);
-            deltaRow = System.Math.Clamp(deltaRow, -minRow, 3 - maxRow);
+            deltaCol = System.Math.Clamp(deltaCol,
+                -SelectedItems.Min(obj => ((CubedHitObject) obj).Column),
+                3 - SelectedItems.Max(obj => ((CubedHitObject) obj).Column));
+            deltaRow = System.Math.Clamp(deltaRow,
+                -SelectedItems.Min(obj => ((CubedHitObject) obj).Row),
+                3 - SelectedItems.Max(obj => ((CubedHitObject) obj).Row));
             if (deltaCol == 0 && deltaRow == 0)
                 return false;
 
