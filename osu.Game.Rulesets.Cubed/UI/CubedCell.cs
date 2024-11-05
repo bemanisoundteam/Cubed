@@ -12,6 +12,9 @@ using System.Linq;
 namespace osu.Game.Rulesets.Cubed.UI {
     public partial class CubedCell : Playfield, IKeyBindingHandler<CubedAction> {
         public required CubedAction Action;
+        public int Column => (int) Action % 4;
+        public int Row => (int) Action / 4;
+
         private DrawableCubedHitObject heldObject;
         private CellGlow glow;
 

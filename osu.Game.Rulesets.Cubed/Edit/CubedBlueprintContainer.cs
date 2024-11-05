@@ -10,5 +10,7 @@ namespace osu.Game.Rulesets.Cubed.Edit {
             Cube cube => new CubeSelectionBlueprint(cube),
             _ => base.CreateHitObjectBlueprintFor(hitObject)
         };
+
+        protected override SelectionHandler<HitObject> CreateSelectionHandler() => new CubedSelectionHandler();
     }
 }
