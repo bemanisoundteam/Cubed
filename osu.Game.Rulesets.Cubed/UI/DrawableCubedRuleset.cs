@@ -1,5 +1,4 @@
-﻿using osu.Framework.Allocation;
-using osu.Framework.Input;
+﻿using osu.Framework.Input;
 using osu.Game.Beatmaps;
 using osu.Game.Input.Handlers;
 using osu.Game.Replays;
@@ -12,7 +11,6 @@ using osu.Game.Scoring;
 using System.Collections.Generic;
 
 namespace osu.Game.Rulesets.Cubed.UI {
-    [Cached]
     public partial class DrawableCubedRuleset : DrawableRuleset<CubedHitObject> {
         public DrawableCubedRuleset(CubedRuleset ruleset, IBeatmap beatmap, IReadOnlyList<Mod> mods = null) : base(ruleset, beatmap, mods) {}
 
