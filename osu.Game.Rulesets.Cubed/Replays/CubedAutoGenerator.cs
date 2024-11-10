@@ -29,7 +29,7 @@ namespace osu.Game.Rulesets.Cubed.Replays {
 
                 foreach (Action action in actionGroup) {
                     if (action.Pressed) {
-                        if (releasedThisFrame[(int) action.CellAction])
+                        if (releasedThisFrame[(int) action.CellAction] || actions.Remove(action.CellAction))
                             Frames.Add(new CubedReplayFrame(action.Time, actions.ToArray()));
                         actions.Add(action.CellAction);
                         pressedThisFrame[(int) action.CellAction] = true;
