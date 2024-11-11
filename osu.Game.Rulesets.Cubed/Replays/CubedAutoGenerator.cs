@@ -27,17 +27,28 @@ namespace osu.Game.Rulesets.Cubed.Replays {
                 // In case this causes problems, blame and revert the commits implementing this
                 bool[] pressedThisFrame = new bool[16];
                 bool[] releasedThisFrame = new bool[16];
+                uint[] releasesToIgnore = new uint[16];
 
                 foreach (Action action in actionGroup) {
                     if (action.Pressed) {
-                        if (releasedThisFrame[(int) action.CellAction] || actions.Remove(action.CellAction))
+                        if (actions.Remove(action.CellAction)) {
+                            releasedThisFrame[(int) action.CellAction] = true;
+                            releasesToIgnore[(int) action.CellAction]++;
+                        }
+
                         // Emmit an intermediary frame to avoid cancelling out the release
+                        if (releasedThisFrame[(int) action.CellAction])
                             Frames.Add(new CubedReplayFrame(action.Time, actions.ToArray()));
 
                         actions.Add(action.CellAction);
                         pressedThisFrame[(int) action.CellAction] = true;
                     }
                     else {
+                        if (releasesToIgnore[(int) action.CellAction] > 0) {
+                            releasesToIgnore[(int) action.CellAction]--;
+                            break;
+                        }
+
                         // Emmit an intermediary frame to avoid cancelling out the press
                         if (pressedThisFrame[(int) action.CellAction])
                             Frames.Add(new CubedReplayFrame(action.Time, actions.ToArray()));
