@@ -14,34 +14,39 @@ namespace osu.Game.Rulesets.Cubed.Replays {
                 // Because a release might be scheduled after other presses (on different cubes),
                 // and release events are emitted alongside their associated press but not within the same time group,
                 // a new time group is created immediately after the press's time group during the grouping process.
-                // This new group MIGHT (generally doesn't on normal maps) belong to later in the chronological ordering
+                // This new group MIGHT (generally doesn't in most cases) belong to later in the chronological ordering
                 // which would cause frames to be generated out of order if left unsorted.
                 // The game doesn't handle this case well, causing weird behavior that's hard to debug.
-                .OrderBy(g => g.First().Time);
+                .OrderBy(g => g.Key);
             List<CubedAction> actions = [];
 
-            foreach (var actionGroup in groupedActions) {
-                // These two arrays are meant to handle stupid cases like
-                // A chart featuring two notes on the same cell at the same time
-                // In case this is a source of problems, blame and revert these
+            foreach (IGrouping<double, Action> actionGroup in groupedActions) {
+                // These two arrays are meant to handle actions cancelling out previous ones
+                // Like two notes on the same cell at the same time
+                // Or when a press is right on a release's frame
+                // In case this causes problems, blame and revert the commits implementing this
                 bool[] pressedThisFrame = new bool[16];
                 bool[] releasedThisFrame = new bool[16];
 
                 foreach (Action action in actionGroup) {
                     if (action.Pressed) {
                         if (releasedThisFrame[(int) action.CellAction] || actions.Remove(action.CellAction))
+                        // Emmit an intermediary frame to avoid cancelling out the release
                             Frames.Add(new CubedReplayFrame(action.Time, actions.ToArray()));
+
                         actions.Add(action.CellAction);
                         pressedThisFrame[(int) action.CellAction] = true;
                     }
                     else {
+                        // Emmit an intermediary frame to avoid cancelling out the press
                         if (pressedThisFrame[(int) action.CellAction])
                             Frames.Add(new CubedReplayFrame(action.Time, actions.ToArray()));
+
                         actions.Remove(action.CellAction);
                         releasedThisFrame[(int) action.CellAction] = true;
                     }
                 }
-                Frames.Add(new CubedReplayFrame(actionGroup.First().Time, actions.ToArray()));
+                Frames.Add(new CubedReplayFrame(actionGroup.Key, actions.ToArray()));
             }
         }
 
