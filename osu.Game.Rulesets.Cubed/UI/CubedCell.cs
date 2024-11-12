@@ -45,12 +45,14 @@ namespace osu.Game.Rulesets.Cubed.UI {
         }
 
         public bool OnPressed(KeyBindingPressEvent<CubedAction> e) =>
-            (e.Action == Action && !(Clock as IGameplayClock)!.IsRewinding) && Press();
+            (e.Action == Action && IsNotRewinding) && Press();
 
         public void OnReleased(KeyBindingReleaseEvent<CubedAction> e) {
-            if (e.Action == Action && !(Clock as IGameplayClock)!.IsRewinding)
+            if (e.Action == Action && IsNotRewinding)
                 Release();
         }
+
+        private bool IsNotRewinding => Clock is not IGameplayClock clock || !clock.IsRewinding;
 
         protected override bool OnMouseDown(MouseDownEvent e) {
             KeyBindingContainer.TriggerPressed(Action);
