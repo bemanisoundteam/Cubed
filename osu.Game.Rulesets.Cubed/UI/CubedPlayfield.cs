@@ -3,6 +3,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Game.Rulesets.Cubed.Objects;
 using osu.Game.Rulesets.Cubed.Objects.Drawables;
+using osu.Game.Rulesets.Cubed.UI.Emotes;
 using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.UI;
@@ -13,9 +14,12 @@ namespace osu.Game.Rulesets.Cubed.UI {
     public partial class CubedPlayfield : Playfield {
         public override bool UpdateSubTreeMasking() => false;
         private readonly CubedCell[][] Cells = new CubedCell[4][];
+        private CubedEmotesContainer emotesContainer;
 
         [BackgroundDependencyLoader]
         private void load() {
+            AddInternal(emotesContainer = new CubedEmotesContainer());
+
             for (int i = 0; i < 4; i++) {
                 Cells[i] = new CubedCell[4];
                 for (int j = 0; j < 4; j++)
@@ -32,6 +36,8 @@ namespace osu.Game.Rulesets.Cubed.UI {
                 RelativeSizeAxes = Axes.Both,
                 Content = Cells
             });
+            // Placed on top to handle inputs first
+            AddInternal(new CubedEmotesController(emotesContainer));
         }
 
         public CubedCell GetCell(Vector2 pos) {
