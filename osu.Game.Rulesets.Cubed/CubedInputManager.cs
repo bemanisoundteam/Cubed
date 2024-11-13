@@ -4,7 +4,7 @@ using osu.Game.Rulesets.UI;
 using System.ComponentModel;
 
 namespace osu.Game.Rulesets.Cubed {
-    [Cached]  // Used for touch/mouse input
+    [Cached]  // Used for touch/mouse input and emotes
     public partial class CubedInputManager : RulesetInputManager<CubedAction> {
         public CubedInputManager(RulesetInfo ruleset) : base(ruleset, 0, SimultaneousBindingMode.Unique) {}
     }
