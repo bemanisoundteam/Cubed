@@ -29,7 +29,7 @@ namespace osu.Game.Rulesets.Cubed.Tests {
                 Size = new Vector2(180)
             });
             bindPanelToInputManager();
-            AddToggleStep("Manual input disabled", e => inputManager.UseParentInput = e);
+            AddToggleStep("Toggle manual input", e => inputManager.UseParentInput = e);
         }
 
         private void bindPanelToInputManager() {

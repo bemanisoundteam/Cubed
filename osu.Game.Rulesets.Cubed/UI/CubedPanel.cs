@@ -5,12 +5,14 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input.Events;
 using osu.Game.Graphics;
+using osu.Game.Graphics.Backgrounds;
 using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Game.Rulesets.Cubed.UI {
     public partial class CubedPanel : CompositeDrawable {
         public Drawable Background;
+        public TrianglesV2 Triangles;
         public readonly CubedPanelCell[][] Cells = new CubedPanelCell[4][];
 
         [BackgroundDependencyLoader]
@@ -25,6 +27,15 @@ namespace osu.Game.Rulesets.Cubed.UI {
                     RelativeSizeAxes = Axes.Both,
                     Colour = colors.Pink1  // sadly not Pinky Crush, but logo pink
                     // But like seriously I'm stopping you for a minute here, have you seen HOW MUCH OF A BANGER IT IS ?
+                },
+                Triangles = new TrianglesV2 {
+                    RelativeSizeAxes = Axes.Both,
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Thickness = 0.025f,
+                    ScaleAdjust = 0.727f,
+                    SpawnRatio = 3.69f,
+                    Colour = colors.Pink3
                 },
                 new GridContainer {
                     RelativeSizeAxes = Axes.Both,
