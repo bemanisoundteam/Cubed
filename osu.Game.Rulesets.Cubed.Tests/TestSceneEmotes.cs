@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using osu.Framework.Allocation;
+using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Testing;
 using osu.Game.Rulesets.Cubed.UI;
@@ -26,7 +27,8 @@ namespace osu.Game.Rulesets.Cubed.Tests {
             inputManager.Add(panel = new CubedPanel {
                 Origin = Anchor.BottomLeft,
                 Anchor = Anchor.BottomLeft,
-                Size = new Vector2(180)
+                Size = new Vector2(180),
+                SmallTriangles = new BindableBool(true)
             });
             bindPanelToInputManager();
             AddToggleStep("Toggle manual input", e => inputManager.UseParentInput = e);

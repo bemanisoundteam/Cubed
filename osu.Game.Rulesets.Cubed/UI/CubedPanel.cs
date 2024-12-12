@@ -13,6 +13,7 @@ namespace osu.Game.Rulesets.Cubed.UI {
     public partial class CubedPanel : CompositeDrawable {
         public Drawable Background;
         public TrianglesV2 Triangles;
+        public BindableBool SmallTriangles = new();
         public readonly CubedPanelCell[][] Cells = new CubedPanelCell[4][];
 
         [BackgroundDependencyLoader]
@@ -33,9 +34,10 @@ namespace osu.Game.Rulesets.Cubed.UI {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
                     Thickness = 0.025f,
-                    ScaleAdjust = 0.727f,
+                    ScaleAdjust = 1.42f,
                     SpawnRatio = 3.69f,
-                    Colour = colors.Pink3
+                    // Pink3 Contrasts so good but it's been called distracting
+                    Colour = colors.Pink2
                 },
                 new GridContainer {
                     RelativeSizeAxes = Axes.Both,
@@ -43,6 +45,7 @@ namespace osu.Game.Rulesets.Cubed.UI {
                     Content = initializeCells()
                 }
             ];
+            SmallTriangles.BindValueChanged(SizeClassChanged, true);
         }
 
         private CubedPanelCell[][] initializeCells() {
@@ -53,6 +56,8 @@ namespace osu.Game.Rulesets.Cubed.UI {
             }
             return Cells;
         }
+
+        private void SizeClassChanged(ValueChangedEvent<bool> e) => Triangles.ScaleAdjust = e.NewValue ? 0.727f : 1.42f;
 
         // WARNING: This will cause a crash if the value is equal to or more than 2^16
         public void PressKeys(uint keyMask) {

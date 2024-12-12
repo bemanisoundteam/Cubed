@@ -3,6 +3,7 @@ using osu.Framework.Graphics;
 using osu.Game.Graphics;
 using osu.Game.Rulesets.Cubed.UI;
 using osu.Game.Tests.Visual;
+using osuTK;
 
 namespace osu.Game.Rulesets.Cubed.Tests.Components {
     public partial class TestSceneArcadePanel : OsuTestScene {
@@ -16,7 +17,8 @@ namespace osu.Game.Rulesets.Cubed.Tests.Components {
                 Origin = Anchor.Centre
             };
             AddStep("Reset panel", Panel.Reset);
-            AddSliderStep("Panel scale", 0f, 1f, 1f, e => Panel.Scale = new osuTK.Vector2(e));
+            AddSliderStep("Panel Size Multiplier", 0f, 1f, 1f, e => Panel.Size = new Vector2(float.Min(Size.X, Size.Y) * e));
+            AddToggleStep("Small Triangles", e => Panel.SmallTriangles.Value = e);
             AddSliderStep("Triangle Spawn Ratio", 0f, 5f, Panel.Triangles.SpawnRatio, e => Panel.Triangles.SpawnRatio = e);
             AddSliderStep("Triangle Scale Adjust", 0f, 4f, Panel.Triangles.ScaleAdjust, e => Panel.Triangles.ScaleAdjust = e);
             AddStep("logo pink (sadly not a good contrast)", () => Panel.Background.Colour = colors.Pink1);
