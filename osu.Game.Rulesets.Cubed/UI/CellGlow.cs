@@ -1,5 +1,6 @@
 ﻿using osu.Framework.Allocation;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osuTK;
@@ -12,7 +13,7 @@ namespace osu.Game.Rulesets.Cubed.UI {
             RelativeSizeAxes = Axes.Both;
             Masking = true;
             BlurSigma = new Vector2(25);
-            BorderColour = Color4.Cyan;
+            BorderColour = ColourInfo.GradientHorizontal(Color4.Cyan, Color4.LimeGreen);
             BorderThickness = 2;
             DrawOriginal = true;
             Child = new Box {
