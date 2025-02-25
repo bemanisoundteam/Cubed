@@ -1,0 +1,32 @@
+﻿name: Build n' Test
+
+on: [ push, pull_request ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore osu.Game.Rulesets.Cubed.Tests
+
+      - name: Build
+        run: dotnet build --no-restore osu.Game.Rulesets.Cubed.Tests
+
+      - name: Test
+        run: dotnet test --no-build --nologo --verbosity normal osu.Game.Rulesets.Cubed.Tests
+
+      - name: Upload built artifact
+        uses: actions/upload-artifact@v4
+        with:
+          path: osu.Game.Rulesets.Cubed.Tests/bin/Debug/net8.0/osu.Game.Rulesets.Cubed.dll
