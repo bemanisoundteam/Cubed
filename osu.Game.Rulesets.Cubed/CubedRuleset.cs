@@ -6,6 +6,7 @@ using osu.Game.Rulesets.Cubed.Edit;
 using osu.Game.Rulesets.Cubed.Mods;
 using osu.Game.Rulesets.Cubed.Scoring;
 using osu.Game.Rulesets.Cubed.UI;
+using osu.Game.Rulesets.Cubed.UI.Emotes;
 using osu.Game.Rulesets.Difficulty;
 using osu.Game.Rulesets.Edit;
 using osu.Game.Rulesets.Mods;
@@ -74,6 +75,9 @@ namespace osu.Game.Rulesets.Cubed {
 
         public override Drawable CreateIcon() => new ConciergeIcon(this);
 
+        static CubedRuleset() {
+            CubedEmote.RegisterEmote(typeof(LarryEmote), LarryEmote.Trigger);
+        }
 
         // Leave this line intact. It will bake the correct version into the ruleset on each build/release.
         public override string RulesetAPIVersionSupported => CURRENT_RULESET_API_VERSION;

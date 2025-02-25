@@ -10,25 +10,10 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace osu.Game.Rulesets.Cubed.UI.Emotes {
-    public partial class CubedEmotesController : Component, IKeyBindingHandler<CubedAction> {
+    public partial class CubedEmotesController(CubedEmotesContainer emotesContainer) : Component, IKeyBindingHandler<CubedAction> {
         public readonly BindableBool Enabled = new(true);
 
-        private readonly CubedEmotesContainer emotesContainer;
-        private readonly Dictionary<uint, Type> Emotes = new ();
-
-        public CubedEmotesController(CubedEmotesContainer emotesContainer) {
-            this.emotesContainer = emotesContainer;
-
-            RegisterEmote(typeof(LarryEmote), LarryEmote.Trigger);
-        }
-
-        public void RegisterEmote(Type emoteType, uint trigger) {
-            ArgumentNullException.ThrowIfNull(emoteType);
-            if (!(typeof(CubedEmote).IsAssignableFrom(emoteType)))
-                throw new ArgumentException($"Type '{emoteType.Name}' is not a {nameof(CubedEmote)}");
-
-            Emotes.Add(trigger, emoteType);
-        }
+        internal static readonly Dictionary<uint, Type> Emotes = new();
 
         [BackgroundDependencyLoader(permitNulls: true)]
         private void load(Player player, CubedInputManager manager) {
