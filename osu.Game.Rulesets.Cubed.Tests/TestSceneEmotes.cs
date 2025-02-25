@@ -54,7 +54,10 @@ namespace osu.Game.Rulesets.Cubed.Tests {
         }
 
         [SetUpSteps]
-        public void Reset() => AddStep("Reset panel", panel.Reset);
+        public void Reset() => AddStep("Reset panel", ResetPanel);
+
+        // Workaround to make headless tests work
+        private void ResetPanel() => panel.Reset();
 
         protected override Ruleset CreateRuleset() => new CubedRuleset();
     }
