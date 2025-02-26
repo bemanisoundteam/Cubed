@@ -13,6 +13,8 @@ using osu.Game.Rulesets.Edit;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Scoring;
 using osu.Game.Rulesets.UI;
+using osu.Game.Scoring;
+using osu.Game.Screens.Ranking.Statistics;
 using System;
 using System.Collections.Generic;
 
@@ -43,6 +45,10 @@ namespace osu.Game.Rulesets.Cubed {
                     return Array.Empty<Mod>();
             }
         }
+
+        public override StatisticItem[] CreateStatisticsForScore(ScoreInfo score, IBeatmap playableBeatmap) => [
+            new ("Live reaction", () => new CubedResultsScreenEmote()),
+        ];
 
         public override IEnumerable<KeyBinding> GetDefaultKeyBindings(int variant = 0) => new [] {
             new KeyBinding(InputKey.Number4, CubedAction.X0Y0),
