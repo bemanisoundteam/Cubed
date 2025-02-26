@@ -18,7 +18,7 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
             // Enforce this, as sprites set their size according to their texture
             emote.Emote.RelativeSizeAxes = Axes.Both;
             emote.Emote.Size = Vector2.One;
-            emote.Channel = emote.Sample.Play();
+            emote.Play();
         }
     }
 }

@@ -13,10 +13,10 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
 
         public Drawable Emote { get; protected set; }
         public DrawableSample Sample { get; protected set; }
-        public SampleChannel Channel;
+        private SampleChannel Channel;
 
         // I advise users of RegisterEmote to register them in a static constructor inside their Ruleset class
-        public static void RegisterEmote(Type emote, uint trigger = 0) {
+        public static void RegisterEmote(Type emote, uint trigger = 0, String resultsScreenMessage = null) {
             ArgumentNullException.ThrowIfNull(emote);
             if (!(typeof(CubedEmote).IsAssignableFrom(emote)))
                 throw new ArgumentException($"Type '{emote.Name}' is not a {nameof(CubedEmote)}");
@@ -25,8 +25,13 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
                 throw new ArgumentException($"Type '{emote.Name}' is already registered");
 
             emotes.Add(emote);
-            CubedEmotesController.Emotes.Add(trigger, emote);
+            if (trigger != 0)
+                CubedEmotesController.Emotes.Add(trigger, emote);
+            if (!String.IsNullOrEmpty(resultsScreenMessage))
+                CubedResultsScreenEmote.Messages.Add(emote, resultsScreenMessage);
         }
+
+        public void Play() => Channel = Sample.Play();
 
         [BackgroundDependencyLoader]
         private void load() {
