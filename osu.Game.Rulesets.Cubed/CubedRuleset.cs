@@ -77,7 +77,7 @@ namespace osu.Game.Rulesets.Cubed {
         public static ResourceStore<byte[]> CreateNamespacedResourceStore(string ns) =>
             new NamespacedResourceStore<byte[]>(new DllResourceStore(typeof(CubedRuleset).Assembly), "Resources/" + ns);
 
-        public override Drawable CreateIcon() => new ConciergeIcon(this);
+        public override Drawable CreateIcon() => new ConciergeIcon();
 
         static CubedRuleset() {
             CubedEmote.RegisterEmote(typeof(LarryEmote), LarryEmote.Trigger, LarryEmote.Quote);
