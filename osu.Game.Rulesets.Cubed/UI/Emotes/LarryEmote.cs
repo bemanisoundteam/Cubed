@@ -11,11 +11,14 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
         // 🟥🟥🟥🟥
         // ⬜🟥⬜🟥
         public const uint Trigger = 0b1010111100111110;
+        public const string Quote = "YEEEEEHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
         [BackgroundDependencyLoader]
         private void load(TextureStore textures, ISampleStore samples) {
             AddInternal(Emote = new Sprite { Texture = textures.Get("Emotes/Larry") });
-            AddInternal(Sample = new DrawableSample(samples.Get("Emotes/Larry")));
+            ISample sample = samples.Get("Emotes/Larry");
+            if (sample != null)
+                AddInternal(Sample = new DrawableSample(sample));
         }
     }
 }
