@@ -1,5 +1,6 @@
 ﻿using osu.Framework.Graphics;
 using osu.Framework.Input.Bindings;
+using osu.Framework.IO.Stores;
 using osu.Game.Beatmaps;
 using osu.Game.Rulesets.Cubed.Beatmaps;
 using osu.Game.Rulesets.Cubed.Edit;
@@ -73,10 +74,13 @@ namespace osu.Game.Rulesets.Cubed {
             HitResult.Miss
         ];
 
+        public static ResourceStore<byte[]> CreateNamespacedResourceStore(string ns) =>
+            new NamespacedResourceStore<byte[]>(new DllResourceStore(typeof(CubedRuleset).Assembly), "Resources/" + ns);
+
         public override Drawable CreateIcon() => new ConciergeIcon(this);
 
         static CubedRuleset() {
-            CubedEmote.RegisterEmote(typeof(LarryEmote), LarryEmote.Trigger);
+            CubedEmote.RegisterEmote(typeof(LarryEmote), LarryEmote.Trigger, LarryEmote.Quote);
         }
 
         // Leave this line intact. It will bake the correct version into the ruleset on each build/release.
