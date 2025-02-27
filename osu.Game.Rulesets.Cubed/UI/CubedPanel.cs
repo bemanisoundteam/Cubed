@@ -77,13 +77,11 @@ namespace osu.Game.Rulesets.Cubed.UI {
                     cell.Active.Value = false;
         }
 
-        public partial class CubedPanelCell : CompositeDrawable {
+        public partial class CubedPanelCell : Container {
             public readonly BindableBool Active = new();
-#pragma warning disable CS0649 // Field is never assigned to, and will always have its default value
-            // I actually want it to be transparent
-            private Color4 idleColor;
-#pragma warning restore CS0649 // Field is never assigned to, and will always have its default value
-            private Color4 activeColor;
+            // LMAO Rider's spellcheck thinks it's read "I dle Color"
+            public Color4 IdleColor = Color4.Transparent;
+            public Color4 ActiveColor = Color4.White;
 
             [BackgroundDependencyLoader]
             private void load() {
@@ -96,10 +94,9 @@ namespace osu.Game.Rulesets.Cubed.UI {
                 CornerRadius = 7.27f;
                 BorderThickness = 4;
                 BorderColour = Color4.White;
-                activeColor = Color4.White;
 
                 InternalChild = new Box { RelativeSizeAxes = Axes.Both };
-                Active.BindValueChanged(e => InternalChild.Colour = e.NewValue ? activeColor : idleColor, true);
+                Active.BindValueChanged(e => InternalChild.Colour = e.NewValue ? ActiveColor : IdleColor, true);
             }
 
             protected override bool OnClick(ClickEvent e) {
