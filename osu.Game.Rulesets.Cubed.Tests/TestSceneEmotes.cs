@@ -2,6 +2,7 @@
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Sprites;
 using osu.Framework.Testing;
 using osu.Game.Rulesets.Cubed.UI;
 using osu.Game.Rulesets.Cubed.UI.Emotes;
@@ -51,6 +52,8 @@ namespace osu.Game.Rulesets.Cubed.Tests {
         public void TestLarry() {
             AddStep("Bird fucking screams", () => panel.PressKeys(LarryEmote.Trigger));
             AddAssert("Bird is actually fucking screaming", () => inputManager.ChildrenOfType<LarryEmote>().Any());
+            AddAssert("Bird is present", () => inputManager.ChildrenOfType<LarryEmote>().First().IsPresent);
+            AddAssert("Bird is visible", () => (inputManager.ChildrenOfType<LarryEmote>().First().Emote as Sprite)?.Texture != null);
         }
 
         [SetUpSteps]
