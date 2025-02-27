@@ -35,7 +35,7 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
             FillMode = FillMode.Fit;
             FillAspectRatio = 1;
             RelativeSizeAxes = Axes.X;
-            Height = 250;
+            Height = 200;
             AddInternal(container);
 
             PickRandomEmote();
