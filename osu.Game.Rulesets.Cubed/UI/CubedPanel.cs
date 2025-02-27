@@ -83,6 +83,8 @@ namespace osu.Game.Rulesets.Cubed.UI {
             public Color4 IdleColor = Color4.Transparent;
             public Color4 ActiveColor = Color4.White;
 
+            private readonly Box box = new() { RelativeSizeAxes = Axes.Both };
+
             [BackgroundDependencyLoader]
             private void load() {
                 RelativeSizeAxes = Axes.Both;
@@ -95,8 +97,8 @@ namespace osu.Game.Rulesets.Cubed.UI {
                 BorderThickness = 4;
                 BorderColour = Color4.White;
 
-                InternalChild = new Box { RelativeSizeAxes = Axes.Both };
-                Active.BindValueChanged(e => InternalChild.Colour = e.NewValue ? ActiveColor : IdleColor, true);
+                InternalChild = box;
+                Active.BindValueChanged(e => box.Colour = e.NewValue ? ActiveColor : IdleColor, true);
             }
 
             protected override bool OnClick(ClickEvent e) {
