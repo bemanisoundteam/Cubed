@@ -5,6 +5,7 @@ using osu.Game.Beatmaps;
 using osu.Game.Rulesets.Cubed.Beatmaps;
 using osu.Game.Rulesets.Cubed.Edit;
 using osu.Game.Rulesets.Cubed.Mods;
+using osu.Game.Rulesets.Cubed.Objects;
 using osu.Game.Rulesets.Cubed.Scoring;
 using osu.Game.Rulesets.Cubed.UI;
 using osu.Game.Rulesets.Cubed.UI.Emotes;
@@ -17,6 +18,7 @@ using osu.Game.Scoring;
 using osu.Game.Screens.Ranking.Statistics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace osu.Game.Rulesets.Cubed {
     public partial class CubedRuleset : Ruleset {
@@ -46,9 +48,21 @@ namespace osu.Game.Rulesets.Cubed {
             }
         }
 
-        public override StatisticItem[] CreateStatisticsForScore(ScoreInfo score, IBeatmap playableBeatmap) => [
-            new ("Live reaction", () => new CubedResultsScreenEmote()),
-        ];
+        public override StatisticItem[] CreateStatisticsForScore(ScoreInfo score, IBeatmap playableBeatmap) {
+            IReadOnlyList<HitEvent> relevantHitEvents = score.HitEvents.Where(e => e.HitObject is Cube).ToList();
+
+            return [
+                new("Live reaction", () => new CubedResultsScreenEmote()),
+                new("Timing Distribution", () => new HitEventTimingDistributionGraph(relevantHitEvents) {
+                    RelativeSizeAxes = Axes.X,
+                    Height = 250
+                }, true),
+                new ("Statistics", () => new SimpleStatisticTable(2,[
+                    new AverageHitError(relevantHitEvents),
+                    new UnstableRate(relevantHitEvents)
+                ]), true),
+            ];
+        }
 
         public override IEnumerable<KeyBinding> GetDefaultKeyBindings(int variant = 0) => new [] {
             new KeyBinding(InputKey.Number4, CubedAction.X0Y0),
