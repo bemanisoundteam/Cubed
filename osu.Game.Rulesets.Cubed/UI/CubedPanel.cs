@@ -8,6 +8,7 @@ using osu.Game.Graphics;
 using osu.Game.Graphics.Backgrounds;
 using osuTK;
 using osuTK.Graphics;
+using System.Diagnostics;
 
 namespace osu.Game.Rulesets.Cubed.UI {
     public partial class CubedPanel : CompositeDrawable {
@@ -61,6 +62,8 @@ namespace osu.Game.Rulesets.Cubed.UI {
 
         // WARNING: This will cause a crash if the value is equal to or more than 2^16
         public void PressKeys(uint keyMask) {
+            Debug.Assert(keyMask < 65536, "Cannot set keyMask above 2^16, as the panel is a 4x4 square");
+
             // That's an assembly nerd's trick
             for (; keyMask != 0; keyMask &= keyMask - 1) {
                 int targetCell = System.Numerics.BitOperations.TrailingZeroCount(keyMask);
