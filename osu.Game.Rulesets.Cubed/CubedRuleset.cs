@@ -38,15 +38,30 @@ namespace osu.Game.Rulesets.Cubed {
 
         public override DifficultyCalculator CreateDifficultyCalculator(IWorkingBeatmap beatmap) => new CubedDifficultyCalculator(RulesetInfo, beatmap);
 
-        public override IEnumerable<Mod> GetModsFor(ModType type) {
-            switch (type) {
-                case ModType.Automation:
-                    return new [] { new CubedModAutoplay() };
+        public override IEnumerable<Mod> GetModsFor(ModType type) => type switch {
+            ModType.DifficultyReduction => [
+                new CubedModNoFail(),
+                new MultiMod(new CubedModHalfTime(), new CubedModDaycore())
+            ],
 
-                default:
-                    return Array.Empty<Mod>();
-            }
-        }
+            ModType.DifficultyIncrease => [
+                new MultiMod(new CubedModSuddenDeath(), new CubedModPerfect()),
+                new MultiMod(new CubedModDoubleTime(), new CubedModNightcore()),
+                new ModAccuracyChallenge()
+            ],
+
+            ModType.Automation => [
+                new MultiMod(new CubedModAutoplay(), new CubedModCinema())
+            ],
+
+            ModType.Fun => [
+                new MultiMod(new ModWindUp(), new ModWindDown()),
+                new CubedModMuted(),
+                new ModAdaptiveSpeed()
+            ],
+
+            _ => Array.Empty<Mod>()
+        };
 
         public override StatisticItem[] CreateStatisticsForScore(ScoreInfo score, IBeatmap playableBeatmap) {
             IReadOnlyList<HitEvent> relevantHitEvents = score.HitEvents.Where(e => e.HitObject is Cube).ToList();
