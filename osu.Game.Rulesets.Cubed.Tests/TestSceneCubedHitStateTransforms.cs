@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using osu.Framework.Graphics;
 using osu.Framework.Testing;
+using osu.Framework.Utils;
 using osu.Game.Beatmaps;
 using osu.Game.Beatmaps.ControlPoints;
 using osu.Game.Rulesets.Cubed.Objects;
@@ -38,7 +39,7 @@ namespace osu.Game.Rulesets.Cubed.Tests {
             AddAssert("Result is Perfect", () => drawableCube.Result.Type == HitResult.Perfect);
             AddUntilStep("Object Expired", (() => drawableCube.LifetimeEnd < Time.Current));
             AddStep("Finish transforms", () => drawableCube.FinishTransforms());
-            AddAssert("Marker's scale is 1.5", () => drawableCube.Marker.Scale.Equals(new Vector2(1.5f)));
+            AddAssert("Marker's scale is 1.5", () => TestVec2Equality(drawableCube.Marker.Scale, 1.5f));
             AddAssert("Object is invisible", () => !drawableCube.IsPresent);
         }
 
@@ -50,10 +51,13 @@ namespace osu.Game.Rulesets.Cubed.Tests {
             AddAssert("Object is Red", () => drawableCube.Colour == osuTK.Graphics.Color4.Red);
             AddUntilStep("Object Expired", () => drawableCube.LifetimeEnd < Time.Current);
             AddStep("Finish transforms", () => drawableCube.FinishTransforms());
-            AddAssert("Object's scale is 60%", () => drawableCube.Scale.Equals(new Vector2(.6f)));
+            AddAssert("Object's scale is 60%", () => TestVec2Equality(drawableCube.Scale, .6f));
             AddAssert("Object is invisible", () => !drawableCube.IsPresent);
         }
 
         private void HitCube() => drawableCube.OnHit();
+
+        private static bool TestVec2Equality(Vector2 vec, float value) =>
+            Precision.AlmostEquals(vec.X, value) && Precision.AlmostEquals(vec.Y, value);
     }
 }
