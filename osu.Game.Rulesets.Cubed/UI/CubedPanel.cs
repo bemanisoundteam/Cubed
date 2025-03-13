@@ -52,8 +52,12 @@ namespace osu.Game.Rulesets.Cubed.UI {
         private CubedPanelCell[][] initializeCells() {
             for (int row = 0; row < 4; row++) {
                 Cells[row] = new CubedPanelCell[4];
-                for (int c = 0; c < 4; c++ /* C what I did here */)
-                    Cells[row][c] = new CubedPanelCell();
+                for (int c = 0; c < 4; c++ /* C what I did here */) {
+                    CubedPanelCell cell = new (CellCornerRadius);
+                    CellCornerRadius.BindValueChanged(e => cell.CornerRadius = e.NewValue, true);
+                    CellBorderThickness.BindValueChanged(e => cell.BorderThickness = e.NewValue, true);
+                    Cells[row][c] = cell;
+                }
             }
             return Cells;
         }
@@ -77,7 +81,19 @@ namespace osu.Game.Rulesets.Cubed.UI {
                     cell.Active.Value = false;
         }
 
-        public partial class CubedPanelCell : Container {
+        public readonly BindableFloat CellCornerRadius = new(7.27f) {
+            MinValue = 0,
+            MaxValue = 100,
+            Precision = .1f
+        };
+
+        public readonly BindableFloat CellBorderThickness = new(4) {
+            MinValue = 0,
+            MaxValue = 5,
+            Precision = .1f
+        };
+
+        public partial class CubedPanelCell(BindableFloat cellCornerRadius = null) : Container {
             public readonly BindableBool Active = new();
             // LMAO Rider's spellcheck thinks it's read "I dle Color"
             public Color4 IdleColor = Color4.Transparent;
@@ -93,8 +109,6 @@ namespace osu.Game.Rulesets.Cubed.UI {
                 Scale = new Vector2(.9f);
 
                 Masking = true;
-                CornerRadius = 7.27f;
-                BorderThickness = 4;
                 BorderColour = Color4.White;
 
                 InternalChild = box;
@@ -104,6 +118,11 @@ namespace osu.Game.Rulesets.Cubed.UI {
             protected override bool OnClick(ClickEvent e) {
                 Active.Toggle();
                 return true;
+            }
+
+            protected override void Update() {
+                if (cellCornerRadius != null)
+                    cellCornerRadius.MaxValue = DrawHeight * .5f;
             }
         }
     }

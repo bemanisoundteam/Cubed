@@ -24,6 +24,8 @@ namespace osu.Game.Rulesets.Cubed.Tests.Components {
             AddStep("Logo pink", () => Panel.Background.Colour = colors.Pink1);
             AddStep("Alternative color I considered", () => Panel.Background.Colour = colors.Pink3);
             AddStep("Main menu exit button color (arbitrary color ?)", () => Panel.Background.Colour = new osuTK.Graphics.Color4(238, 51, 153, 255));
+            AddSliderStep("Inner corner radius", Panel.CellCornerRadius.MinValue, Panel.CellCornerRadius.MaxValue, Panel.CellCornerRadius.Default, e => Panel.CellCornerRadius.Value = e);
+            AddSliderStep("Inner thiccness", Panel.CellBorderThickness.MinValue, Panel.CellBorderThickness.MaxValue, Panel.CellBorderThickness.Default, e => Panel.CellBorderThickness.Value = e);
         }
     }
 }
