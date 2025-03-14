@@ -7,6 +7,7 @@ using osu.Game.Rulesets.Cubed.Edit;
 using osu.Game.Rulesets.Cubed.Mods;
 using osu.Game.Rulesets.Cubed.Objects;
 using osu.Game.Rulesets.Cubed.Scoring;
+using osu.Game.Rulesets.Cubed.Skinning;
 using osu.Game.Rulesets.Cubed.UI;
 using osu.Game.Rulesets.Cubed.UI.Emotes;
 using osu.Game.Rulesets.Difficulty;
@@ -16,6 +17,7 @@ using osu.Game.Rulesets.Scoring;
 using osu.Game.Rulesets.UI;
 using osu.Game.Scoring;
 using osu.Game.Screens.Ranking.Statistics;
+using osu.Game.Skinning;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +39,8 @@ namespace osu.Game.Rulesets.Cubed {
         public override IBeatmapConverter CreateBeatmapConverter(IBeatmap beatmap) => new CubedBeatmapConverter(beatmap, this);
 
         public override DifficultyCalculator CreateDifficultyCalculator(IWorkingBeatmap beatmap) => new CubedDifficultyCalculator(RulesetInfo, beatmap);
+
+        public override ISkin CreateSkinTransformer(ISkin skin, IBeatmap beatmap) => new CubedSkinTransformer(skin);
 
         public override IEnumerable<Mod> GetModsFor(ModType type) => type switch {
             ModType.DifficultyReduction => [
