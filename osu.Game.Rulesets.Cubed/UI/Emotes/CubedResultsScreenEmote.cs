@@ -1,6 +1,7 @@
 ﻿using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Input.Events;
 using osu.Game.Graphics;
 using osu.Game.Graphics.Sprites;
 using osuTK;
@@ -17,9 +18,11 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
             Padding = new MarginPadding { Bottom = 12 }
         };
 
+        public CubedEmote CurrentEmote { get; private set; }
+
         public void PickEmote(Type emote) {
             container.Clear();
-            createEmote(emote, container);
+            CurrentEmote = createEmote(emote, container);
             container.Add(new OsuSpriteText {
                 Text = Messages[emote],
                 Font = OsuFont.GetFont(size: 12),
@@ -44,7 +47,7 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
         public void PickRandomEmote() =>
             PickEmote(Messages.Keys.ElementAt(new Random().Next(0, Messages.Count)));
 
-        private static void createEmote(Type emote, FillFlowContainer container) {
+        private static CubedEmote createEmote(Type emote, FillFlowContainer container) {
             CubedEmote elmote = (CubedEmote) Activator.CreateInstance(emote)!;
             container.Add(elmote);
             elmote.Anchor = Anchor.TopCentre;
@@ -54,6 +57,12 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
 
             elmote.Emote.RelativeSizeAxes = Axes.Both;
             elmote.Emote.Size = Vector2.One;
+            return elmote;
+        }
+
+        protected override bool OnClick(ClickEvent e) {
+            CurrentEmote?.Sample.Play();
+            return true;
         }
     }
 }
