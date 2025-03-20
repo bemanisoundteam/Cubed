@@ -1,6 +1,7 @@
 ﻿using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Cursor;
 using osu.Framework.Input.Events;
 using osu.Game.Graphics;
 using osu.Game.Graphics.Sprites;
@@ -10,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace osu.Game.Rulesets.Cubed.UI.Emotes {
-    public partial class CubedResultsScreenEmote : CompositeDrawable {
+    public partial class CubedResultsScreenEmote : CompositeDrawable, IHasCustomTooltip<uint> {
         internal static readonly Dictionary<Type, String> Messages = new();
         private readonly FillFlowContainer container = new() {
             RelativeSizeAxes = Axes.Both,
@@ -35,10 +36,7 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
         private void load() {
             Anchor = Anchor.Centre;
             Origin = Anchor.Centre;
-            FillMode = FillMode.Fit;
-            FillAspectRatio = 1;
-            RelativeSizeAxes = Axes.X;
-            Height = 200;
+            Size = new Vector2(200);
             AddInternal(container);
 
             PickRandomEmote();
@@ -62,5 +60,9 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
 
         protected override bool OnClick(ClickEvent e) =>
             CurrentEmote?.Sample.Play() != null;
+
+        public ITooltip<uint> GetCustomTooltip() => new CubedPanelTooltip();
+
+        public uint TooltipContent => CurrentEmote.trigger;
     }
 }
