@@ -26,7 +26,7 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
 
             emotes.Add(emote);
             if (trigger != 0)
-                CubedEmotesController.Emotes.Add(trigger, emote);
+                CubedEmotes.Emotes.Add(trigger, emote);
             if (!String.IsNullOrEmpty(resultsScreenMessage))
                 CubedResultsScreenEmote.Messages.Add(emote, resultsScreenMessage);
         }

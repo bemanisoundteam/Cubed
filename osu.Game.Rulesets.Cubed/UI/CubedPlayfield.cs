@@ -14,11 +14,12 @@ namespace osu.Game.Rulesets.Cubed.UI {
     public partial class CubedPlayfield : Playfield {
         public override bool UpdateSubTreeMasking() => false;
         private readonly CubedCell[][] Cells = new CubedCell[4][];
-        private CubedEmotesContainer emotesContainer;
+        private CubedEmotes emotes = new ();
 
         [BackgroundDependencyLoader]
         private void load() {
-            AddInternal(emotesContainer = new CubedEmotesContainer());
+            // Proxied here to render below the notes
+            AddInternal(emotes.CreateProxy());
 
             for (int i = 0; i < 4; i++) {
                 Cells[i] = new CubedCell[4];
@@ -36,8 +37,9 @@ namespace osu.Game.Rulesets.Cubed.UI {
                 RelativeSizeAxes = Axes.Both,
                 Content = Cells
             });
-            // Placed on top to handle inputs first
-            AddInternal(new CubedEmotesController(emotesContainer));
+            // This is placed here to catch inputs first, but as it has a proxy
+            // It won't be rendered
+            AddInternal(emotes);
         }
 
         public CubedCell GetCell(Vector2 pos) {
