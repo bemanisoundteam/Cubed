@@ -60,9 +60,7 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
             return elmote;
         }
 
-        protected override bool OnClick(ClickEvent e) {
-            CurrentEmote?.Sample.Play();
-            return true;
-        }
+        protected override bool OnClick(ClickEvent e) =>
+            CurrentEmote?.Sample.Play() != null;
     }
 }
