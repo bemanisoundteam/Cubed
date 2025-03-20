@@ -56,6 +56,8 @@ namespace osu.Game.Rulesets.Cubed.UI {
                     CubedPanelCell cell = new (CellCornerRadius);
                     CellCornerRadius.BindValueChanged(e => cell.CornerRadius = e.NewValue, true);
                     CellBorderThickness.BindValueChanged(e => cell.BorderThickness = e.NewValue, true);
+                    AccentColor.BindValueChanged(e => cell.BorderColour = e.NewValue, true);
+                    AccentColor.BindValueChanged(e => cell.ActiveColor = e.NewValue, true);
                     Cells[row][c] = cell;
                 }
             }
@@ -92,6 +94,8 @@ namespace osu.Game.Rulesets.Cubed.UI {
             MaxValue = 5,
             Precision = .1f
         };
+
+        public readonly BindableColour4 AccentColor = new (Colour4.White);
 
         public partial class CubedPanelCell(BindableFloat cellCornerRadius = null) : Container {
             public readonly BindableBool Active = new();

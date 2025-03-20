@@ -5,6 +5,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Game.Configuration;
 using osu.Game.Graphics;
 using osu.Game.Graphics.Sprites;
+using osu.Game.Localisation.SkinComponents;
 using osu.Game.Rulesets.Cubed.UI;
 using osu.Game.Screens.Play;
 using osu.Game.Screens.Play.HUD;
@@ -48,6 +49,9 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
 
         [SettingSource("Use smaller triangles")]
         public BindableBool UseSmallTriangles => panel.SmallTriangles;
+
+        [SettingSource(typeof(SkinnableComponentStrings), nameof(SkinnableComponentStrings.Colour), nameof(SkinnableComponentStrings.ColourDescription))]
+        public BindableColour4 Color => panel.AccentColor;
 
         #endregion
 
