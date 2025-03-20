@@ -41,7 +41,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
             MaxValue = 500
         };
 
-        [SettingSource("Cell corner radius")]
+        [SettingSource(typeof(SkinnableComponentStrings), nameof(SkinnableComponentStrings.CornerRadius), nameof(SkinnableComponentStrings.CornerRadiusDescription))]
         public BindableFloat InnerRadius => panel.CellCornerRadius;
 
         [SettingSource("Cell border thickness")]
