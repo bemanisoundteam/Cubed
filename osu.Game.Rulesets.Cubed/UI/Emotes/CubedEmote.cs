@@ -7,9 +7,12 @@ using System;
 using System.Collections.Generic;
 
 namespace osu.Game.Rulesets.Cubed.UI.Emotes {
+    // I know I'm sorry, the whole Emotes API sucks
     public abstract partial class CubedEmote : CompositeDrawable {
         private static readonly List<Type> emotes = [];
         public static IEnumerable<Type> Emotes => emotes;
+
+        public abstract uint trigger { get; }
 
         public Drawable Emote { get; protected set; }
         public DrawableSample Sample { get; protected set; }

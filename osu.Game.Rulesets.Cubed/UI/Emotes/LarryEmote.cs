@@ -13,6 +13,8 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
         public const uint Trigger = 0b1010111100111110;
         public const string Quote = "YEEEEEHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 
+        public override uint trigger => Trigger;
+
         [BackgroundDependencyLoader]
         private void load(TextureStore textures, ISampleStore samples) {
             AddInternal(Emote = new Sprite { Texture = textures.Get("Emotes/Larry") });
