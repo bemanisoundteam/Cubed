@@ -113,7 +113,7 @@ namespace osu.Game.Rulesets.Cubed.UI {
                 Scale = new Vector2(.9f);
 
                 Masking = true;
-                BorderColour = Color4.White;
+                // Border/corner settings are handled using bindables
 
                 InternalChild = box;
                 Active.BindValueChanged(e => box.Colour = e.NewValue ? ActiveColor : IdleColor, true);
