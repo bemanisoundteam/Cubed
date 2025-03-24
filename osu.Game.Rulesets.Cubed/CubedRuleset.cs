@@ -72,6 +72,9 @@ namespace osu.Game.Rulesets.Cubed {
 
             return [
                 new("Live reaction", () => new CubedResultsScreenEmote()),
+                new ("Notes Distribution", () => new CubedMusicBar(relevantHitEvents, playableBeatmap) {
+                    RelativeSizeAxes = Axes.X,
+                }),
                 new("Timing Distribution", () => new HitEventTimingDistributionGraph(relevantHitEvents) {
                     RelativeSizeAxes = Axes.X,
                     Height = 250
