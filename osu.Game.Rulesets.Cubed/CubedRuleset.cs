@@ -74,7 +74,7 @@ namespace osu.Game.Rulesets.Cubed {
                 new("Live reaction", () => new CubedResultsScreenEmote()),
                 new ("Notes Distribution", () => new CubedMusicBar(relevantHitEvents, playableBeatmap) {
                     RelativeSizeAxes = Axes.X,
-                }),
+                }, true),
                 new("Timing Distribution", () => new HitEventTimingDistributionGraph(relevantHitEvents) {
                     RelativeSizeAxes = Axes.X,
                     Height = 250
@@ -87,7 +87,7 @@ namespace osu.Game.Rulesets.Cubed {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
                     RelativeSizeAxes = Axes.X,
-                }),
+                }, true),
             ];
         }
 
