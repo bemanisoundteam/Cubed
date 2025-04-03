@@ -5,16 +5,16 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Framework.Lists;
+using osu.Game.Rulesets.Cubed.Skinning;
 using osu.Game.Screens.Play;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace osu.Game.Rulesets.Cubed.UI.Emotes {
-    public partial class CubedEmotes : Container, IKeyBindingHandler<CubedAction> {
+    public partial class CubedEmotesHandler : Container, IKeyBindingHandler<CubedAction> {
         public readonly BindableBool Enabled = new(true);
 
-        internal static readonly Dictionary<uint, Type> Emotes = new();
+        internal static readonly Dictionary<uint, CubedEmoteLookup> Emotes = new();
 
         [BackgroundDependencyLoader(permitNulls: true)]
         private void load(Player player, CubedInputManager manager) {
@@ -22,7 +22,7 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
                 throw new DependencyNotRegisteredException(this.GetType(), typeof(CubedInputManager));
             pressedActions = manager.KeyBindingContainer.PressedActions;
             if (player != null)
-                ((IBindable<bool>) Enabled).BindTo(player.IsBreakTime);
+                Enabled.BindTarget = player.IsBreakTime;
 
             RelativeSizeAxes = Axes.Both;
             Anchor = Anchor.Centre;
@@ -36,8 +36,8 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
                 uint pressedActionsBitfield = pressedActions.Aggregate<CubedAction, uint>(0,
                     (current, action) => current | 1u << (int) action);
 
-                if (Emotes.TryGetValue(pressedActionsBitfield, out Type emote))
-                    Fire((CubedEmote) Activator.CreateInstance(emote));
+                if (Emotes.TryGetValue(pressedActionsBitfield, out CubedEmoteLookup emote))
+                    Fire(emote.CreateEmote());
             }
 
             return false;
@@ -46,12 +46,9 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
         public void OnReleased(KeyBindingReleaseEvent<CubedAction> e) { }
 
         // FIRE IN THE HOLE
-        private void Fire(CubedEmote emote) {
+        public void Fire(CubedSkinnableEmote emote) {
             AddInternal(emote);
             emote.Size = new osuTK.Vector2(.40f);
-            // Enforce this, as sprites set their size according to their texture
-            emote.Emote.RelativeSizeAxes = Axes.Both;
-            emote.Emote.Size = osuTK.Vector2.One;
             emote.Play();
         }
     }

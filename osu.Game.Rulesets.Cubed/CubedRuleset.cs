@@ -127,7 +127,7 @@ namespace osu.Game.Rulesets.Cubed {
         public override Drawable CreateIcon() => new ConciergeIcon();
 
         static CubedRuleset() {
-            CubedEmote.RegisterEmote(typeof(LarryEmote), LarryEmote.Trigger, LarryEmote.Quote);
+            CubedEmote.RegisterEmote(new (LarryEmote.Name, "Cubed"), () => new LarryEmote(), LarryEmote.Trigger, LarryEmote.Quote);
         }
 
         // Leave this line intact. It will bake the correct version into the ruleset on each build/release.

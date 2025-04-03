@@ -1,47 +1,52 @@
 ﻿using osu.Framework.Allocation;
 using osu.Framework.Audio.Sample;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Audio;
 using osu.Framework.Graphics.Containers;
+using osu.Game.Rulesets.Cubed.Skinning;
 using System;
 using System.Collections.Generic;
 
 namespace osu.Game.Rulesets.Cubed.UI.Emotes {
-    // I know I'm sorry, the whole Emotes API sucks
     public abstract partial class CubedEmote : CompositeDrawable {
-        private static readonly List<Type> emotes = [];
-        public static IEnumerable<Type> Emotes => emotes;
+        private static readonly Dictionary<CubedEmoteLookup, Func<CubedEmote>> emotes = [];
+        public static IReadOnlyDictionary<CubedEmoteLookup, Func<CubedEmote>> Emotes => emotes;
 
-        public abstract uint trigger { get; }
+        public Drawable Content {
+            get => InternalChild;
+            protected set {
+                value.Anchor = Anchor.Centre;
+                value.Origin = Anchor.Centre;
+                value.RelativeSizeAxes = Axes.Both;
+                value.Size = osuTK.Vector2.One;
+                value.Scale = osuTK.Vector2.One;
+                value.FillMode = FillMode.Fit;
+                InternalChild = value;
+            }
+        }
 
-        public Drawable Emote { get; protected set; }
-        public DrawableSample Sample { get; protected set; }
+        public ISample Sample { get; protected set; }
         private SampleChannel Channel;
 
         // I advise users of RegisterEmote to register them in a static constructor inside their Ruleset class
-        public static void RegisterEmote(Type emote, uint trigger = 0, String resultsScreenMessage = null) {
-            ArgumentNullException.ThrowIfNull(emote);
-            if (!(typeof(CubedEmote).IsAssignableFrom(emote)))
-                throw new ArgumentException($"Type '{emote.Name}' is not a {nameof(CubedEmote)}");
+        public static void RegisterEmote(CubedEmoteLookup emote, Func<CubedEmote> createDefault, uint trigger, String resultsScreenMessage = null) {
+            // That error handling is open to discussion
+            // I could replace a null createDefault with an "empty emote" one
+            ArgumentNullException.ThrowIfNull(createDefault);
+            // Or making null triggers accepted but with reduced functionality
+            if (trigger == 0)
+                throw new ArgumentException("Tried to register an emote without a valid trigger!", nameof(trigger));
 
-            if (emotes.Contains(emote))
-                throw new ArgumentException($"Type '{emote.Name}' is already registered");
-
-            emotes.Add(emote);
-            if (trigger != 0)
-                CubedEmotes.Emotes.Add(trigger, emote);
+            emotes.Add(emote, createDefault);
+            CubedEmotesHandler.Emotes.Add(trigger, emote);
             if (!String.IsNullOrEmpty(resultsScreenMessage))
-                CubedResultsScreenEmote.Messages.Add(emote, resultsScreenMessage);
+                CubedResultsScreenEmote.Messages.Add(emote, new (resultsScreenMessage, trigger));
         }
-
-        public void Play() => Channel = Sample.Play();
 
         [BackgroundDependencyLoader]
-        private void load() {
+        private void load() =>
             RelativeSizeAxes = Axes.Both;
-            Anchor = Anchor.Centre;
-            Origin = Anchor.Centre;
-        }
+
+        public void Play() => Channel = Sample?.Play();
 
         protected override void Update() {
             if (Channel is not null && Channel.HasCompleted)

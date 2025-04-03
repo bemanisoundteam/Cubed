@@ -18,7 +18,7 @@ namespace osu.Game.Rulesets.Cubed.Tests.Components {
 
         [Test]
         public void Larry() {
-            AddStep("Larry ! I pick you", () => screen.PickEmote(typeof(LarryEmote)));
+            AddStep("Larry ! I pick you", () => screen.PickEmote(new (LarryEmote.Name, Ruleset.Value.Name)));
             AddAssert("Current Emote is set to Larry", () => screen.CurrentEmote is LarryEmote);
             AddAssert("Larry is on screen", () => screen.ChildrenOfType<LarryEmote>().Any());
             AddAssert("Text workey", () => screen.ChildrenOfType<OsuSpriteText>().First().Text == LarryEmote.Quote);

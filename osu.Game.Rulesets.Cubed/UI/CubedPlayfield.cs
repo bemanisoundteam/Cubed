@@ -14,7 +14,7 @@ namespace osu.Game.Rulesets.Cubed.UI {
     public partial class CubedPlayfield : Playfield {
         public override bool UpdateSubTreeMasking() => false;
         private readonly CubedCell[][] Cells = new CubedCell[4][];
-        private CubedEmotes emotes = new ();
+        private readonly CubedEmotesHandler emotes = new ();
 
         [BackgroundDependencyLoader]
         private void load() {
