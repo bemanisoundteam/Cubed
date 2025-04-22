@@ -7,7 +7,7 @@ using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Game.Rulesets.Cubed.UI {
-    public partial class CellGlow : BufferedContainer {
+    public partial class CellGlow() : BufferedContainer(null, true, true) {
         [BackgroundDependencyLoader]
         private void load() {
             RelativeSizeAxes = Axes.Both;
