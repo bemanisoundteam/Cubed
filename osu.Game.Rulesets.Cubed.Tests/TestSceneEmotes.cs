@@ -63,6 +63,14 @@ namespace osu.Game.Rulesets.Cubed.Tests {
         }
 
         [Test]
+        public void TestEGadd() {
+            AddStep("Trigger Elvin", () => panel.PressKeys(EGaddEmote.Trigger));
+            AddAssert("Professor Elvin shows up", () => inputManager.ChildrenOfType<EGaddEmote>().Any());
+            AddAssert("Professor is present", () => inputManager.ChildrenOfType<EGaddEmote>().First().IsPresent);
+            AddAssert("Professor is visible", () => (inputManager.ChildrenOfType<EGaddEmote>().First().Content as Sprite)?.Texture != null);
+        }
+
+        [Test]
         public void TestWideEmote() =>
             AddStep("Fire wide emote", () => inputManager.ChildrenOfType<CubedEmotesHandler>().First().Fire(NatGeoEmote.Skinnable()));
 

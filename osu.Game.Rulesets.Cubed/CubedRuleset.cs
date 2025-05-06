@@ -128,6 +128,7 @@ namespace osu.Game.Rulesets.Cubed {
 
         static CubedRuleset() {
             CubedEmote.RegisterEmote(new (LarryEmote.Name, "Cubed"), () => new LarryEmote(), LarryEmote.Trigger, LarryEmote.Quote);
+            CubedEmote.RegisterEmote(new (EGaddEmote.Name, "Cubed"), () => new EGaddEmote(), EGaddEmote.Trigger);
         }
 
         // Leave this line intact. It will bake the correct version into the ruleset on each build/release.
