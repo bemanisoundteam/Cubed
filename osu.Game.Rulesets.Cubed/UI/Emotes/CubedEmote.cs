@@ -8,8 +8,12 @@ using System.Collections.Generic;
 
 namespace osu.Game.Rulesets.Cubed.UI.Emotes {
     public abstract partial class CubedEmote : CompositeDrawable {
-        private static readonly Dictionary<CubedEmoteLookup, Func<CubedEmote>> emotes = [];
+        private static readonly Dictionary<CubedEmoteLookup, Func<CubedEmote>> emotes = new() {
+            [new CubedEmoteLookup(null, null)] = Empty
+        };
         public static IReadOnlyDictionary<CubedEmoteLookup, Func<CubedEmote>> Emotes => emotes;
+
+        public static new CubedEmote Empty() => new EmptyEmote();
 
         public Drawable Content {
             get => InternalChild;
@@ -52,5 +56,7 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
             if (Channel is not null && Channel.HasCompleted)
                 Expire();
         }
+
+        private partial class EmptyEmote : CubedEmote;
     }
 }
