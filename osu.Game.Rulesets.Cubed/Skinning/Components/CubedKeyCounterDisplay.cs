@@ -12,7 +12,7 @@ using osu.Game.Screens.Play.HUD;
 using osuTK;
 using osuTK.Graphics;
 
-namespace osu.Game.Rulesets.Cubed.Skinning {
+namespace osu.Game.Rulesets.Cubed.Skinning.Components {
     public partial class CubedKeyCounterDisplay : KeyCounterDisplay {
         private readonly CubedPanel panel = new() { RelativeSizeAxes = Axes.Both };
         // Users shouldn't be able to toggle the panel's cells on the display, as it's supposed to match the input state
