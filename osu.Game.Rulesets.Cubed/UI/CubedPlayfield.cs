@@ -43,9 +43,10 @@ namespace osu.Game.Rulesets.Cubed.UI {
         }
 
         public CubedCell GetCell(Vector2 pos) {
-            foreach (CubedCell cell in Cells.SelectMany(c => c))
-                if (cell.ReceivePositionalInputAt(pos))
-                    return cell;
+            foreach (CubedCell[] c in Cells)
+                foreach (CubedCell cell in c)
+                    if (cell.ReceivePositionalInputAt(pos))
+                        return cell;
             return null;
         }
 

@@ -1,5 +1,4 @@
 ﻿using osu.Framework.Allocation;
-using osu.Framework.Graphics;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Game.Rulesets.Cubed.Objects;
@@ -32,14 +31,13 @@ namespace osu.Game.Rulesets.Cubed.UI {
         protected override HitObjectLifetimeEntry CreateLifetimeEntry(HitObject hitObject) => new CubedHitObjectLifetimeEntry((CubedHitObject) hitObject);
 
         private bool Press() {
-            glow.FadeIn();
-            var _ = (HitObjectContainer.AliveObjects.FirstOrDefault(obj => !obj.Judged) as DrawableCubedHitObject)!;
-            heldObject = _;
-            return _?.OnHit() ?? false;
+            glow.Alpha = 1;
+            heldObject = (HitObjectContainer.AliveObjects.FirstOrDefault(obj => !obj.Judged) as DrawableCubedHitObject)!;
+            return heldObject?.OnHit() ?? false;
         }
 
         private void Release() {
-            glow.FadeOut();
+            glow.Alpha = 0;
             heldObject?.OnRelease();
             heldObject = null;
         }
