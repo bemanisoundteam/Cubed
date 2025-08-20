@@ -1,9 +1,12 @@
-﻿using osu.Framework.Graphics;
-using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Shapes;
+﻿using osu.Framework.Allocation;
+using osu.Framework.Graphics;
+using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Rendering;
+using osu.Framework.Graphics.Shaders;
 using osu.Game.Beatmaps;
 using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.Scoring;
+using osuTK;
 using System.Collections.Generic;
 using System;
 using System.Linq;
@@ -19,13 +22,15 @@ namespace osu.Game.Rulesets.Cubed.UI {
      *      columns[index] = min(columns[index] + 1, 8)
      */
 
-    public partial class CubedMusicBar : Container {
+    public partial class CubedMusicBar : Drawable {
         const int ColumnCount = 120;
-        private readonly int highestColumn;
+        public readonly int[] ColumnHeights = new int[ColumnCount];
+        public readonly BarState[] BarStates = new BarState[ColumnCount];
+        public readonly int HighestColumn;
+
+        private IShader Shader;
 
         public CubedMusicBar(IReadOnlyList<HitEvent> hitEvents, IBeatmap beatmap) {
-            int[] columns = new int[ColumnCount];
-            BarState[] barStates = new BarState[ColumnCount];
             double startTime = beatmap.HitObjects[0].StartTime;
             double endTime = beatmap.HitObjects[^1].StartTime;
 
@@ -35,48 +40,30 @@ namespace osu.Game.Rulesets.Cubed.UI {
             double timePerColumn = (endTime - startTime + 1) / ColumnCount;
             foreach (HitObject hitObject in beatmap.HitObjects) {
                 int index = (int) ((hitObject.StartTime - startTime) / timePerColumn);
-                columns[index]++; // No clamping
+                ColumnHeights[index]++;  // No clamping
             }
+
+            HighestColumn = ColumnHeights.Max();
 
             foreach (HitEvent hitEvent in hitEvents) {
                 int index = (int) ((hitEvent.HitObject.StartTime - startTime) / timePerColumn);
                 if (hitEvent.Result == HitResult.Miss)
-                    barStates[index] = BarState.Missed;
-                else if (hitEvent.Result != HitResult.Perfect && barStates[index] != BarState.Missed)
-                    barStates[index] = BarState.Missless;
+                    BarStates[index] = BarState.Missed;
+                else if (hitEvent.Result != HitResult.Perfect && BarStates[index] != BarState.Missed)
+                    BarStates[index] = BarState.Missless;
             }
-
-            // In case this feels claustrophobic, or if I want to stick to the original, uncomment the following :
-            // highestColumn = Math.Max(columns.Max(), 8)
-            highestColumn = columns.Max();
-            // I swear GridContainer is so fucking retarded, I hate that fucking steaming pile of shit
-            Box[][] boxes = new Box[highestColumn][];
-            for (int y = 0; y < highestColumn; y++) {
-                // Did I mention I fucking hate GridContainer ?
-                boxes[y] = new Box[ColumnCount];
-                for (int x = 0; x < ColumnCount; x++)
-                    if (columns[x] >= highestColumn - y)
-                        // SEE THAT MOTHERFUCKING SHIT IS FUCKING INVERTED
-                        boxes[y][x] = new Box {
-                            RelativeSizeAxes = Axes.Both,
-                            Colour = getBarColor(barStates[x]),
-                            FillMode = FillMode.Fit,
-                            FillAspectRatio = 1
-                        };
-            }
-
-            InternalChild = new GridContainer {
-                RelativeSizeAxes = Axes.Both,
-                Content = boxes
-            };
         }
 
-        // Stolen from Tzwcard
-        private readonly Colour4 PerfectColor = new (255, 212, 39, 255);
-        private readonly Colour4 MisslessColor = new (41, 187, 229, 255);
-        private readonly Colour4 MissedColor = new (134, 130, 132, 255);
+        [BackgroundDependencyLoader]
+        private void load(ShaderManager shaders) =>
+            Shader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, FragmentShaderDescriptor.TEXTURE);
 
-        private Colour4 getBarColor(BarState barState) => barState switch {
+        // Stolen from Tzwcard
+        private static readonly Colour4 PerfectColor = new(255, 212, 39, 255);
+        private static readonly Colour4 MisslessColor = new(41, 187, 229, 255);
+        private static readonly Colour4 MissedColor = new(134, 130, 132, 255);
+
+        private static Colour4 getBarColor(BarState barState) => barState switch {
             BarState.Perfect => PerfectColor,
             BarState.Missless => MisslessColor,
             BarState.Missed => MissedColor,
@@ -85,11 +72,68 @@ namespace osu.Game.Rulesets.Cubed.UI {
             _ => throw new ArgumentOutOfRangeException(nameof(barState), barState, null)
         };
 
+        protected override DrawNode CreateDrawNode() => new MusicBarDrawNode(this);
+
         protected override void Update() =>
-            Height = (DrawWidth / ColumnCount) * highestColumn;
+            Height = (DrawWidth / ColumnCount) * HighestColumn;
+
+        private class MusicBarDrawNode(CubedMusicBar source) : DrawNode(source) {
+            private IShader shader;
+            private Vector2 cellSize;
+
+            // Could optimise further by bring vertex count down from 4 * ColumnCount to a few, but it's currently not a bottleneck
+            private readonly Quad[] bars = new Quad[ColumnCount];
+
+            public override void ApplyState() {
+                base.ApplyState();
+
+                shader = source.Shader;
+                cellSize = new Vector2(source.DrawWidth / ColumnCount, source.DrawHeight / source.HighestColumn);
+
+                for (int i = 0; i < ColumnCount; i++) {
+                    float height = cellSize.Y * source.ColumnHeights[i];
+
+                    Vector2 topLeft = new(cellSize.X * i, source.DrawHeight - height);
+                    Vector2 topRight = new(cellSize.X * (i + 1), source.DrawHeight - height);
+                    Vector2 bottomLeft = new(cellSize.X * i, source.DrawHeight);
+                    Vector2 bottomRight = new(cellSize.X * (i + 1), source.DrawHeight);
+                    bars[i] = new Quad(topLeft, topRight, bottomLeft, bottomRight);
+                }
+            }
+
+            protected override bool CanDrawOpaqueInterior => true;
+
+            protected override void Draw(IRenderer renderer) {
+                base.Draw(renderer);
+
+                DrawBars(renderer);
+            }
+
+            protected override void DrawOpaqueInterior(IRenderer renderer) {
+                base.DrawOpaqueInterior(renderer);
+
+                DrawBars(renderer);
+            }
+
+            private void DrawBars(IRenderer renderer) {
+                shader.Bind();
+
+                for (int i = 0; i < ColumnCount; i++) {
+                    renderer.DrawQuad(
+                        renderer.WhitePixel,
+                        bars[i] * DrawInfo.Matrix,
+                        // This is ok, as bar states are readonly in the source
+                        getBarColor(source.BarStates[i])
+                            .MultiplyAlpha(DrawColourInfo.Colour.TopLeft.Alpha)
+                    );
+                }
+
+                shader.Unbind();
+            }
+        }
     }
 
-    enum BarState {
+    public enum BarState {
         Perfect,
         Missless,
         Missed
