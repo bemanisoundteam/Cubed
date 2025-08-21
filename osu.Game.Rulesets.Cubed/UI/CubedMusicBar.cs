@@ -97,7 +97,7 @@ namespace osu.Game.Rulesets.Cubed.UI {
                     Vector2 topRight = new(cellSize.X * (i + 1), source.DrawHeight - height);
                     Vector2 bottomLeft = new(cellSize.X * i, source.DrawHeight);
                     Vector2 bottomRight = new(cellSize.X * (i + 1), source.DrawHeight);
-                    bars[i] = new Quad(topLeft, topRight, bottomLeft, bottomRight);
+                    bars[i] = new Quad(topLeft, topRight, bottomLeft, bottomRight) * DrawInfo.Matrix;
                 }
             }
 
@@ -121,7 +121,7 @@ namespace osu.Game.Rulesets.Cubed.UI {
                 for (int i = 0; i < ColumnCount; i++) {
                     renderer.DrawQuad(
                         renderer.WhitePixel,
-                        bars[i] * DrawInfo.Matrix,
+                        bars[i],
                         // This is ok, as bar states are readonly in the source
                         getBarColor(source.BarStates[i])
                             .MultiplyAlpha(DrawColourInfo.Colour.TopLeft.Alpha)
