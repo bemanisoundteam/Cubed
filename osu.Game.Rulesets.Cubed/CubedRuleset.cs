@@ -83,7 +83,7 @@ namespace osu.Game.Rulesets.Cubed {
                     new AverageHitError(relevantHitEvents),
                     new UnstableRate(relevantHitEvents)
                 ]), true),
-                new ("Per key results", () => new HackCubedPanelPerKeyRank(relevantHitEvents, CreateScoreProcessor) {
+                new ("Per key results", () => new HackCubedPanelPerKeyRank(relevantHitEvents, CreateScoreProcessor, score) {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
                     RelativeSizeAxes = Axes.X,
@@ -135,7 +135,7 @@ namespace osu.Game.Rulesets.Cubed {
         public override string RulesetAPIVersionSupported => CURRENT_RULESET_API_VERSION;
 
         // I'm VERY mad that I had to do this, but at least this shit works, and I'm never going to think about it again
-        private partial class HackCubedPanelPerKeyRank(IReadOnlyList<HitEvent> hitEvents, Func<ScoreProcessor> createScoreProcessor) : CubedPanelPerKeyRank(hitEvents, createScoreProcessor) {
+        private partial class HackCubedPanelPerKeyRank(IReadOnlyList<HitEvent> hitEvents, Func<ScoreProcessor> createScoreProcessor, ScoreInfo score) : CubedPanelPerKeyRank(hitEvents, createScoreProcessor, score) {
             protected override void Update() => Height = DrawWidth;
         }
     }

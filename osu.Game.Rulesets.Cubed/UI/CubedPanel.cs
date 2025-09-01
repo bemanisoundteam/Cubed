@@ -120,6 +120,9 @@ namespace osu.Game.Rulesets.Cubed.UI {
             }
 
             protected override bool OnClick(ClickEvent e) {
+                if (Active.Disabled)
+                    return false;
+
                 Active.Toggle();
                 return true;
             }
