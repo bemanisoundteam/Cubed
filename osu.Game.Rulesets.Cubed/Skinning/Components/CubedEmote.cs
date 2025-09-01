@@ -8,7 +8,7 @@ using osu.Game.Skinning;
 
 namespace osu.Game.Rulesets.Cubed.Skinning.Components {
     public partial class CubedEmote : CompositeDrawable, ISerialisableDrawable {
-        [SettingSource(typeof(SkinnableComponentStrings), nameof(SkinnableComponentStrings.SpriteName), nameof(SkinnableComponentStrings.SpriteNameDescription), SettingControlType = typeof(EmoteSelector))]
+        [SettingSource(typeof(SkinnableComponentStrings), nameof(SkinnableComponentStrings.SpriteName), SettingControlType = typeof(EmoteSelector))]
         public Bindable<CubedEmoteLookup> Emote { get; } = new() {
             // Defaulting to CubedEmote#EmptyEmote avoids a crash when resetting that setting
             Default = new CubedEmoteLookup(null, null)

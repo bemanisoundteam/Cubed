@@ -14,8 +14,6 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
                     switch (containerLookup.Lookup) {
                         case GlobalSkinnableContainers.MainHUDComponents:
                             Container components = (Container) base.GetDrawableComponent(lookup);
-                            // FIXME, this does disable it for other rulesets
-                            components?.OfType<KeyCounterDisplay>().FirstOrDefault()?.Expire();
 
                             if (containerLookup.Ruleset != null) {
                                 components ??= new DefaultSkinComponentsContainer(_ => {});

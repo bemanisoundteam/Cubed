@@ -17,8 +17,8 @@ namespace osu.Game.Rulesets.Cubed.Edit.Blueprints {
             return true;
         }
 
-        public override void UpdateTimeAndPosition(SnapResult result) {
-            base.UpdateTimeAndPosition(result);
+        public override SnapResult UpdateTimeAndPosition(osuTK.Vector2 screenSpacePosition, double time) {
+            SnapResult result = base.UpdateTimeAndPosition(screenSpacePosition, time);
 
             InternalChild.Alpha = 0;
             if (result.Playfield != null) {
@@ -27,6 +27,8 @@ namespace osu.Game.Rulesets.Cubed.Edit.Blueprints {
                 InternalChild.Scale = result.Playfield.Scale;
                 InternalChild.Position = result.Playfield.ToSpaceOfOtherDrawable(result.Playfield.Position, this);
             }
+
+            return result;
         }
     }
 }

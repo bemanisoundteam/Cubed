@@ -50,7 +50,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning.Components {
         [SettingSource("Use smaller triangles")]
         public BindableBool UseSmallTriangles => panel.SmallTriangles;
 
-        [SettingSource(typeof(SkinnableComponentStrings), nameof(SkinnableComponentStrings.Colour), nameof(SkinnableComponentStrings.ColourDescription))]
+        [SettingSource(typeof(SkinnableComponentStrings), nameof(SkinnableComponentStrings.Colour))]
         public BindableColour4 Color => panel.AccentColor;
 
         #endregion

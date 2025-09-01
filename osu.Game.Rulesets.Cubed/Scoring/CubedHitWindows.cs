@@ -14,13 +14,16 @@ namespace osu.Game.Rulesets.Cubed.Scoring {
             return false;
         }
 
+        public override void SetDifficulty(double difficulty) {  /* NO-OP */  }
+
         // With help from https://544332133981.hatenablog.com/entry/bemani-rank_4
-        protected override DifficultyRange [] GetRanges() => new [] {
-            new DifficultyRange(HitResult.Perfect, 42, 42, 42),
-            new DifficultyRange(HitResult.Great, 92, 92, 92),
-            new DifficultyRange(HitResult.Good, 166, 166, 166),
-            new DifficultyRange(HitResult.Meh, 250, 250, 250),
-            new DifficultyRange(HitResult.Miss, 400, 400, 400)
+        public override double WindowFor(HitResult result) => result switch {
+            HitResult.Perfect => 42,
+            HitResult.Great => 92,
+            HitResult.Good => 166,
+            HitResult.Meh => 250,
+            HitResult.Miss => 400,
+            _ => throw new System.ArgumentOutOfRangeException(nameof(result), result, null)
         };
     }
 }

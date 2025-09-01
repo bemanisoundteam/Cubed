@@ -8,6 +8,8 @@ using osu.Game.Screens.Edit.Compose.Components;
 using System.Collections.Generic;
 using System.Linq;
 
+// ReSharper disable PossibleInvalidCastExceptionInForeachLoop
+
 namespace osu.Game.Rulesets.Cubed.Edit {
     public partial class CubedSelectionHandler : EditorSelectionHandler {
         private CubedPlayfield playfield;
@@ -25,12 +27,13 @@ namespace osu.Game.Rulesets.Cubed.Edit {
         private static bool canFlipY(IReadOnlyList<HitObject> selected) => selected.Select(obj => ((CubedHitObject) obj).Row).Distinct().Count() > 1;
 
         public override bool HandleMovement(MoveSelectionEvent<HitObject> moveEvent) {
+            CubedHitObject BlueprintItem = (CubedHitObject) moveEvent.Blueprint.Item;
             CubedCell cell = playfield.GetCell(moveEvent.Blueprint.ScreenSpaceSelectionPoint + moveEvent.ScreenSpaceDelta);
             if (cell == null)
                 return false;
 
-            int deltaCol = cell.Column - ((CubedHitObject) moveEvent.Blueprint.Item).Column;
-            int deltaRow = cell.Row - ((CubedHitObject) moveEvent.Blueprint.Item).Row;
+            int deltaCol = cell.Column - BlueprintItem.Column;
+            int deltaRow = cell.Row - BlueprintItem.Row;
             if (deltaCol == 0 && deltaRow == 0)
                 return false;
 
