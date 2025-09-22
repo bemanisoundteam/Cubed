@@ -52,20 +52,28 @@ namespace osu.Game.Rulesets.Cubed.UI {
 
         private bool IsNotRewinding => Clock is not IGameplayClock clock || !clock.IsRewinding;
 
+        private int pressCount = 0;
+
         protected override bool OnMouseDown(MouseDownEvent e) {
+            pressCount++;
             KeyBindingContainer.TriggerPressed(Action);
             return true;
         }
 
-        protected override void OnMouseUp(MouseUpEvent e) =>
-            KeyBindingContainer.TriggerReleased(Action);
+        protected override void OnMouseUp(MouseUpEvent e) {
+            if (--pressCount == 0)
+                KeyBindingContainer.TriggerReleased(Action);
+        }
 
         protected override bool OnTouchDown(TouchDownEvent e) {
+            pressCount++;
             KeyBindingContainer.TriggerPressed(Action);
             return true;
         }
 
-        protected override void OnTouchUp(TouchUpEvent e) =>
-            KeyBindingContainer.TriggerReleased(Action);
+        protected override void OnTouchUp(TouchUpEvent e) {
+            if (--pressCount == 0)
+                KeyBindingContainer.TriggerReleased(Action);
+        }
     }
 }
