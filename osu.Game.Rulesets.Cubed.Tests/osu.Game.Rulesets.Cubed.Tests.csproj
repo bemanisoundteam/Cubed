@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup Label="Project Reference">
     <ProjectReference Include="..\osu.Game.Rulesets.Cubed\osu.Game.Rulesets.Cubed.csproj" />
-    <PackageReference Include="ppy.osu.Game.Rulesets.Osu" Version="2025.710.0-lazer"/>
   </ItemGroup>
   <PropertyGroup Label="Project">
     <OutputType>WinExe</OutputType>

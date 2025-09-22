@@ -8,6 +8,6 @@
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources/**" />
-    <PackageReference Include="ppy.osu.Game" Version="2025.710.0-lazer" />
+    <PackageReference Include="ppy.osu.Game" Version="2025.905.0" />
   </ItemGroup>
 </Project>
