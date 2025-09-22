@@ -7,16 +7,16 @@ using osuTK.Graphics;
 
 namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
     public partial class DrawableCube : DrawableCubedHitObject {
-        public DrawableCube() : this(null) { } // Required for pooling
+        public DrawableCube() : this(null) { }  // Required for pooling
         public DrawableCube(Cube cube) : base(cube) { }
 
         public CubedApproachPiece Approach { get; private set; }
-        public CubedMarkerPiece Marker { get; private set; }
+        public CubedMarker Marker { get; private set; }
 
         [BackgroundDependencyLoader]
         private void load() {
             AddInternal(Approach = new CubedApproachPiece());
-            AddInternal(Marker = new CubedMarkerPiece());
+            AddInternal(Marker = new CubedMarker());
         }
 
         protected override void CheckForResult(bool userTriggered, double timeOffset) {
