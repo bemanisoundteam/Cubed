@@ -22,7 +22,7 @@ namespace osu.Game.Rulesets.Cubed.UI {
         [BackgroundDependencyLoader]
         private void load(CubedInputManager manager) {
             KeyBindingContainer = manager.KeyBindingContainer;
-            AddInternal(glow = new CellGlow() { Alpha = 0 });
+            AddInternal(glow = new CellGlow { Alpha = 0 });
 
             // TODO put numbers that make sense for std (~6*) converts here
             RegisterPool<Cube, DrawableCube>(20, 100);
@@ -37,22 +37,25 @@ namespace osu.Game.Rulesets.Cubed.UI {
         }
 
         private void Release() {
-            glow.Alpha = 0;
             heldObject?.OnRelease();
             heldObject = null;
         }
 
         public bool OnPressed(KeyBindingPressEvent<CubedAction> e) =>
-            (e.Action == Action && IsNotRewinding) && Press();
+            e.Action == Action && IsNotRewinding && Press();
 
         public void OnReleased(KeyBindingReleaseEvent<CubedAction> e) {
-            if (e.Action == Action && IsNotRewinding)
+            if (e.Action != Action)
+                return;
+
+            glow.Alpha = 0;
+            if (IsNotRewinding)
                 Release();
         }
 
         private bool IsNotRewinding => Clock is not IGameplayClock clock || !clock.IsRewinding;
 
-        private int pressCount = 0;
+        private int pressCount;
 
         protected override bool OnMouseDown(MouseDownEvent e) {
             pressCount++;
