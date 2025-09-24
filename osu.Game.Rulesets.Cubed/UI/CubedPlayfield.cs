@@ -12,6 +12,8 @@ using System.Linq;
 
 namespace osu.Game.Rulesets.Cubed.UI {
     public partial class CubedPlayfield : Playfield {
+        public const float CellScale = .9f;
+
         public override bool UpdateSubTreeMasking() => false;
         private readonly CubedCell[][] Cells = new CubedCell[4][];
         private readonly CubedEmotesHandler emotes = new ();
@@ -24,8 +26,8 @@ namespace osu.Game.Rulesets.Cubed.UI {
             for (int i = 0; i < 4; i++) {
                 Cells[i] = new CubedCell[4];
                 for (int j = 0; j < 4; j++)
-                    AddNested(Cells[i][j] = new CubedCell() {
-                        Scale = new Vector2(0.9f),
+                    AddNested(Cells[i][j] = new CubedCell {
+                        Scale = new Vector2(CellScale),
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
 
