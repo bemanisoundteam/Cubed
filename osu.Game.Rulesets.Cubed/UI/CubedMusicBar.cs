@@ -101,7 +101,7 @@ namespace osu.Game.Rulesets.Cubed.UI {
                 }
             }
 
-            protected override bool CanDrawOpaqueInterior => true;
+            protected override bool CanDrawOpaqueInterior => DrawColourInfo.Colour.TopLeft.Alpha >= 1;
 
             protected override void Draw(IRenderer renderer) {
                 base.Draw(renderer);
