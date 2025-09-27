@@ -14,8 +14,8 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
             RelativeSizeAxes = Axes.Both;
         }
 
-        public bool OnHit() => UpdateResult(true);
-        public void OnRelease() { }
+        public virtual bool OnHit() => UpdateResult(true);
+        public virtual void OnRelease() { }
 
         protected override void UpdateInitialTransforms() =>
             this.FadeInFromZero(250, Easing.OutQuint);

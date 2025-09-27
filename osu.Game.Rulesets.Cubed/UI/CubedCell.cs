@@ -26,6 +26,8 @@ namespace osu.Game.Rulesets.Cubed.UI {
 
             // TODO put numbers that make sense for std (~6*) converts here
             RegisterPool<Cube, DrawableCube>(20, 100);
+            RegisterPool<CubedHoldNote, DrawableCubedHoldNote>(20, 100);
+            RegisterPool<CubedHoldHead, DrawableCubedHoldHead>(20, 100);
         }
 
         protected override HitObjectLifetimeEntry CreateLifetimeEntry(HitObject hitObject) => new CubedHitObjectLifetimeEntry((CubedHitObject) hitObject);
