@@ -8,7 +8,6 @@ using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.UI;
 using osuTK;
-using System.Linq;
 
 namespace osu.Game.Rulesets.Cubed.UI {
     public partial class CubedPlayfield : Playfield {
