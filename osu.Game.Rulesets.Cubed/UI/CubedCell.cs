@@ -1,9 +1,14 @@
 ﻿using osu.Framework.Allocation;
+using osu.Framework.Graphics;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Game.Rulesets.Cubed.Objects;
 using osu.Game.Rulesets.Cubed.Objects.Drawables;
+using osu.Game.Rulesets.Cubed.Scoring;
+using osu.Game.Rulesets.Judgements;
 using osu.Game.Rulesets.Objects;
+using osu.Game.Rulesets.Objects.Drawables;
+using osu.Game.Rulesets.Scoring;
 using osu.Game.Rulesets.UI;
 using osu.Game.Screens.Play;
 using System.Linq;
@@ -19,15 +24,37 @@ namespace osu.Game.Rulesets.Cubed.UI {
 
         private KeyBindingContainer<CubedAction> KeyBindingContainer;
 
+        private readonly JudgementContainer<DrawableCubedJudgement> judgements = new() { RelativeSizeAxes = Axes.Both };
+        private readonly JudgementPooler<DrawableCubedJudgement> judgementPool =
+            new(System.Enum.GetValues<HitResult>().Where(CubedHitWindows.HitResultAllowed));
+
         [BackgroundDependencyLoader]
         private void load(CubedInputManager manager) {
             KeyBindingContainer = manager.KeyBindingContainer;
             AddInternal(glow = new CellGlow { Alpha = 0 });
 
+            AddInternal(judgements);
+            AddInternal(judgementPool);
+
             // TODO put numbers that make sense for std (~6*) converts here
             RegisterPool<Cube, DrawableCube>(20, 100);
             RegisterPool<CubedHoldNote, DrawableCubedHoldNote>(20, 100);
             RegisterPool<CubedHoldHead, DrawableCubedHoldHead>(20, 100);
+        }
+
+        protected override void LoadComplete() {
+            base.LoadComplete();
+
+            NewResult += OnNewResult;
+        }
+
+        private void OnNewResult(DrawableHitObject judgedObject, JudgementResult result) {
+            if (!judgedObject.DisplayResult || !DisplayJudgements.Value)
+                return;
+
+            // Original clears here, if it's broken we just need to do
+            // judgements.Clear(false);
+            judgements.Add(judgementPool.Get(result.Type, j => j.Apply(result, judgedObject))!);
         }
 
         protected override HitObjectLifetimeEntry CreateLifetimeEntry(HitObject hitObject) => new CubedHitObjectLifetimeEntry((CubedHitObject) hitObject);
@@ -79,6 +106,13 @@ namespace osu.Game.Rulesets.Cubed.UI {
         protected override void OnTouchUp(TouchUpEvent e) {
             if (--pressCount == 0)
                 KeyBindingContainer.TriggerReleased(Action);
+        }
+
+        protected override void Dispose(bool isDisposing) {
+            // must happen before children are disposed in base call to prevent illegal accesses to the judgement pool.
+            NewResult -= OnNewResult;
+
+            base.Dispose(isDisposing);
         }
     }
 }

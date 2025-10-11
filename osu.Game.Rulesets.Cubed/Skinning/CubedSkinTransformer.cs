@@ -1,6 +1,7 @@
 ﻿using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Game.Rulesets.Cubed.Skinning.Components;
+using osu.Game.Rulesets.Scoring;
 using osu.Game.Skinning;
 using osuTK;
 
@@ -8,6 +9,13 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
     public class CubedSkinTransformer(ISkin skin) : SkinTransformer(skin) {
         public override Drawable GetDrawableComponent(ISkinComponentLookup lookup) {
             switch (lookup) {
+                case SkinComponentLookup<HitResult> hitResult:
+                    // This should be a setting, or done at the skin level instead of me having to do this...
+                    if (Skin is ArgonProSkin && hitResult.Component is HitResult.Great or HitResult.Perfect)
+                        return Drawable.Empty();
+
+                    break;
+
                 case GlobalSkinnableContainerLookup containerLookup:
                     switch (containerLookup.Lookup) {
                         case GlobalSkinnableContainers.MainHUDComponents:
