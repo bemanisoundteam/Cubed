@@ -2,8 +2,10 @@
 using osu.Framework.Graphics.Containers;
 using osu.Game.Rulesets.Cubed.Skinning.Components;
 using osu.Game.Rulesets.Scoring;
+using osu.Game.Screens.Play.HUD;
 using osu.Game.Skinning;
 using osuTK;
+using System.Linq;
 
 namespace osu.Game.Rulesets.Cubed.Skinning {
     public class CubedSkinTransformer(ISkin skin) : SkinTransformer(skin) {
@@ -18,6 +20,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
 
                 case GlobalSkinnableContainerLookup containerLookup:
                     switch (containerLookup.Lookup) {
+                        // TODO This is wonky (aka will not hide keycounter for edited skins) and should implement apply defaults
                         case GlobalSkinnableContainers.MainHUDComponents:
                             Container components = (Container) base.GetDrawableComponent(lookup);
 
@@ -36,6 +39,9 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
                                     Position = new Vector2(-padding, -paddedSongProgressHeight)
                                 });
                             }
+                            else
+                                // This will not hide it for edited skins sadly, will have to do with it for the moment...
+                                components?.OfType<KeyCounterDisplay>().FirstOrDefault()?.Hide();
 
                             return components;
                     }
