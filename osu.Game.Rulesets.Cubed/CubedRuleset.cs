@@ -25,7 +25,7 @@ using System.Linq;
 namespace osu.Game.Rulesets.Cubed {
     public partial class CubedRuleset : Ruleset {
         public override string Description => "Cubed";
-        public override string ShortName => "cubedruleset";
+        public override string ShortName => "cubed";
         public override string PlayingVerb => "Tapping cubes";
 
         public override DrawableRuleset CreateDrawableRulesetWith(IBeatmap beatmap, IReadOnlyList<Mod> mods = null) => new DrawableCubedRuleset(this, beatmap, mods);
