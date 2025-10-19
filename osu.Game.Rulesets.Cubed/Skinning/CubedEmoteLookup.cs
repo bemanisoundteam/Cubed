@@ -3,7 +3,7 @@ using osu.Game.Skinning;
 
 namespace osu.Game.Rulesets.Cubed.Skinning {
     public record CubedEmoteLookup(string Name, string Namespace) : ISkinComponentLookup {
-        public CubedSkinnableEmote CreateEmote() => new (this, CubedEmote.Emotes[this]);
+        public CubedSkinnableEmote CreateEmote() => new (this, CubedEmoteRegistry.Emotes[this]);
 
         public override string ToString() => !string.IsNullOrEmpty(Namespace)
             ? $"{Name} ({Namespace})"

@@ -1,10 +1,9 @@
 ﻿using osu.Framework.Allocation;
 using osu.Framework.Audio.Sample;
-using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 
 namespace osu.Game.Rulesets.Cubed.UI.Emotes {
-    public partial class LarryEmote : CubedEmote {
+    public partial class LarryEmote : CubedSpriteEmote {
         // ⬜🟥🟥🟥
         // 🟥🟥⬜⬜
         // 🟥🟥🟥🟥
@@ -15,7 +14,7 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
 
         [BackgroundDependencyLoader]
         private void load(TextureStore textures, ISampleStore samples) {
-            Content = new Sprite { Texture = textures.Get("Emotes/Larry") };
+            Texture = textures.Get("Emotes/Larry");
             Sample = samples.Get("Emotes/Larry");
         }
     }

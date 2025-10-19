@@ -5,11 +5,11 @@ using osu.Game.Skinning;
 using System;
 
 namespace osu.Game.Rulesets.Cubed.Skinning {
-    public partial class CubedSkinnableEmote : SkinnableDrawable {
-        public CubedEmote Emote => Drawable as CubedEmote;
+    public partial class CubedSkinnableEmote(CubedEmoteLookup lookup, Func<ICubedEmote> createDefault)
+        : SkinnableDrawable(lookup, _ => (Drawable) createDefault(), ConfineMode.ScaleToFit) {
+        public ICubedEmote Emote => Drawable as ICubedEmote;
 
-        public CubedSkinnableEmote(CubedEmoteLookup lookup, Func<CubedEmote> createDefault)
-            : base(lookup, (_ => createDefault()), ConfineMode.ScaleToFit) {}
+        protected override bool ApplySizeRestrictionsToDefault => true;
 
         [BackgroundDependencyLoader]
         private void load() {
@@ -17,6 +17,6 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
             Origin = Anchor.Centre;
         }
 
-        public void Play() => Emote.Play();
+        public void Play() => Emote.Fire(true);
     }
 }

@@ -2,7 +2,6 @@
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
-using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.IO.Stores;
 using osu.Framework.Testing;
@@ -58,16 +57,18 @@ namespace osu.Game.Rulesets.Cubed.Tests {
         public void TestLarry() {
             AddStep("Bird fucking screams", () => panel.PressKeys(LarryEmote.Trigger));
             AddAssert("Bird is actually fucking screaming", () => inputManager.ChildrenOfType<LarryEmote>().Any());
+            AddAssert("And you sadly can hear it...", () => inputManager.ChildrenOfType<LarryEmote>().First().Sample != null);
             AddAssert("Bird is present", () => inputManager.ChildrenOfType<LarryEmote>().First().IsPresent);
-            AddAssert("Bird is visible", () => (inputManager.ChildrenOfType<LarryEmote>().First().Content as Sprite)?.Texture != null);
+            AddAssert("Bird is visible", () => inputManager.ChildrenOfType<LarryEmote>().First()?.Texture != null);
         }
 
         [Test]
         public void TestEGadd() {
             AddStep("Trigger Elvin", () => panel.PressKeys(EGaddEmote.Trigger));
             AddAssert("Professor Elvin shows up", () => inputManager.ChildrenOfType<EGaddEmote>().Any());
+            AddAssert("Funny jingle plays", () => inputManager.ChildrenOfType<EGaddEmote>().First().Sample != null);
             AddAssert("Professor is present", () => inputManager.ChildrenOfType<EGaddEmote>().First().IsPresent);
-            AddAssert("Professor is visible", () => (inputManager.ChildrenOfType<EGaddEmote>().First().Content as Sprite)?.Texture != null);
+            AddAssert("Professor is visible", () => inputManager.ChildrenOfType<EGaddEmote>().First().Texture != null);
         }
 
         [Test]
@@ -85,13 +86,13 @@ namespace osu.Game.Rulesets.Cubed.Tests {
         protected override Ruleset CreateRuleset() => new CubedRuleset();
 
         // Used for testing with a wide emote
-        private partial class NatGeoEmote : CubedEmote {
+        private partial class NatGeoEmote : CubedSpriteEmote {
             private static readonly CubedEmoteLookup Lookup = new("NATIONAL GEOGRAPHIC GOD DAMNIT", "Cubed Tests");
             public static CubedSkinnableEmote Skinnable() => new (Lookup, () => new NatGeoEmote());
 
             [BackgroundDependencyLoader]
             private void load(TextureStore textures) =>
-                Content = new Sprite { Texture = textures.Get("Natgeologo.svg") };
+                Texture = textures.Get("Natgeologo.svg");
         }
     }
 }

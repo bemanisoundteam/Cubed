@@ -20,7 +20,7 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
             Padding = new MarginPadding { Bottom = 12 }
         };
 
-        public CubedEmote CurrentEmote { get; private set; }
+        public ICubedEmote CurrentEmote { get; private set; }
         private uint CurrentTrigger;
 
         public void PickEmote(CubedEmoteLookup emote) {
@@ -48,7 +48,7 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
         public void PickRandomEmote() =>
             PickEmote(Messages.Keys.ElementAt(new Random().Next(0, Messages.Count)));
 
-        private static CubedEmote createEmote(CubedEmoteLookup emote, FillFlowContainer container) {
+        private static ICubedEmote createEmote(CubedEmoteLookup emote, FillFlowContainer container) {
             CubedSkinnableEmote elmote = emote.CreateEmote();
             container.Add(elmote);
 
@@ -60,8 +60,10 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
             return elmote.Emote;
         }
 
-        protected override bool OnClick(ClickEvent e) =>
-            CurrentEmote?.Sample.Play() != null;
+        protected override bool OnClick(ClickEvent e) {
+            CurrentEmote?.Fire(false);
+            return CurrentEmote != null;
+        }
 
         public ITooltip<uint> GetCustomTooltip() => new CubedPanelTooltip();
 
