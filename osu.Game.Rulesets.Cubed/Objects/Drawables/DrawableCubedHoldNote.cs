@@ -8,9 +8,8 @@ using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Scoring;
 
 namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
-    public partial class DrawableCubedHoldNote : DrawableCubedHitObject {
+    public partial class DrawableCubedHoldNote(CubedHoldNote hold) : DrawableCubedHitObject(hold) {
         public DrawableCubedHoldNote() : this(null) { }  // Required for pooling
-        public DrawableCubedHoldNote(CubedHoldNote hold) : base(hold) { }
         public new CubedHoldNote HitObject => (CubedHoldNote) base.HitObject;
 
         public readonly Bindable<HoldDirection> Direction = new ();

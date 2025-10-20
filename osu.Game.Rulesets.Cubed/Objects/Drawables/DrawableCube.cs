@@ -6,9 +6,8 @@ using osu.Game.Rulesets.Scoring;
 using osuTK.Graphics;
 
 namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
-    public partial class DrawableCube : DrawableCubedHitObject {
+    public partial class DrawableCube(Cube cube) : DrawableCubedHitObject(cube) {
         public DrawableCube() : this(null) { }  // Required for pooling
-        public DrawableCube(Cube cube) : base(cube) { }
 
         public CubedApproachPiece Approach { get; private set; }
         public CubedMarker Marker { get; private set; }
