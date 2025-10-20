@@ -6,10 +6,10 @@ using osu.Framework.Graphics.Shapes;
 using osuTK;
 using osuTK.Graphics;
 
-namespace osu.Game.Rulesets.Cubed.UI {
-    public partial class CellGlow() : BufferedContainer(null, true, true) {
+namespace osu.Game.Rulesets.Cubed.Skinning.CellGlows {
+    public partial class DefaultCellGlow() : BufferedContainer(null, true, true) {
         [BackgroundDependencyLoader]
-        private void load() {
+        private void hugeHack() {
             RelativeSizeAxes = Axes.Both;
             Masking = true;
             BlurSigma = new Vector2(25);

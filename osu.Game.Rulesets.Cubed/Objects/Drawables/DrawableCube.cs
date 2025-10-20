@@ -1,6 +1,6 @@
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
-using osu.Game.Rulesets.Cubed.Objects.Drawables.Pieces;
+using osu.Game.Rulesets.Cubed.Skinning;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Scoring;
 using osuTK.Graphics;
@@ -9,14 +9,12 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
     public partial class DrawableCube(Cube cube) : DrawableCubedHitObject(cube) {
         public DrawableCube() : this(null) { }  // Required for pooling
 
-        public CubedApproachPiece Approach { get; private set; }
-        public CubedMarker Marker { get; private set; }
+        private CubedSkinnableDrawable marker;
+        public IMarker Marker => (IMarker) marker.Drawable;
 
         [BackgroundDependencyLoader]
-        private void load() {
-            AddInternal(Approach = new CubedApproachPiece());
-            AddInternal(Marker = new CubedMarker());
-        }
+        private void load() =>
+            AddInternal(marker = new CubedSkinnableDrawable(CubedSkinComponents.Marker));
 
         protected override void CheckForResult(bool userTriggered, double timeOffset) {
             if (!userTriggered) {
@@ -34,7 +32,7 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
 
         protected override void UpdateInitialTransforms() {
             base.UpdateInitialTransforms();
-            Approach.ScaleTo(1, InitialLifetimeOffset).Then().FadeOut();
+            Marker.AnimateApproach(InitialLifetimeOffset);
         }
 
         protected override void UpdateHitStateTransforms(ArmedState state) {
@@ -42,8 +40,7 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
 
             switch (state) {
                 case ArmedState.Hit:
-                    Approach.FadeOut();
-                    Marker.ScaleTo(1.5f, duration, Easing.OutQuint);
+                    Marker.AnimateHit(duration);
                     this.FadeOut(duration).Expire();
                     break;
 

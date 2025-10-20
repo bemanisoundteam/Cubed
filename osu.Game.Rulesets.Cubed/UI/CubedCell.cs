@@ -5,6 +5,8 @@ using osu.Framework.Input.Events;
 using osu.Game.Rulesets.Cubed.Objects;
 using osu.Game.Rulesets.Cubed.Objects.Drawables;
 using osu.Game.Rulesets.Cubed.Scoring;
+using osu.Game.Rulesets.Cubed.Skinning;
+using static osu.Game.Rulesets.Cubed.Skinning.CubedSkinComponents;
 using osu.Game.Rulesets.Judgements;
 using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.Objects.Drawables;
@@ -20,7 +22,7 @@ namespace osu.Game.Rulesets.Cubed.UI {
         public int Row => (int) Action / 4;
 
         private DrawableCubedHitObject heldObject;
-        private CellGlow glow;
+        private Drawable glow;
 
         private KeyBindingContainer<CubedAction> KeyBindingContainer;
 
@@ -31,7 +33,7 @@ namespace osu.Game.Rulesets.Cubed.UI {
         [BackgroundDependencyLoader]
         private void load(CubedInputManager manager) {
             KeyBindingContainer = manager.KeyBindingContainer;
-            AddInternal(glow = new CellGlow { Alpha = 0 });
+            AddInternal(glow = new CubedSkinnableDrawable(CellGlow) { Alpha = 0 });
 
             AddInternal(judgements);
             AddInternal(judgementPool);

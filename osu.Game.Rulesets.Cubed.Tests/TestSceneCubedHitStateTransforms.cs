@@ -35,18 +35,15 @@ namespace osu.Game.Rulesets.Cubed.Tests {
         public void TestPerfect() {
             AddStep("Schedule perfect hit", () => Scheduler.AddDelayed(HitCube, drawableCube.HitObject.StartTime - Time.Current));
             AddUntilStep("Object is Judged", () => drawableCube.Judged);
-            AddAssert("Approach is invisible", () => !drawableCube.Approach.IsPresent);
             AddAssert("Result is Perfect", () => drawableCube.Result.Type, () => Is.EqualTo(HitResult.Perfect));
             AddUntilStep("Object Expired", () => drawableCube.LifetimeEnd, () => Is.LessThan(Time.Current));
             AddStep("Finish transforms", () => drawableCube.FinishTransforms());
-            AddAssert("Marker's scale is 1.5", () => TestVec2Equality(drawableCube.Marker.Scale, 1.5f));
             AddAssert("Object is invisible", () => !drawableCube.IsPresent);
         }
 
         [Test]
         public void TestMiss() {
             AddUntilStep("Object is Judged", () => drawableCube.Judged);
-            AddAssert("Approach is invisible", () => !drawableCube.Approach.IsPresent);
             AddAssert("Result is Miss", () => drawableCube.Result.Type, () => Is.EqualTo(HitResult.Miss));
             AddAssert("Object is Red", () => drawableCube.Colour == Colour4.Red);
             AddUntilStep("Object Expired", () => drawableCube.LifetimeEnd, () => Is.LessThan(Time.Current));
