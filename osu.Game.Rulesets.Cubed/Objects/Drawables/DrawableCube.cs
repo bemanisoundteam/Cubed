@@ -14,6 +14,24 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
         private void load() =>
             AddInternal(marker = new CubedSkinnableDrawable(CubedSkinComponents.Marker));
 
+        protected override void LoadComplete() {
+            base.LoadComplete();
+
+            marker.OnSkinChanged += onMarkerChanged;
+        }
+
+        private void onMarkerChanged() {
+            if (HitObject == null)
+                return;
+
+            using (BeginAbsoluteSequence(HitObject.StartTime - InitialLifetimeOffset))
+                   Marker.AnimateApproach(InitialLifetimeOffset);
+
+            if (State.Value == ArmedState.Hit)
+                using (BeginAbsoluteSequence(HitStateUpdateTime))
+                    Marker.AnimateHit(TransformsDuration);
+        }
+
         protected override void CheckForResult(bool userTriggered, double timeOffset) {
             if (!userTriggered) {
                 if (!HitObject.HitWindows.CanBeHit(timeOffset))
@@ -38,6 +56,12 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
 
             if (state == ArmedState.Hit)
                 Marker.AnimateHit(TransformsDuration);
+        }
+
+        protected override void Dispose(bool isDisposing) {
+            base.Dispose(isDisposing);
+
+            marker.OnSkinChanged -= onMarkerChanged;
         }
     }
 }
