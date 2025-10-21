@@ -5,9 +5,8 @@ using System.ComponentModel;
 
 namespace osu.Game.Rulesets.Cubed {
     [Cached]  // Used for touch/mouse input and emotes
-    public partial class CubedInputManager : RulesetInputManager<CubedAction> {
-        public CubedInputManager(RulesetInfo ruleset) : base(ruleset, 0, SimultaneousBindingMode.Unique) {}
-    }
+    public partial class CubedInputManager(RulesetInfo ruleset)
+        : RulesetInputManager<CubedAction>(ruleset, 0, SimultaneousBindingMode.All);
 
     public enum CubedAction {
         [Description("01 - Row 1, Column 1")] X0Y0,

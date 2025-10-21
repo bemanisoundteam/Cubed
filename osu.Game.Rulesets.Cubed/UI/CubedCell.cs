@@ -14,6 +14,7 @@ using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Scoring;
 using osu.Game.Rulesets.UI;
 using osu.Game.Screens.Play;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace osu.Game.Rulesets.Cubed.UI {
@@ -22,7 +23,8 @@ namespace osu.Game.Rulesets.Cubed.UI {
         public int Column => (int) Action % 4;
         public int Row => (int) Action / 4;
 
-        private DrawableCubedHitObject heldObject;
+        private readonly List<DrawableCubedHitObject> heldObjects = [];
+        private uint pressCount;
         private Drawable glow;
 
         private KeyBindingContainer<CubedAction> KeyBindingContainer;
@@ -69,14 +71,27 @@ namespace osu.Game.Rulesets.Cubed.UI {
         protected override HitObjectLifetimeEntry CreateLifetimeEntry(HitObject hitObject) => new CubedHitObjectLifetimeEntry((CubedHitObject) hitObject);
 
         private bool Press() {
+            pressCount++;
             glow.Alpha = 1;
-            heldObject = (HitObjectContainer.AliveObjects.FirstOrDefault(obj => !obj.Judged) as DrawableCubedHitObject)!;
-            return heldObject?.OnHit() ?? false;
+            var heldObject = HitObjectContainer.AliveObjects.FirstOrDefault(obj => !obj.Judged) as DrawableCubedHitObject;
+
+            if (heldObject == null || !heldObject.OnHit())
+                return false;
+
+            heldObjects.Add(heldObject);
+            return true;
+
         }
 
         private void Release() {
-            heldObject?.OnRelease();
-            heldObject = null;
+            if (--pressCount != 0)
+                return;
+
+            glow.Alpha = 0;
+            foreach (DrawableCubedHitObject heldObject in heldObjects)
+                heldObject.OnRelease();
+
+            heldObjects.Clear();
         }
 
         public bool OnPressed(KeyBindingPressEvent<CubedAction> e) =>
@@ -86,36 +101,27 @@ namespace osu.Game.Rulesets.Cubed.UI {
             if (e.Action != Action)
                 return;
 
-            glow.Alpha = 0;
             if (IsNotRewinding)
                 Release();
         }
 
         private bool IsNotRewinding => Clock is not IGameplayClock clock || !clock.IsRewinding;
 
-        private int pressCount;
 
         protected override bool OnMouseDown(MouseDownEvent e) {
-            pressCount++;
             KeyBindingContainer.TriggerPressed(Action);
             return true;
         }
 
-        protected override void OnMouseUp(MouseUpEvent e) {
-            if (--pressCount == 0)
-                KeyBindingContainer.TriggerReleased(Action);
-        }
+        protected override void OnMouseUp(MouseUpEvent e) =>
+            KeyBindingContainer.TriggerReleased(Action);
 
         protected override bool OnTouchDown(TouchDownEvent e) {
-            pressCount++;
             KeyBindingContainer.TriggerPressed(Action);
             return true;
         }
-
-        protected override void OnTouchUp(TouchUpEvent e) {
-            if (--pressCount == 0)
-                KeyBindingContainer.TriggerReleased(Action);
-        }
+        protected override void OnTouchUp(TouchUpEvent e) =>
+            KeyBindingContainer.TriggerReleased(Action);
 
         protected override void Dispose(bool isDisposing) {
             // must happen before children are disposed in base call to prevent illegal accesses to the judgement pool.
