@@ -9,9 +9,9 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
         public void AnimateApproach(double time);
 
         /// <summary>
-        /// Called on object hit, to optionally animate object hit
+        /// Called on object hit, to play an eventual hit animation
         /// </summary>
-        /// <remarks>Markers are drawn under the judgments</remarks>
+        /// <remarks>Markers may be drawn under the judgments</remarks>
         /// <param name="duration">Time before object fades out</param>
         public void AnimateHit(double duration) {}
     }

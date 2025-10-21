@@ -1,5 +1,6 @@
 ﻿using osu.Framework.Allocation;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Containers;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Game.Rulesets.Cubed.Objects;
@@ -27,21 +28,27 @@ namespace osu.Game.Rulesets.Cubed.UI {
         private KeyBindingContainer<CubedAction> KeyBindingContainer;
 
         private readonly JudgementContainer<DrawableCubedJudgement> judgements = new() { RelativeSizeAxes = Axes.Both };
-        private readonly JudgementPooler<DrawableCubedJudgement> judgementPool =
-            new(System.Enum.GetValues<HitResult>().Where(CubedHitWindows.HitResultAllowed));
+        private readonly Container judgementsAboveHitObjects = new() { RelativeSizeAxes = Axes.Both };
+        private JudgementPooler<DrawableCubedJudgement> judgementPool;
 
         [BackgroundDependencyLoader]
         private void load(CubedInputManager manager) {
             KeyBindingContainer = manager.KeyBindingContainer;
             AddInternal(glow = new CubedSkinnableDrawable(CellGlow) { Alpha = 0 });
 
-            AddInternal(judgements);
-            AddInternal(judgementPool);
-
             // TODO put numbers that make sense for std (~6*) converts here
             RegisterPool<Cube, DrawableCube>(20, 100);
             RegisterPool<CubedHoldNote, DrawableCubedHoldNote>(20, 100);
             RegisterPool<CubedHoldHead, DrawableCubedHoldHead>(20, 100);
+
+            AddInternal(judgements);
+            AddInternal(HitObjectContainer);
+            AddInternal(judgementsAboveHitObjects);
+
+            // I don't think placing the pool here does something about proxying above HitObjects,
+            // but osu! does it like this and I can't test it yet
+            AddInternal(judgementPool = new(System.Enum.GetValues<HitResult>().Where(CubedHitWindows.HitResultAllowed)
+            , judgement => judgementsAboveHitObjects.Add(judgement.ProxiedAboveHitObjectsContent)));
         }
 
         protected override void LoadComplete() {
