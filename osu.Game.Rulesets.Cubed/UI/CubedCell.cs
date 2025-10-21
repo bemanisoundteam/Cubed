@@ -32,9 +32,9 @@ namespace osu.Game.Rulesets.Cubed.UI {
         private readonly Container judgementsAboveHitObjects = new() { RelativeSizeAxes = Axes.Both };
         private JudgementPooler<DrawableCubedJudgement> judgementPool;
 
-        [BackgroundDependencyLoader]
+        [BackgroundDependencyLoader(true)]
         private void load(CubedInputManager manager) {
-            KeyBindingContainer = manager.KeyBindingContainer;
+            KeyBindingContainer = manager?.KeyBindingContainer;
             AddInternal(glow = new CubedSkinnableDrawable(CellGlow) { Alpha = 0 });
 
             // TODO put numbers that make sense for std (~6*) converts here
@@ -102,19 +102,19 @@ namespace osu.Game.Rulesets.Cubed.UI {
         }
 
         protected override bool OnMouseDown(MouseDownEvent e) {
-            KeyBindingContainer.TriggerPressed(Action);
+            KeyBindingContainer?.TriggerPressed(Action);
             return true;
         }
 
         protected override void OnMouseUp(MouseUpEvent e) =>
-            KeyBindingContainer.TriggerReleased(Action);
+            KeyBindingContainer?.TriggerReleased(Action);
 
         protected override bool OnTouchDown(TouchDownEvent e) {
-            KeyBindingContainer.TriggerPressed(Action);
+            KeyBindingContainer?.TriggerPressed(Action);
             return true;
         }
         protected override void OnTouchUp(TouchUpEvent e) =>
-            KeyBindingContainer.TriggerReleased(Action);
+            KeyBindingContainer?.TriggerReleased(Action);
 
         protected override void Dispose(bool isDisposing) {
             // must happen before children are disposed in base call to prevent illegal accesses to the judgement pool.
