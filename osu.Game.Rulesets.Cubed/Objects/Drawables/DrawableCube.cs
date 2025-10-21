@@ -1,9 +1,7 @@
 using osu.Framework.Allocation;
-using osu.Framework.Graphics;
 using osu.Game.Rulesets.Cubed.Skinning;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Scoring;
-using osuTK.Graphics;
 
 namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
     public partial class DrawableCube(Cube cube) : DrawableCubedHitObject(cube) {
@@ -36,20 +34,10 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
         }
 
         protected override void UpdateHitStateTransforms(ArmedState state) {
-            const double duration = 250;
+            base.UpdateHitStateTransforms(state);
 
-            switch (state) {
-                case ArmedState.Hit:
-                    Marker.AnimateHit(duration);
-                    this.FadeOut(duration).Expire();
-                    break;
-
-                case ArmedState.Miss:
-                    this.FadeColour(Color4.Red);
-                    this.FadeOut(duration).Expire();
-                    this.ScaleTo(0.6f, duration, Easing.OutExpo);
-                    break;
-            }
+            if (state == ArmedState.Hit)
+                Marker.AnimateHit(TransformsDuration);
         }
     }
 }

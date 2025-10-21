@@ -55,15 +55,6 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
             TailDistance.Value = HitObject.TailLength;
         }
 
-        protected override void UpdateHitStateTransforms(ArmedState state) {
-            switch (state) {
-                case ArmedState.Hit:
-                case ArmedState.Miss:
-                    this.FadeOut(250).Expire();
-                    break;
-            }
-        }
-
         protected override void CheckForResult(bool userTriggered, double timeOffset) {
             if (head.Result.Type == HitResult.Miss)
                 ApplyMinResult();

@@ -48,7 +48,7 @@ namespace osu.Game.Rulesets.Cubed.Tests {
             AddAssert("Object is Red", () => drawableCube.Colour == Colour4.Red);
             AddUntilStep("Object Expired", () => drawableCube.LifetimeEnd, () => Is.LessThan(Time.Current));
             AddStep("Finish transforms", () => drawableCube.FinishTransforms());
-            AddAssert("Object's scale is 60%", () => TestVec2Equality(drawableCube.Scale, .6f));
+            AddAssert("Object's scale is 80%", () => TestVec2Equality(drawableCube.Scale, .8f));
             AddAssert("Object is invisible", () => !drawableCube.IsPresent);
         }
 
