@@ -13,7 +13,6 @@ using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Scoring;
 using osu.Game.Rulesets.UI;
-using osu.Game.Screens.Play;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -95,18 +94,12 @@ namespace osu.Game.Rulesets.Cubed.UI {
         }
 
         public bool OnPressed(KeyBindingPressEvent<CubedAction> e) =>
-            e.Action == Action && IsNotRewinding && Press();
+            e.Action == Action && Press();
 
         public void OnReleased(KeyBindingReleaseEvent<CubedAction> e) {
-            if (e.Action != Action)
-                return;
-
-            if (IsNotRewinding)
+            if (e.Action == Action)
                 Release();
         }
-
-        private bool IsNotRewinding => Clock is not IGameplayClock clock || !clock.IsRewinding;
-
 
         protected override bool OnMouseDown(MouseDownEvent e) {
             KeyBindingContainer.TriggerPressed(Action);
