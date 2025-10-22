@@ -3,6 +3,7 @@ using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Game.Rulesets.Cubed.Objects.Drawables.Pieces;
+using osu.Game.Rulesets.Cubed.Skinning;
 using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Scoring;
@@ -18,7 +19,7 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
             MaxValue = 3
         };
 
-        public CubedHoldReceptor Receptor { get; set; }
+        public Drawable Receptor { get; set; }
         public CubedHoldIndicator Indicator { get; set; }
 
         [BackgroundDependencyLoader]
@@ -26,7 +27,8 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
             // Order is important, Head above Receptor above Indicator
 
             AddInternal(Indicator = new CubedHoldIndicator(Direction, TailDistance));
-            AddInternal(Receptor = new CubedHoldReceptor(Direction));
+            AddInternal(Receptor = new CubedSkinnableDrawable(CubedSkinComponents.Receptor));
+            Direction.ValueChanged += e => Receptor.Rotation = (int) e.NewValue * 90;
 
             AddInternal(headContainer = new Container { RelativeSizeAxes = Axes.Both });
         }
