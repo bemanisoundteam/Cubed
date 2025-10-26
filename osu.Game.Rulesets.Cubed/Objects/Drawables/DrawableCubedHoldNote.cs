@@ -1,8 +1,6 @@
 ﻿using osu.Framework.Allocation;
-using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Game.Rulesets.Cubed.Objects.Drawables.Pieces;
 using osu.Game.Rulesets.Cubed.Skinning;
 using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.Objects.Drawables;
@@ -13,25 +11,30 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
         public DrawableCubedHoldNote() : this(null) { }  // Required for pooling
         public new CubedHoldNote HitObject => (CubedHoldNote) base.HitObject;
 
-        public readonly Bindable<HoldDirection> Direction = new ();
-        public readonly BindableInt TailDistance = new() {
-            MinValue = 0,
-            MaxValue = 3
-        };
+        public CubedSkinnableDrawable Receptor { get; set; }
 
-        public Drawable Receptor { get; set; }
-        public CubedHoldIndicator Indicator { get; set; }
+        private CubedSkinnableDrawable indicator;
+        public IHoldIndicator Indicator => (IHoldIndicator) indicator.Drawable;
 
         [BackgroundDependencyLoader]
         private void load() {
             // Order is important, Head above Receptor above Indicator
 
-            AddInternal(Indicator = new CubedHoldIndicator(Direction, TailDistance));
+            AddInternal(indicator = new CubedSkinnableDrawable(CubedSkinComponents.Indicator));
             AddInternal(Receptor = new CubedSkinnableDrawable(CubedSkinComponents.Receptor));
-            Direction.ValueChanged += e => Receptor.Rotation = (int) e.NewValue * 90;
 
             AddInternal(headContainer = new Container { RelativeSizeAxes = Axes.Both });
         }
+
+        protected override void LoadComplete() {
+            base.LoadComplete();
+
+            indicator.OnSkinChanged += RefreshIndicator;
+            Receptor.OnSkinChanged += RefreshReceptor;
+        }
+
+        private void RefreshIndicator() => Indicator.Apply(HitObject);
+        private void RefreshReceptor() => Receptor.Rotation = (int) HitObject.Direction * 90;
 
         private DrawableCubedHoldHead head => (DrawableCubedHoldHead) headContainer.Child;
 
@@ -52,9 +55,8 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
             };
 
         protected override void OnApply() {
-            Indicator.SetObject(HitObject);
-            Direction.Value = HitObject.Direction;
-            TailDistance.Value = HitObject.TailLength;
+            RefreshIndicator();
+            RefreshReceptor();
         }
 
         protected override void CheckForResult(bool userTriggered, double timeOffset) {
@@ -90,6 +92,13 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
             // Remove this check for the drake note experience, I dare you
             if (HitObject != null)
                 UpdateResult(true);
+        }
+
+        protected override void Dispose(bool isDisposing) {
+            base.Dispose(isDisposing);
+
+            indicator.OnSkinChanged -= RefreshIndicator;
+            Receptor.OnSkinChanged -= RefreshReceptor;
         }
     }
 }
