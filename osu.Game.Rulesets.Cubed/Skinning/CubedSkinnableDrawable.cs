@@ -5,6 +5,7 @@ using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Shapes;
 using osu.Game.Rulesets.Cubed.Skinning.CellGlows;
+using osu.Game.Rulesets.Cubed.Skinning.Indicators;
 using osu.Game.Skinning;
 using System;
 
@@ -24,7 +25,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
         private static Func<ISkinComponentLookup, Drawable> DefaultFunction(CubedSkinComponents l) => l switch {
             CubedSkinComponents.Marker => _ => new DefaultMarker(),
             CubedSkinComponents.Receptor => _ => new DefaultReceptor(),
-            // CubedSkinComponents.Indicator => TODO,
+            CubedSkinComponents.Indicator => _ => new DefaultIndicator(),
             CubedSkinComponents.CellGlow => _ => new DefaultCellGlow(),
             _ => null
         };

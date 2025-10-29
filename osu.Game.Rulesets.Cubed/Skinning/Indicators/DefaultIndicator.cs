@@ -1,12 +1,13 @@
 ﻿using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Effects;
 using osu.Framework.Graphics.Shapes;
-using osu.Game.Rulesets.Cubed.Skinning;
+using osu.Game.Rulesets.Cubed.Objects;
 using osu.Game.Rulesets.Cubed.UI;
 using osuTK;
 
-namespace osu.Game.Rulesets.Cubed.Objects.Drawables.Pieces {
-    public partial class CubedHoldIndicator : CompositeDrawable, IHoldIndicator {
+namespace osu.Game.Rulesets.Cubed.Skinning.Indicators {
+    public partial class DefaultIndicator : CompositeDrawable, IHoldIndicator {
         private const float LineThickness = .01f;
 
         public CubedHoldNote Object { get; set; }
@@ -17,10 +18,10 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables.Pieces {
         private readonly Drawable Pointer;
         private readonly Drawable Line;
 
-        public CubedHoldIndicator() {
+        public DefaultIndicator() {
             RelativeSizeAxes = Axes.Both;
 
-            AddInternal(Line = new CubedHoldLine {
+            AddInternal(Line = new HoldLine {
                 RelativeSizeAxes = Axes.Both,
                 RelativePositionAxes = Axes.Both,
                 Anchor = Anchor.Centre,
@@ -93,6 +94,23 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables.Pieces {
 
             Line.Scale = new Vector2(1, 1f - (float) progress);
             Pointer.Position = PointerPosition * (1f - (float) progress);
+        }
+
+        private partial class HoldLine : CompositeDrawable {
+            private const int GlowRadius = 3;
+
+            public HoldLine() {
+                InternalChild = new Box { RelativeSizeAxes = Axes.Both };
+
+                Masking = true;
+                EdgeEffect = new EdgeEffectParameters {
+                    Colour = Colour4.Cyan,
+                    Type = EdgeEffectType.Glow,
+                    Radius = GlowRadius,
+                    // Offset to not bleed behind the receptor, also hides better the hold arrow not connecting properly
+                    Offset = new Vector2(0, GlowRadius)
+                };
+            }
         }
     }
 }
