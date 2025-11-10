@@ -18,24 +18,25 @@ namespace osu.Game.Rulesets.Cubed.Replays {
                 // which would cause frames to be generated out of order if left unsorted.
                 // The game doesn't handle this case well, causing weird behavior that's hard to debug.
                 .OrderBy(g => g.Key);
+
             List<CubedAction> actions = [];
 
+            // This would greatly benefit from fine-grained unit testing, as this hasn't been properly edge case tested
+            // Testing was really just about FC-ing centipede and razor sharp, which whilst being great test maps
+            // aren't extensive edge cases tests. I might even want to test if the right amount of frames is made
             foreach (IGrouping<double, Action> actionGroup in groupedActions) {
                 // These two arrays are meant to handle actions cancelling out previous ones
-                // Like two notes on the same cell at the same time
-                // Or when a press is right on a release's frame
-                // In case this causes problems, blame and revert the commits implementing this
+                // Frames only have input state, not events, so pressing then immediately releasing is NOOP
+                // This happens either when an object starts at the time of the previous object's end
+                // Therefore to avoid that case, we use these arrays to insert intermediary frames if needed
                 bool[] pressedThisFrame = new bool[16];
                 bool[] releasedThisFrame = new bool[16];
-                uint[] releasesToIgnore = new uint[16];
 
-                foreach (Action action in actionGroup) {
+                /* TODO This makes a single frame per "debounced" event, which is inefficient
+                 * but acceptable as (as of late 2025 and since the beginning) you can't export Cubed replays
+                 * expected behavior is to have the minimal amount of intermediary frames */
+                foreach (Action action in actionGroup)
                     if (action.Pressed) {
-                        if (actions.Remove(action.CellAction)) {
-                            releasedThisFrame[(int) action.CellAction] = true;
-                            releasesToIgnore[(int) action.CellAction]++;
-                        }
-
                         // Emmit an intermediary frame to avoid cancelling out the release
                         if (releasedThisFrame[(int) action.CellAction])
                             Frames.Add(new CubedReplayFrame(action.Time, actions.ToArray()));
@@ -44,11 +45,6 @@ namespace osu.Game.Rulesets.Cubed.Replays {
                         pressedThisFrame[(int) action.CellAction] = true;
                     }
                     else {
-                        if (releasesToIgnore[(int) action.CellAction] > 0) {
-                            releasesToIgnore[(int) action.CellAction]--;
-                            break;
-                        }
-
                         // Emmit an intermediary frame to avoid cancelling out the press
                         if (pressedThisFrame[(int) action.CellAction])
                             Frames.Add(new CubedReplayFrame(action.Time, actions.ToArray()));
@@ -56,7 +52,7 @@ namespace osu.Game.Rulesets.Cubed.Replays {
                         actions.Remove(action.CellAction);
                         releasedThisFrame[(int) action.CellAction] = true;
                     }
-                }
+
                 Frames.Add(new CubedReplayFrame(actionGroup.Key, actions.ToArray()));
             }
         }

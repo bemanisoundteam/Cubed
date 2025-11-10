@@ -38,6 +38,7 @@ namespace osu.Game.Rulesets.Cubed.UI {
             AddInternal(glow = new CubedSkinnableDrawable(CellGlow) { Alpha = 0 });
 
             // TODO put numbers that make sense for std (~6*) converts here
+            // Or even just precompute initialSize using an injected map (capped still probably)
             RegisterPool<Cube, DrawableCube>(20, 100);
             RegisterPool<CubedHoldNote, DrawableCubedHoldNote>(20, 100);
             RegisterPool<CubedHoldHead, DrawableCubedHoldHead>(20, 100);
@@ -48,6 +49,9 @@ namespace osu.Game.Rulesets.Cubed.UI {
 
             // I don't think placing the pool here does something about proxying above HitObjects,
             // but osu! does it like this and I can't test it yet
+            // FIXME This registers a stupid amount of pools, possible performance regression (I didn't measure it, but stress tests stutter on high object spikes)
+            // Requires RenderDoc + profiling (I have around 2500-3000 instances of ProxyDrawable on razor sharp, I need to test impact on unlimited framerate, but this is amongst top CPU consumers...)
+            // And still we might want to preload the right amount of judgements
             AddInternal(judgementPool = new(System.Enum.GetValues<HitResult>().Where(CubedHitWindows.HitResultAllowed)
             , judgement => judgementsAboveHitObjects.Add(judgement.ProxiedAboveHitObjectsContent)));
         }
