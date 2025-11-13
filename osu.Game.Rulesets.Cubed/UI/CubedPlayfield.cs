@@ -1,6 +1,8 @@
 ﻿using osu.Framework.Allocation;
+using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Game.Rulesets.Cubed.Configuration;
 using osu.Game.Rulesets.Cubed.Objects;
 using osu.Game.Rulesets.Cubed.Objects.Drawables;
 using osu.Game.Rulesets.Cubed.UI.Emotes;
@@ -13,12 +15,19 @@ namespace osu.Game.Rulesets.Cubed.UI {
     public partial class CubedPlayfield : Playfield {
         public const float CellScale = .9f;
 
+        public bool isEditor { get; init; }
+
         public override bool UpdateSubTreeMasking() => false;
         private readonly CubedCell[][] Cells = new CubedCell[4][];
         private readonly CubedEmotesHandler emotes = new ();
 
-        [BackgroundDependencyLoader]
-        private void load() {
+        private readonly BindableBool highlightCells = new(true);
+
+        [BackgroundDependencyLoader(true)]
+        private void load(CubedRulesetConfigManager config) {
+            if (!isEditor)
+                config?.BindWith(CubedRulesetSetting.HighlightCells, highlightCells);
+
             // Proxied here to render below the notes
             AddInternal(emotes.CreateProxy());
 
@@ -30,7 +39,8 @@ namespace osu.Game.Rulesets.Cubed.UI {
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
 
-                        Action = (CubedAction) (i * 4 + j)
+                        Action = (CubedAction) (i * 4 + j),
+                        HighlightCells = highlightCells,
                     });
             }
 

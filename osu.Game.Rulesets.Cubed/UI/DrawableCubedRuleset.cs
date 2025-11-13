@@ -11,10 +11,9 @@ using osu.Game.Scoring;
 using System.Collections.Generic;
 
 namespace osu.Game.Rulesets.Cubed.UI {
-    public partial class DrawableCubedRuleset : DrawableRuleset<CubedHitObject> {
-        public DrawableCubedRuleset(CubedRuleset ruleset, IBeatmap beatmap, IReadOnlyList<Mod> mods = null) : base(ruleset, beatmap, mods) {}
-
-        protected override Playfield CreatePlayfield() => new CubedPlayfield();
+    public partial class DrawableCubedRuleset(CubedRuleset ruleset, IBeatmap beatmap, IReadOnlyList<Mod> mods = null, bool editor = false)
+        : DrawableRuleset<CubedHitObject>(ruleset, beatmap, mods) {
+        protected override Playfield CreatePlayfield() => new CubedPlayfield { isEditor = editor };
 
         public override PlayfieldAdjustmentContainer CreatePlayfieldAdjustmentContainer() => new CubedPlayfieldAdjustmentContainer();
 

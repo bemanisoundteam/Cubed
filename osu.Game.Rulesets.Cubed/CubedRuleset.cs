@@ -2,7 +2,11 @@
 using osu.Framework.Input.Bindings;
 using osu.Framework.IO.Stores;
 using osu.Game.Beatmaps;
+using osu.Game.Configuration;
+using osu.Game.Overlays.Settings;
+using osu.Game.Rulesets.Configuration;
 using osu.Game.Rulesets.Cubed.Beatmaps;
+using osu.Game.Rulesets.Cubed.Configuration;
 using osu.Game.Rulesets.Cubed.Edit;
 using osu.Game.Rulesets.Cubed.Mods;
 using osu.Game.Rulesets.Cubed.Objects;
@@ -90,6 +94,10 @@ namespace osu.Game.Rulesets.Cubed {
                 }, true),
             ];
         }
+
+        public override IRulesetConfigManager CreateConfig(SettingsStore settings) => new CubedRulesetConfigManager(settings, RulesetInfo);
+
+        public override RulesetSettingsSubsection CreateSettings() => new CubedRulesetSettingsSubsection(this);
 
         public override IEnumerable<KeyBinding> GetDefaultKeyBindings(int variant = 0) => new [] {
             new KeyBinding(InputKey.Number4, CubedAction.X0Y0),

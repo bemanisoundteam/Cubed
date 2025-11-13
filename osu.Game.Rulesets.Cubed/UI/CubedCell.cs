@@ -1,6 +1,8 @@
 ﻿using osu.Framework.Allocation;
+using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Game.Rulesets.Cubed.Objects;
@@ -24,9 +26,12 @@ namespace osu.Game.Rulesets.Cubed.UI {
 
         private readonly List<DrawableCubedHitObject> heldObjects = [];
         private uint pressCount;
+
+        private Drawable highlight;
         private Drawable glow;
 
         private KeyBindingContainer<CubedAction> KeyBindingContainer;
+        public Bindable<bool> HighlightCells { get; init; }
 
         private readonly JudgementContainer<DrawableCubedJudgement> judgements = new() { RelativeSizeAxes = Axes.Both };
         private readonly Container judgementsAboveHitObjects = new() { RelativeSizeAxes = Axes.Both };
@@ -35,6 +40,13 @@ namespace osu.Game.Rulesets.Cubed.UI {
         [BackgroundDependencyLoader(true)]
         private void load(CubedInputManager manager) {
             KeyBindingContainer = manager?.KeyBindingContainer;
+
+            AddInternal(highlight = new Box {
+                RelativeSizeAxes = Axes.Both,
+                Colour = Colour4.Cyan
+            });
+            HighlightCells?.BindValueChanged(e => highlight.Alpha = e.NewValue ? .1f : 0, true);
+
             AddInternal(glow = new CubedSkinnableDrawable(CellGlow) { Alpha = 0 });
 
             // TODO put numbers that make sense for std (~6*) converts here
