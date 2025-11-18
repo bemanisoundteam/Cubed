@@ -2,6 +2,7 @@
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Game.Beatmaps;
 using osu.Game.Rulesets.Cubed.Configuration;
 using osu.Game.Rulesets.Cubed.Objects;
 using osu.Game.Rulesets.Cubed.Objects.Drawables;
@@ -10,6 +11,8 @@ using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.UI;
 using osuTK;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace osu.Game.Rulesets.Cubed.UI {
     public partial class CubedPlayfield : Playfield {
@@ -21,12 +24,18 @@ namespace osu.Game.Rulesets.Cubed.UI {
         private readonly CubedCell[][] Cells = new CubedCell[4][];
         private readonly CubedEmotesHandler emotes = new ();
 
+        [Cached]
+        private readonly Dictionary<CubedHoldNote, double> PressTimes = new();
+
         private readonly BindableBool highlightCells = new(true);
 
         [BackgroundDependencyLoader(true)]
-        private void load(CubedRulesetConfigManager config) {
+        private void load(CubedRulesetConfigManager config, IBeatmap beatmap) {
             if (!isEditor)
                 config?.BindWith(CubedRulesetSetting.HighlightCells, highlightCells);
+
+            if (beatmap != null)
+                PressTimes.EnsureCapacity(beatmap.HitObjects.OfType<CubedHoldNote>().Count());
 
             // Proxied here to render below the notes
             AddInternal(emotes.CreateProxy());

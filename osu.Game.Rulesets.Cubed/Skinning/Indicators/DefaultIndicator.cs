@@ -1,16 +1,20 @@
-﻿using osu.Framework.Graphics;
+﻿using osu.Framework.Allocation;
+using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Effects;
 using osu.Framework.Graphics.Shapes;
 using osu.Game.Rulesets.Cubed.Objects;
 using osu.Game.Rulesets.Cubed.UI;
 using osuTK;
+using System.Collections.Generic;
 
 namespace osu.Game.Rulesets.Cubed.Skinning.Indicators {
     public partial class DefaultIndicator : CompositeDrawable, IHoldIndicator {
         private const float LineThickness = .01f;
 
         public CubedHoldNote Object { get; set; }
+        [Resolved]
+        public Dictionary<CubedHoldNote, double> PressTimes { get; private set; }
 
         // Pointer Starting Point
         private Vector2 PointerPosition;
