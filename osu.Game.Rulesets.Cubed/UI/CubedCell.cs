@@ -29,9 +29,11 @@ namespace osu.Game.Rulesets.Cubed.UI {
 
         private Drawable highlight;
         private Drawable glow;
+        private Container borderContainer;
 
         private KeyBindingContainer<CubedAction> KeyBindingContainer;
         public Bindable<bool> HighlightCells { get; init; }
+        public Bindable<bool> CellBorders { get; init; }
 
         private readonly JudgementContainer<DrawableCubedJudgement> judgements = new() { RelativeSizeAxes = Axes.Both };
         private readonly Container judgementsAboveHitObjects = new() { RelativeSizeAxes = Axes.Both };
@@ -46,6 +48,20 @@ namespace osu.Game.Rulesets.Cubed.UI {
                 Colour = Colour4.Cyan
             });
             HighlightCells?.BindValueChanged(e => highlight.Alpha = e.NewValue ? .1f : 0, true);
+
+            AddInternal(borderContainer = new Container {
+                RelativeSizeAxes = Axes.Both,
+                Masking = true,
+                BorderColour = Colour4.Black,
+                BorderThickness = 3,
+
+                Child = new Box {
+                    RelativeSizeAxes = Axes.Both,
+                    Colour = Colour4.Transparent
+                },
+                Alpha = 0
+            });
+            CellBorders?.BindValueChanged(e => borderContainer.Alpha = e.NewValue ? 1 : 0, true);
 
             AddInternal(glow = new CubedSkinnableDrawable(CellGlow) { Alpha = 0 });
 

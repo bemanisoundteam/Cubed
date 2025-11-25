@@ -28,11 +28,14 @@ namespace osu.Game.Rulesets.Cubed.UI {
         private readonly Dictionary<CubedHoldNote, double> PressTimes = new();
 
         private readonly BindableBool highlightCells = new(true);
+        private readonly BindableBool drawCellBorders = new(true);
 
         [BackgroundDependencyLoader(true)]
         private void load(CubedRulesetConfigManager config, IBeatmap beatmap) {
-            if (!isEditor)
+            if (!isEditor) {
                 config?.BindWith(CubedRulesetSetting.HighlightCells, highlightCells);
+                config?.BindWith(CubedRulesetSetting.CellBorders, drawCellBorders);
+            }
 
             if (beatmap != null)
                 PressTimes.EnsureCapacity(beatmap.HitObjects.OfType<CubedHoldNote>().Count());
@@ -50,6 +53,7 @@ namespace osu.Game.Rulesets.Cubed.UI {
 
                         Action = (CubedAction) (i * 4 + j),
                         HighlightCells = highlightCells,
+                        CellBorders = drawCellBorders,
                     });
             }
 

@@ -8,10 +8,12 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
             base.InitialiseDefaults();
 
             SetDefault(CubedRulesetSetting.HighlightCells, false);
+            SetDefault(CubedRulesetSetting.CellBorders, false);
         }
     }
 
     public enum CubedRulesetSetting {
         HighlightCells,
+        CellBorders,
     }
 }

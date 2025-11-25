@@ -14,6 +14,10 @@ namespace osu.Game.Rulesets.Cubed.UI {
 
             Children = [
                 new SettingsCheckbox {
+                    LabelText = @"Cell borders",
+                    Current = config.GetBindable<bool>(CubedRulesetSetting.CellBorders)
+                },
+                new SettingsCheckbox {
                     LabelText = "Highlight cells",
                     Current = config.GetBindable<bool>(CubedRulesetSetting.HighlightCells)
                 }
