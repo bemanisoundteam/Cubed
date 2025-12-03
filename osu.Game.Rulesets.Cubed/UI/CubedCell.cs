@@ -35,6 +35,8 @@ namespace osu.Game.Rulesets.Cubed.UI {
         public Bindable<bool> HighlightCells { get; init; }
         public Bindable<bool> CellBorders { get; init; }
 
+        public Container GlowProxyContainer { get; init; }
+
         private readonly JudgementContainer<DrawableCubedJudgement> judgements = new() { RelativeSizeAxes = Axes.Both };
         private readonly Container judgementsAboveHitObjects = new() { RelativeSizeAxes = Axes.Both };
         private JudgementPooler<DrawableCubedJudgement> judgementPool;
@@ -64,6 +66,7 @@ namespace osu.Game.Rulesets.Cubed.UI {
             CellBorders?.BindValueChanged(e => borderContainer.Alpha = e.NewValue ? 1 : 0, true);
 
             AddInternal(glow = new CubedSkinnableDrawable(CellGlow) { Alpha = 0 });
+            GlowProxyContainer?.Add(glow.CreateProxy());
 
             // TODO put numbers that make sense for std (~6*) converts here
             // Or even just precompute initialSize using an injected map (capped still probably)

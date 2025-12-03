@@ -23,6 +23,7 @@ namespace osu.Game.Rulesets.Cubed.UI {
         public override bool UpdateSubTreeMasking() => false;
         private readonly CubedCell[][] Cells = new CubedCell[4][];
         private readonly CubedEmotesHandler emotes = new ();
+        private readonly Container cellGlowProxyContainer = new();
 
         [Cached]
         private readonly Dictionary<CubedHoldNote, double> PressTimes = new();
@@ -43,6 +44,9 @@ namespace osu.Game.Rulesets.Cubed.UI {
             // Proxied here to render below the notes
             AddInternal(emotes.CreateProxy());
 
+            // Used to have all cell glows in the same container, so that batching renders them in a single drawcall
+            AddInternal(cellGlowProxyContainer);
+
             for (int i = 0; i < 4; i++) {
                 Cells[i] = new CubedCell[4];
                 for (int j = 0; j < 4; j++)
@@ -54,6 +58,8 @@ namespace osu.Game.Rulesets.Cubed.UI {
                         Action = (CubedAction) (i * 4 + j),
                         HighlightCells = highlightCells,
                         CellBorders = drawCellBorders,
+
+                        GlowProxyContainer = cellGlowProxyContainer,
                     });
             }
 

@@ -1,5 +1,6 @@
 ﻿using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Game.Rulesets.Cubed.Skinning.CellGlows;
 using osu.Game.Rulesets.Cubed.Skinning.Components;
 using osu.Game.Rulesets.Scoring;
 using osu.Game.Screens.Play.HUD;
@@ -17,6 +18,13 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
                         return Drawable.Empty();
 
                     break;
+
+                case CubedSkinComponentLookup component:
+                    if (component.Component is CubedSkinComponents.CellGlow)
+                        return new PointerPositionAwareCellGlow();
+
+                    break;
+
 
                 case GlobalSkinnableContainerLookup containerLookup:
                     switch (containerLookup.Lookup) {
