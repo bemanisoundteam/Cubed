@@ -31,7 +31,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
         };
     }
 
-    file partial class DefaultMarker : CompositeDrawable, IMarker {
+    public partial class DefaultMarker : CompositeDrawable, IMarker {
         private readonly Drawable approach = new Approach();
         private readonly Drawable marker = new Box {
             RelativeSizeAxes = Axes.Both,
@@ -69,7 +69,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
         }
     }
 
-    file partial class DefaultReceptor : Drawable {
+    public partial class DefaultReceptor : Drawable {
         private IShader shader;
 
         [BackgroundDependencyLoader]
