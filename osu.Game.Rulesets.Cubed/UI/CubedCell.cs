@@ -3,6 +3,7 @@ using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Input;
 using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Game.Rulesets.Cubed.Objects;
@@ -15,6 +16,7 @@ using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Scoring;
 using osu.Game.Rulesets.UI;
+using osuTK;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,13 +26,21 @@ namespace osu.Game.Rulesets.Cubed.UI {
         public int Column => (int) Action % 4;
         public int Row => (int) Action / 4;
 
+        [Cached]
+        private Bindable<Vector2> PointerPosition = new ();
+        // NOT Cached
+        private PPSource ppSource;
+
         private readonly List<DrawableCubedHitObject> heldObjects = [];
         private uint pressCount;
+        private uint positionalPressCount;
 
         private Drawable highlight;
         private Drawable glow;
         private Container borderContainer;
 
+        // [Resolved], although injected through the BDL
+        private CubedInputManager inputManager;
         private KeyBindingContainer<CubedAction> KeyBindingContainer;
         public Bindable<bool> HighlightCells { get; init; }
         public Bindable<bool> CellBorders { get; init; }
@@ -43,6 +53,7 @@ namespace osu.Game.Rulesets.Cubed.UI {
 
         [BackgroundDependencyLoader(true)]
         private void load(CubedInputManager manager) {
+            inputManager = manager;
             KeyBindingContainer = manager?.KeyBindingContainer;
 
             AddInternal(highlight = new Box {
@@ -137,19 +148,60 @@ namespace osu.Game.Rulesets.Cubed.UI {
         }
 
         protected override bool OnMouseDown(MouseDownEvent e) {
+            positionalPressCount++;
+            PointerPosition.Value = e.ScreenSpaceMousePosition;
+            ppSource = PPSource.Mouse;
+
             KeyBindingContainer?.TriggerPressed(Action);
             return true;
         }
 
-        protected override void OnMouseUp(MouseUpEvent e) =>
+        protected override void OnMouseUp(MouseUpEvent e) {
+            positionalPressCount--;
             KeyBindingContainer?.TriggerReleased(Action);
+        }
 
         protected override bool OnTouchDown(TouchDownEvent e) {
+            positionalPressCount++;
+            PointerPosition.Value = e.ScreenSpaceTouch.Position;
+            ppSource = (PPSource) (int) PPSource.Touch1 + (int) e.ScreenSpaceTouch.Source;
+
             KeyBindingContainer?.TriggerPressed(Action);
             return true;
         }
-        protected override void OnTouchUp(TouchUpEvent e) =>
+
+        protected override void OnTouchUp(TouchUpEvent e) {
+            positionalPressCount--;
             KeyBindingContainer?.TriggerReleased(Action);
+        }
+
+        protected override bool OnMouseMove(MouseMoveEvent e) {
+            PointerPosition.Value = e.ScreenSpaceMousePosition;
+            ppSource = PPSource.Mouse;
+            return false;
+        }
+
+        protected override void OnTouchMove(TouchMoveEvent e) {
+            PointerPosition.Value = e.ScreenSpaceTouch.Position;
+            ppSource = (PPSource) (int) PPSource.Touch1 + (int) e.ScreenSpaceTouch.Source;
+        }
+
+        protected override void Update() {
+            if (positionalPressCount == 0)
+                // ppSource should be set to None here for correctness, but it's not going to be checked against anyway
+                PointerPosition.Value = default;
+            else
+                // I didn't really test behaviors when releasing the input ppSource is set to
+                // Touch theoretically fallbacks to mouse but mouse doesn't do so (and it might even be mapped to touch ?)
+                PointerPosition.Value = ppSource switch {
+                    PPSource.Mouse => inputManager.CurrentState.Mouse.Position,
+                    // I didn't know you could have flying comparison operators, but it's pretty cool
+                    >= PPSource.Touch1 and <= PPSource.TouchPen => inputManager.CurrentState.Touch.
+                        GetTouchPosition((TouchSource) (int) ppSource - (int) PPSource.Touch1) ?? inputManager.CurrentState.Mouse.Position,
+                    // This shouldn't be reached, but do the best we can do to have a viable-ish position
+                    _ => DrawRectangle.Contains(inputManager.CurrentState.Mouse.Position) ? inputManager.CurrentState.Mouse.Position : default
+                };
+        }
 
         protected override void Dispose(bool isDisposing) {
             // must happen before children are disposed in base call to prevent illegal accesses to the judgement pool.
@@ -157,5 +209,21 @@ namespace osu.Game.Rulesets.Cubed.UI {
 
             base.Dispose(isDisposing);
         }
+    }
+
+    internal enum PPSource {
+        None,
+        Mouse,
+        Touch1,
+        Touch2,
+        Touch3,
+        Touch4,
+        Touch5,
+        Touch6,
+        Touch7,
+        Touch8,
+        Touch9,
+        Touch10,
+        TouchPen,
     }
 }

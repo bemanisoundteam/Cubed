@@ -1,15 +1,18 @@
 ﻿using osu.Framework.Allocation;
+using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Shaders;
-using osu.Framework.Input.Events;
 using osuTK;
 
 namespace osu.Game.Rulesets.Cubed.Skinning.CellGlows {
     public partial class PointerPositionAwareCellGlow : Drawable, ITexturedShaderDrawable {
         public override bool HandlePositionalInput => true;
+
+        [Resolved]
+        private Bindable<Vector2> PtrPos { get; set; }
 
         private Vector2 _pointerPosition = new (float.NegativeInfinity);
         private Vector2 PointerPosition {
@@ -36,10 +39,8 @@ namespace osu.Game.Rulesets.Cubed.Skinning.CellGlows {
             TextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, "PointerPositionAwareCellGlow");
         }
 
-        protected override bool OnMouseMove(MouseMoveEvent e) {
-            PointerPosition = ToLocalSpace(e.ScreenSpaceMousePosition);
-            return false;
-        }
+        protected override void LoadComplete() => PtrPos.BindValueChanged(
+            e => PointerPosition = PtrPos.IsDefault ? DrawPosition + DrawSize / 2 : ToLocalSpace(e.NewValue), true);
 
         protected override DrawNode CreateDrawNode() => new PointerPositionAwareCellGlowDrawNode(this);
 
