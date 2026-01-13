@@ -10,7 +10,7 @@ using System.Reflection;
 namespace osu.Game.Rulesets.Cubed {
     public partial class ConciergeIcon : Sprite {
         /// <summary>
-        /// A replacement for IRenderer.WhitePixel, that preserves base
+        /// A replacement for IRenderer.WhitePixel, that preserves base textRect size
         /// </summary>
         /// <remarks>Please inject and use Renderer.WhitePixel whenever possible instead</remarks>
         public static Texture WhitePixel { get; private set; }
@@ -24,12 +24,15 @@ namespace osu.Game.Rulesets.Cubed {
                 ResourceStore<byte[]> sampleStore = (ResourceStore<byte[]>) audio.GetSampleStore().GetType().
                     GetField("store", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(audio.GetSampleStore());
                 sampleStore!.AddStore(CubedRuleset.CreateNamespacedResourceStore("Samples"));
-                WhitePixel = renderer.CreateTexture(1, 1, initialisationColour: Colour4.White);
+                EnsureWhitePixel(renderer);
 
                 UploadedToTheStores = true;
             }
 
             Texture = textures.Get("Cubed-logo");
         }
+
+        public static void EnsureWhitePixel(IRenderer renderer) =>
+            WhitePixel ??= renderer.CreateTexture(1, 1, initialisationColour: Colour4.White);
     }
 }

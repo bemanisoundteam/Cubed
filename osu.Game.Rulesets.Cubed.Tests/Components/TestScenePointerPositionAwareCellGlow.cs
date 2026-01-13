@@ -18,9 +18,7 @@ namespace osu.Game.Rulesets.Cubed.Tests.Components {
 
         [BackgroundDependencyLoader]
         private void load(IRenderer renderer, ShaderManager shaders) {
-            // Hack: I load ConciergeIcon to initialise ConciergeIcon.WhitePixel
-            // This deserves to be handled better, but it's good enough for now
-            Add(new ConciergeIcon { Alpha = 0 });
+            ConciergeIcon.EnsureWhitePixel(renderer);
 
             Dependencies.CacheAs<ShaderManager>(new CubedShaderManager(renderer, shaders));
 
