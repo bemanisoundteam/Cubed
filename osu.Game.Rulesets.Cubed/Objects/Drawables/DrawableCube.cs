@@ -17,19 +17,7 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
         protected override void LoadComplete() {
             base.LoadComplete();
 
-            marker.OnSkinChanged += onMarkerChanged;
-        }
-
-        private void onMarkerChanged() {
-            if (HitObject == null)
-                return;
-
-            using (BeginAbsoluteSequence(HitObject.StartTime - InitialLifetimeOffset))
-                   Marker.AnimateApproach(InitialLifetimeOffset);
-
-            if (State.Value == ArmedState.Hit)
-                using (BeginAbsoluteSequence(HitStateUpdateTime))
-                    Marker.AnimateHit(TransformsDuration);
+            marker.OnSkinChanged += RefreshStateTransforms;
         }
 
         protected override void CheckForResult(bool userTriggered, double timeOffset) {
@@ -61,7 +49,7 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
         protected override void Dispose(bool isDisposing) {
             base.Dispose(isDisposing);
 
-            marker.OnSkinChanged -= onMarkerChanged;
+            marker.OnSkinChanged -= RefreshStateTransforms;
         }
     }
 }
