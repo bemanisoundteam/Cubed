@@ -18,8 +18,6 @@ namespace osu.Game.Rulesets.Cubed.Tests.Components {
 
         [BackgroundDependencyLoader]
         private void load(IRenderer renderer, ShaderManager shaders) {
-            ConciergeIcon.EnsureWhitePixel(renderer);
-
             Dependencies.CacheAs<ShaderManager>(new CubedShaderManager(renderer, shaders));
 
             PointerPositionAwareCellGlow[][] cells = new PointerPositionAwareCellGlow[4][];

@@ -31,12 +31,13 @@ namespace osu.Game.Rulesets.Cubed.Skinning.CellGlows {
         public IShader TextureShader { get; private set; }
 
         [BackgroundDependencyLoader]
-        private void load(ShaderManager shaders) {
+        private void load(ShaderManager shaders, IRenderer renderer) {
             RelativeSizeAxes = Axes.Both;
 
             Colour = ColourInfo.GradientHorizontal(Colour4.Cyan, Colour4.LimeGreen);
 
             TextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, "PointerPositionAwareCellGlow");
+            ConciergeIcon.EnsureWhitePixel(renderer);
         }
 
         protected override void LoadComplete() => PtrPos.BindValueChanged(
