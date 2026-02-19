@@ -8,13 +8,9 @@ using osu.Framework.Input.Bindings;
 using osu.Framework.Input.Events;
 using osu.Game.Rulesets.Cubed.Objects;
 using osu.Game.Rulesets.Cubed.Objects.Drawables;
-using osu.Game.Rulesets.Cubed.Scoring;
 using osu.Game.Rulesets.Cubed.Skinning;
 using static osu.Game.Rulesets.Cubed.Skinning.CubedSkinComponents;
-using osu.Game.Rulesets.Judgements;
 using osu.Game.Rulesets.Objects;
-using osu.Game.Rulesets.Objects.Drawables;
-using osu.Game.Rulesets.Scoring;
 using osu.Game.Rulesets.UI;
 using osuTK;
 using System.Collections.Generic;
@@ -46,10 +42,6 @@ namespace osu.Game.Rulesets.Cubed.UI {
         public Bindable<bool> CellBorders { get; init; }
 
         public Container GlowProxyContainer { get; init; }
-
-        private readonly JudgementContainer<DrawableCubedJudgement> judgements = new() { RelativeSizeAxes = Axes.Both };
-        private readonly Container judgementsAboveHitObjects = new() { RelativeSizeAxes = Axes.Both };
-        private JudgementPooler<DrawableCubedJudgement> judgementPool;
 
         [BackgroundDependencyLoader(true)]
         private void load(CubedInputManager manager) {
@@ -85,32 +77,7 @@ namespace osu.Game.Rulesets.Cubed.UI {
             RegisterPool<CubedHoldNote, DrawableCubedHoldNote>(20, 100);
             RegisterPool<CubedHoldHead, DrawableCubedHoldHead>(20, 100);
 
-            AddInternal(judgements);
             AddInternal(HitObjectContainer);
-            AddInternal(judgementsAboveHitObjects);
-
-            // I don't think placing the pool here does something about proxying above HitObjects,
-            // but osu! does it like this and I can't test it yet
-            // FIXME This registers a stupid amount of pools, possible performance regression (I didn't measure it, but stress tests stutter on high object spikes)
-            // Requires RenderDoc + profiling (I have around 2500-3000 instances of ProxyDrawable on razor sharp, I need to test impact on unlimited framerate, but this is amongst top CPU consumers...)
-            // And still we might want to preload the right amount of judgements
-            AddInternal(judgementPool = new(System.Enum.GetValues<HitResult>().Where(CubedHitWindows.HitResultAllowed)
-            , judgement => judgementsAboveHitObjects.Add(judgement.ProxiedAboveHitObjectsContent)));
-        }
-
-        protected override void LoadComplete() {
-            base.LoadComplete();
-
-            NewResult += OnNewResult;
-        }
-
-        private void OnNewResult(DrawableHitObject judgedObject, JudgementResult result) {
-            if (!judgedObject.DisplayResult || !DisplayJudgements.Value)
-                return;
-
-            // Original clears here, if it's broken we just need to do
-            // judgements.Clear(false);
-            judgements.Add(judgementPool.Get(result.Type, j => j.Apply(result, judgedObject))!);
         }
 
         protected override HitObjectLifetimeEntry CreateLifetimeEntry(HitObject hitObject) => new CubedHitObjectLifetimeEntry((CubedHitObject) hitObject);
@@ -201,13 +168,6 @@ namespace osu.Game.Rulesets.Cubed.UI {
                     // This shouldn't be reached, but do the best we can do to have a viable-ish position
                     _ => DrawRectangle.Contains(inputManager.CurrentState.Mouse.Position) ? inputManager.CurrentState.Mouse.Position : default
                 };
-        }
-
-        protected override void Dispose(bool isDisposing) {
-            // must happen before children are disposed in base call to prevent illegal accesses to the judgement pool.
-            NewResult -= OnNewResult;
-
-            base.Dispose(isDisposing);
         }
     }
 
