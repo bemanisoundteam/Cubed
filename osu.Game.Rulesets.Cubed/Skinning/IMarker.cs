@@ -1,18 +1,19 @@
 using osu.Framework.Graphics;
+using osu.Game.Rulesets.Judgements;
 
 namespace osu.Game.Rulesets.Cubed.Skinning {
     public interface IMarker : IDrawable {
         /// <summary>
-        /// Animate this marker until HitObject's StartTime
+        /// Transform this marker until HitObject's StartTime
         /// </summary>
-        /// <param name="time">Duration of the animation</param>
+        /// <param name="time">Duration of the transform</param>
         public void AnimateApproach(double time);
 
         /// <summary>
-        /// Called on object hit, to play an eventual hit animation
+        /// Apply Transforms to be displayed when the object gets hit
         /// </summary>
-        /// <remarks>Markers may be drawn under the judgments</remarks>
-        /// <param name="duration">Time before object fades out</param>
-        public void AnimateHit(double duration) {}
+        /// <param name="duration">Duration of transforms</param>
+        /// <param name="judgement">Judgement resulting from the hit</param>
+        public void AnimateHit(double duration, JudgementResult judgement);
     }
 }

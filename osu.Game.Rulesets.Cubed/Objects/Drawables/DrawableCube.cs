@@ -43,7 +43,7 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
             base.UpdateHitStateTransforms(state);
 
             if (state == ArmedState.Hit)
-                Marker.AnimateHit(TransformsDuration);
+                Marker.AnimateHit(TransformsDuration, Result);
         }
 
         protected override void Dispose(bool isDisposing) {

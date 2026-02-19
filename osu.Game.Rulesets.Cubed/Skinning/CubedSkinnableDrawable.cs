@@ -4,8 +4,10 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Shapes;
+using osu.Game.Graphics;
 using osu.Game.Rulesets.Cubed.Skinning.CellGlows;
 using osu.Game.Rulesets.Cubed.Skinning.Indicators;
+using osu.Game.Rulesets.Judgements;
 using osu.Game.Skinning;
 using System;
 
@@ -39,15 +41,18 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
             Origin = Anchor.Centre
         };
 
+        [Resolved]
+        private OsuColour colour { get; set; }
+
         [BackgroundDependencyLoader]
         private void load() =>
             InternalChildren = [marker, approach];
 
         public void AnimateApproach(double time) => approach.ScaleTo(1, time).Then().FadeOut();
 
-        public void AnimateHit(double duration) {
+        public void AnimateHit(double duration, JudgementResult judgement) {
             approach.FadeOut();
-            marker.ScaleTo(1.5f, duration, Easing.OutQuint);
+            marker.FadeColour(colour.ForHitResult(judgement.Type)).ScaleTo(1.5f, duration, Easing.OutQuint);
         }
 
         private partial class Approach : CompositeDrawable {
