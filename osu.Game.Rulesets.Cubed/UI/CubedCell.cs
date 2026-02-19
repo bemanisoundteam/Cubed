@@ -38,6 +38,7 @@ namespace osu.Game.Rulesets.Cubed.UI {
         // [Resolved], although injected through the BDL
         private CubedInputManager inputManager;
         private KeyBindingContainer<CubedAction> KeyBindingContainer;
+
         public Bindable<bool> HighlightCells { get; init; }
         public Bindable<bool> CellBorders { get; init; }
 
@@ -114,6 +115,8 @@ namespace osu.Game.Rulesets.Cubed.UI {
                 Release();
         }
 
+        #region Input State Handling
+
         protected override bool OnMouseDown(MouseDownEvent e) {
             positionalPressCount++;
             PointerPosition.Value = e.ScreenSpaceMousePosition;
@@ -153,6 +156,9 @@ namespace osu.Game.Rulesets.Cubed.UI {
             ppSource = (PPSource) (int) PPSource.Touch1 + (int) e.ScreenSpaceTouch.Source;
         }
 
+        #endregion
+
+        // This could be made in class parts in case we need to have less clutter here
         protected override void Update() {
             if (positionalPressCount == 0)
                 // ppSource should be set to None here for correctness, but it's not going to be checked against anyway
