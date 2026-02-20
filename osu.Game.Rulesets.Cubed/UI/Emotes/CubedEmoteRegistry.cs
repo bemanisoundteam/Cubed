@@ -19,6 +19,9 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
         #endregion
 
         public static void RegisterEmote(CubedEmoteLookup emote, Func<ICubedEmote> createDefault, uint trigger, String resultsScreenMessage = null) {
+            ArgumentException.ThrowIfNullOrWhiteSpace(emote.Name);
+            ArgumentException.ThrowIfNullOrWhiteSpace(emote.Namespace);
+
             // That error handling is open to discussion :
             // I could replace a null createDefault with a "missing emote warning" one
             ArgumentNullException.ThrowIfNull(createDefault);
