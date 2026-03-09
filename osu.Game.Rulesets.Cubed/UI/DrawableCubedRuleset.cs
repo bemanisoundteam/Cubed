@@ -1,13 +1,17 @@
-﻿using osu.Framework.Input;
+﻿using osu.Framework.Allocation;
+using osu.Framework.Input;
 using osu.Game.Beatmaps;
 using osu.Game.Input.Handlers;
 using osu.Game.Replays;
+using osu.Game.Rulesets.Cubed.Configuration;
 using osu.Game.Rulesets.Cubed.Objects;
 using osu.Game.Rulesets.Cubed.Replays;
+using osu.Game.Rulesets.Cubed.Skinning;
 using osu.Game.Rulesets.Mods;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.UI;
 using osu.Game.Scoring;
+using osu.Game.Skinning;
 using System.Collections.Generic;
 
 namespace osu.Game.Rulesets.Cubed.UI {
@@ -24,5 +28,11 @@ namespace osu.Game.Rulesets.Cubed.UI {
         public override DrawableHitObject<CubedHitObject> CreateDrawableRepresentation(CubedHitObject h) => null;
 
         protected override PassThroughInputManager CreateInputManager() => new CubedInputManager(Ruleset?.RulesetInfo);
+
+        protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) {
+            var deps = new DependencyContainer(base.CreateChildDependencies(parent));
+            deps.CacheAs<ISkinSource>(new CubedSkinSource(deps.Get<ISkinSource>(), (CubedRulesetConfigManager) Config));
+            return deps;
+        }
     }
 }

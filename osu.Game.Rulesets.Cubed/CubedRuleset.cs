@@ -12,6 +12,7 @@ using osu.Game.Rulesets.Cubed.Mods;
 using osu.Game.Rulesets.Cubed.Objects;
 using osu.Game.Rulesets.Cubed.Scoring;
 using osu.Game.Rulesets.Cubed.Skinning;
+using osu.Game.Rulesets.Cubed.Skinning.CellGlows;
 using osu.Game.Rulesets.Cubed.UI;
 using osu.Game.Rulesets.Cubed.UI.Emotes;
 using osu.Game.Rulesets.Difficulty;
@@ -135,6 +136,9 @@ namespace osu.Game.Rulesets.Cubed {
         public override Drawable CreateIcon() => new ConciergeIcon();
 
         static CubedRuleset() {
+            CubedSkinRegistry.RegisterCellGlow(new ("Default", "Cubed"), () => new DefaultCellGlow());
+            CubedSkinRegistry.RegisterCellGlow(new ("Pointer Position Aware", "Cubed"), () => new PointerPositionAwareCellGlow());
+
             CubedEmoteRegistry.RegisterEmote(new (LarryEmote.Name, "Cubed"), () => new LarryEmote(), LarryEmote.Trigger, LarryEmote.Quote);
             CubedEmoteRegistry.RegisterEmote(new (EGaddEmote.Name, "Cubed"), () => new EGaddEmote(), EGaddEmote.Trigger);
         }
