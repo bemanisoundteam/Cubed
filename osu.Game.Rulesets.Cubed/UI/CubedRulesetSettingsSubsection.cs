@@ -4,9 +4,9 @@ using osu.Game.Overlays.Settings;
 using osu.Game.Rulesets.Cubed.Configuration;
 
 namespace osu.Game.Rulesets.Cubed.UI {
-#pragma warning disable CS9107 // Parameter is captured into the state of the enclosing type and its value is also passed to the base constructor. The value might be captured by the base class as well.
     public partial class CubedRulesetSettingsSubsection(Ruleset ruleset) : RulesetSettingsSubsection(ruleset) {
-        protected override LocalisableString Header => ruleset.Description;
+        // Matches ruleset.Description, but I didn't want to make a field, and the compiler complains if I use ruleset directly
+        protected override LocalisableString Header => "Cubed";
 
         [BackgroundDependencyLoader]
         private void load() {
@@ -14,13 +14,13 @@ namespace osu.Game.Rulesets.Cubed.UI {
 
             Children = [
                 new SettingsCheckbox {
-                    LabelText = @"Cell borders",
+                    LabelText = "Cell borders",
                     Current = config.GetBindable<bool>(CubedRulesetSetting.CellBorders)
                 },
                 new SettingsCheckbox {
                     LabelText = "Highlight cells",
                     Current = config.GetBindable<bool>(CubedRulesetSetting.HighlightCells)
-                }
+                },
             ];
         }
     }
