@@ -1,7 +1,7 @@
 ﻿using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Shaders;
 
-namespace osu.Game.Rulesets.Cubed.Tests {
+namespace osu.Game.Rulesets.Cubed.Dependencies {
     public class CubedShaderManager(IRenderer renderer, ShaderManager parent = null)
         : ShaderManager(renderer, CubedRuleset.CreateNamespacedResourceStore("Shaders")) {
         public override IShader GetCachedShader(string vertex, string fragment) =>
