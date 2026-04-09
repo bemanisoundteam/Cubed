@@ -136,7 +136,6 @@ namespace osu.Game.Rulesets.Cubed {
         public override Drawable CreateIcon() => new ConciergeIcon();
 
         static CubedRuleset() {
-            CubedSkinRegistry.RegisterCellGlow(new ("Default", "Cubed"), () => new DefaultCellGlow());
             CubedSkinRegistry.RegisterCellGlow(new ("Pointer Position Aware", "Cubed"), () => new PointerPositionAwareCellGlow());
 
             CubedEmoteRegistry.RegisterEmote(new (LarryEmote.Name, "Cubed"), () => new LarryEmote(), LarryEmote.Trigger, LarryEmote.Quote);

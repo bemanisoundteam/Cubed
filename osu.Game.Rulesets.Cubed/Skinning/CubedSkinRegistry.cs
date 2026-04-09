@@ -10,6 +10,10 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
 
         private static readonly Dictionary<CellGlowSkin, Func<Drawable>> CellGlowsDict = [];
         private static readonly BindableList<CellGlowSkin> CellGlowsList = [];
+        private static readonly Dictionary<CellGlowSkin, Func<Drawable>> CellGlowsDict = new() {
+            [new CellGlowSkin(null, "Cubed")] = () => new DefaultCellGlow()
+        };
+        private static readonly BindableList<CellGlowSkin> CellGlowsList = [new(null, "Cubed")];
 
         public static void RegisterCellGlow(CellGlowSkin skinInfo, Func<Drawable> cellGlow) {
             ArgumentException.ThrowIfNullOrWhiteSpace(skinInfo.Name);
@@ -24,7 +28,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
         public static Drawable CreateCellGlow(CellGlowSkin skin) {
             ArgumentNullException.ThrowIfNull(skin, nameof(skin));
 
-            return CellGlowsDict[skin]?.Invoke();
+            return CellGlowsDict[skin]();
         }
     }
 }
