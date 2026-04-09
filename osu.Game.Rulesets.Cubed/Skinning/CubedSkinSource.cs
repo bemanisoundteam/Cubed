@@ -5,6 +5,7 @@ using osu.Framework.Graphics.Textures;
 using osu.Game.Audio;
 using osu.Game.Rulesets.Cubed.Configuration;
 using osu.Game.Rulesets.Cubed.Skinning.CellGlows;
+using osu.Game.Rulesets.Cubed.Skinning.Gameplay;
 using osu.Game.Skinning;
 using System;
 using System.Collections.Generic;
@@ -17,13 +18,17 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
         public event Action? SourceChanged;
 
         private readonly ISkinSource parent;
+        private readonly Bindable<CubedGameplaySkin> currentGameplaySkin;
         private readonly Bindable<CellGlowSkin> currentCellGlow;
 
         public CubedSkinSource(ISkinSource parent, CubedRulesetConfigManager config) {
             Debug.Assert(parent != null);
             this.parent = parent;
 
+            currentGameplaySkin = config.GetBindable<CubedGameplaySkin>(CubedRulesetSetting.CurrentGameplaySkin);
             currentCellGlow = config.GetBindable<CellGlowSkin>(CubedRulesetSetting.CurrentCellGlow);
+
+            currentGameplaySkin.ValueChanged += _ => SourceChanged?.Invoke();
             currentCellGlow.ValueChanged += _ => SourceChanged?.Invoke();
 
             parent.SourceChanged += TriggerSourceChange;
@@ -35,7 +40,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
             if (lookup is CubedSkinComponentLookup lkp)
                 return lkp.Component switch {
                     CubedSkinComponents.CellGlow => currentCellGlow.Value.CreateCellGlow(),
-                    _ => parent.GetDrawableComponent(lkp)
+                    _ => currentGameplaySkin.Value.CreateComponent(lkp.Component)
                 };
 
             return parent.GetDrawableComponent(lookup);
