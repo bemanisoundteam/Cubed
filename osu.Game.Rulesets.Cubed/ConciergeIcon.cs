@@ -5,6 +5,7 @@ using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.IO.Stores;
+using osu.Framework.Platform;
 using System.Reflection;
 
 namespace osu.Game.Rulesets.Cubed {
@@ -18,13 +19,14 @@ namespace osu.Game.Rulesets.Cubed {
         private static bool UploadedToTheStores;
 
         [BackgroundDependencyLoader]
-        private void load(TextureStore textures, AudioManager audio, IRenderer renderer) {
+        private void load(TextureStore textures, AudioManager audio, GameHost host) {
             if (!UploadedToTheStores) {
-                textures.AddTextureSource(new TextureLoaderStore(CubedRuleset.CreateNamespacedResourceStore("Textures")));
+                textures.AddTextureSource(host.CreateTextureLoaderStore(CubedRuleset.CreateNamespacedResourceStore("Textures")));
                 ResourceStore<byte[]> sampleStore = (ResourceStore<byte[]>) audio.GetSampleStore().GetType().
                     GetField("store", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(audio.GetSampleStore());
                 sampleStore!.AddStore(CubedRuleset.CreateNamespacedResourceStore("Samples"));
-                EnsureWhitePixel(renderer);
+
+                EnsureWhitePixel(host.Renderer);
 
                 UploadedToTheStores = true;
             }
