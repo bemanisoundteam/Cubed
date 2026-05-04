@@ -6,6 +6,7 @@ using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.IO.Stores;
 using osu.Framework.Platform;
+using osu.Game.Rulesets.Cubed.Skinning;
 using System.Reflection;
 
 namespace osu.Game.Rulesets.Cubed {
@@ -27,6 +28,8 @@ namespace osu.Game.Rulesets.Cubed {
                 sampleStore!.AddStore(CubedRuleset.CreateNamespacedResourceStore("Samples"));
 
                 EnsureWhitePixel(host.Renderer);
+
+                CubedSkinLoader.DiscoverSkins(CubedRuleset.CreateNamespacedResourceStore("Skins"), host);
 
                 UploadedToTheStores = true;
             }

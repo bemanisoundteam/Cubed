@@ -6,6 +6,7 @@ using osu.Game.Overlays.Settings;
 using osu.Game.Rulesets.Cubed.Configuration;
 using osu.Game.Rulesets.Cubed.Skinning;
 using osu.Game.Rulesets.Cubed.Skinning.CellGlows;
+using osu.Game.Rulesets.Cubed.Skinning.Gameplay;
 using osuTK;
 
 namespace osu.Game.Rulesets.Cubed.UI {
@@ -18,6 +19,12 @@ namespace osu.Game.Rulesets.Cubed.UI {
             var config = (CubedRulesetConfigManager) Config;
 
             Children = [
+                new SettingsDropdown<CubedGameplaySkin> {
+                    LabelText = "Skin",
+                    Current = config.GetBindable<CubedGameplaySkin>(CubedRulesetSetting.CurrentGameplaySkin),
+                    ItemSource = CubedSkinRegistry.GameplaySkins
+                },
+
                 new CellGlowConfigPreviewer(config) {
                     Size = new Vector2(SettingsPanel.PANEL_WIDTH, SettingsPanel.PANEL_WIDTH - SettingsPanel.CONTENT_MARGINS * 2),
                     Padding = new MarginPadding { Horizontal = SettingsPanel.CONTENT_MARGINS }
