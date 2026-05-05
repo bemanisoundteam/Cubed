@@ -12,7 +12,11 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
     public partial class CellGlowPreviewer : Container {
         public Drawable CellGlow {
             get => InternalChild;
-            set => InternalChild = value;
+            set {
+                InternalChild = value;
+                InternalChild.RelativeSizeAxes = Axes.Both;
+                InternalChild.Size = Vector2.One;
+            }
         }
 
         protected CubedShaderManager Shaders;
