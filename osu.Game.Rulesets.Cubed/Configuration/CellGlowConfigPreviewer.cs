@@ -59,7 +59,10 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
                     CornerRadius = 10,
                     BorderThickness = 3,
                     BackgroundColor = Colors.Background3,
-                    Child = skin.CreateCellGlow(),
+                    Child = new CellGlowPreviewer {
+                        RelativeSizeAxes = Axes.Both,
+                        CellGlow = skin.CreateCellGlow()
+                    },
                     OnSelection = () => CellGlowSkin.Value = skin
                 };
                 CellGlowSkin.BindValueChanged(e => card.IsSelected = e.NewValue == skin, true);
