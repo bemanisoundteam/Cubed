@@ -2,6 +2,7 @@
 using osu.Framework.Graphics;
 using osu.Game.Rulesets.Cubed.Skinning.CellGlows;
 using osu.Game.Rulesets.Cubed.Skinning.Gameplay;
+using osu.Game.Rulesets.Cubed.Skinning.Indicators;
 using System;
 using System.Collections.Generic;
 
@@ -49,9 +50,9 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
             GameplaySkinComponentFactories factory = GameplaySkinsDict[skin];
 
             return component switch {
-                CubedSkinComponents.Marker => factory?.Marker(),
-                CubedSkinComponents.Receptor => factory?.Receptor(),
-                CubedSkinComponents.Indicator => factory?.Indicator(),
+                CubedSkinComponents.Marker => factory?.Marker() ?? new DefaultMarker(),
+                CubedSkinComponents.Receptor => factory?.Receptor() ?? new DefaultReceptor(),
+                CubedSkinComponents.Indicator => factory?.Indicator() ?? new DefaultIndicator(),
                 _ => null
             };
         }
