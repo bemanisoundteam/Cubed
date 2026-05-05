@@ -1,4 +1,5 @@
 ﻿using osu.Framework.Graphics;
+using osu.Framework.Graphics.Animations;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.IO.Stores;
@@ -125,7 +126,14 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
             Func<Drawable> CellGlow(SkinConfig config) {
                 return config.Type switch {
                     ImplementationType.Texture => () => new Sprite { Texture = skinTextures.Get("CellGlow") },
-                    _ => throw new NotImplementedException($"Cubed: Error with skin {skinName} ({skinNamespace}): CellGlows currently only have Texture type implemented for now")
+                    ImplementationType.Animation => () => {
+                        TextureAnimation animation = new(false);
+                        for (int i = 0; i < config.FrameCount; i++)
+                            animation.AddFrame(skinTextures.Get($"CellGlow{i}"), 1000 / config.Framerate);
+                        animation.Loop = true;
+                        return animation;
+                    },
+                    _ => throw new Exception($"Cubed: Error with skin {skinName} ({skinNamespace}): Invalid CellGlow Type")
                 };
             }
 
@@ -133,7 +141,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
                 return config.Type switch {
                     ImplementationType.Null => () => new NullMarker(),
                     ImplementationType.Animation => () => new AnimatedMarker(skinTextures, config.FrameCount, config.TapAtFrame, config.JudgementFrameCount),
-                    _ => throw new NotImplementedException($"Cubed: Error with skin {skinName} ({skinNamespace}): Markers only have Animation type implemented for now")
+                    _ => throw new Exception($"Cubed: Error with skin {skinName} ({skinNamespace}): Invalid Marker Type")
                 };
             }
         }
