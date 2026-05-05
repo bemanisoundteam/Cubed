@@ -74,18 +74,23 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
                     }
 
                     // Ignore lines that don't belong to a component
-                    if (!componentValid)
+                    if (!componentValid) {
+                        Logger.Log($"Cubed: Ignored line \"{line}\" whilst parsing {manifest} as it doesn't belong to a valid skin component");
                         continue;
+                    }
 
                     // Parse the config line
                     int equalsIndex = line.IndexOf('=');
+                    if (equalsIndex == -1)
+                        throw new Exception($"Cubed: Malformed line \"{line}\" in {manifest}");
+
                     var key = line.Slice(0, equalsIndex).Trim();
                     var val = line.Slice(equalsIndex + 1).Trim();
 
                     switch (key) {
                         case "Type": {
                             if (!Enum.TryParse(val, out componentConfigs[component].Type))
-                                Logger.Log($"Cubed: Error whilst loading {manifest}: Unknown Type : {val}");
+                                throw new Exception($"Cubed: Error whilst parsing {manifest}: Unknown Type : {val}");
                             break;
                         }
                         case "Framerate":
@@ -99,6 +104,9 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
                             break;
                         case "JudgementFrameCount":
                             componentConfigs[component].JudgementFrameCount = int.Parse(val, CultureInfo.InvariantCulture);
+                            break;
+                        default:
+                            Logger.Log($"Cubed: Encountered an unknown config key whilst parsing {manifest}: {key}");
                             break;
                     }
                 }
