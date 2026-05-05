@@ -19,6 +19,10 @@ namespace osu.Game.Rulesets.Cubed.UI {
             var config = (CubedRulesetConfigManager) Config;
 
             Children = [
+                new MarkerSkinConfigPreviewer(config) {
+                    Size = new Vector2(SettingsPanel.PANEL_WIDTH, SettingsPanel.PANEL_WIDTH - SettingsPanel.CONTENT_MARGINS * 2),
+                    Padding = new MarginPadding { Horizontal = SettingsPanel.CONTENT_MARGINS }
+                },
                 new SettingsDropdown<CubedGameplaySkin> {
                     LabelText = "Skin",
                     Current = config.GetBindable<CubedGameplaySkin>(CubedRulesetSetting.CurrentGameplaySkin),
