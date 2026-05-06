@@ -1,5 +1,6 @@
 ﻿using osu.Framework.Allocation;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Containers;
 using osu.Framework.Localisation;
 using osu.Game.Overlays;
 using osu.Game.Overlays.Settings;
@@ -19,20 +20,14 @@ namespace osu.Game.Rulesets.Cubed.UI {
             var config = (CubedRulesetConfigManager) Config;
 
             Children = [
-                new MarkerSkinConfigPreviewer(config) {
-                    Size = new Vector2(SettingsPanel.PANEL_WIDTH, SettingsPanel.PANEL_WIDTH - SettingsPanel.CONTENT_MARGINS * 2),
-                    Padding = new MarginPadding { Horizontal = SettingsPanel.CONTENT_MARGINS }
-                },
+                new CubedConfigPaddedContainer(new MarkerSkinConfigPreviewer(config)),
                 new SettingsDropdown<CubedGameplaySkin> {
                     LabelText = "Skin",
                     Current = config.GetBindable<CubedGameplaySkin>(CubedRulesetSetting.CurrentGameplaySkin),
                     ItemSource = CubedSkinRegistry.GameplaySkins
                 },
 
-                new CellGlowConfigPreviewer(config) {
-                    Size = new Vector2(SettingsPanel.PANEL_WIDTH, SettingsPanel.PANEL_WIDTH - SettingsPanel.CONTENT_MARGINS * 2),
-                    Padding = new MarginPadding { Horizontal = SettingsPanel.CONTENT_MARGINS }
-                },
+                new CubedConfigPaddedContainer(new CellGlowConfigPreviewer(config)),
                 new SettingsDropdown<CellGlowSkin> {
                     LabelText = "Cell glow",
                     Current = config.GetBindable<CellGlowSkin>(CubedRulesetSetting.CurrentCellGlow),
@@ -48,6 +43,19 @@ namespace osu.Game.Rulesets.Cubed.UI {
                     Current = config.GetBindable<bool>(CubedRulesetSetting.HighlightCells)
                 },
             ];
+        }
+
+        private sealed partial class CubedConfigPaddedContainer : Container {
+            public CubedConfigPaddedContainer(Drawable child) {
+                Size = new Vector2(SettingsPanel.PANEL_WIDTH, SettingsPanel.PANEL_WIDTH - SettingsPanel.CONTENT_MARGINS * 2);
+                Padding = new MarginPadding { Horizontal = SettingsPanel.CONTENT_MARGINS };
+                Child = new Container {
+                    RelativeSizeAxes = Axes.Both,
+                    Masking = true,
+                    Child = child
+                };
+                child.RelativeSizeAxes = Axes.Both;
+            }
         }
     }
 }
