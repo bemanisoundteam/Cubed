@@ -34,7 +34,7 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
 
         protected override void Update() {
             Container.MaximumSize = Parent!.DrawSize;
-            scrollContainer.Height = float.Min(scrollContainer.ScrollContent.Height, Parent.DrawHeight);
+            scrollContainer.Height = float.Min(scrollContainer.ScrollContent.Height, Parent.DrawHeight - Content.Padding.TotalVertical);
         }
 
         protected partial class SkinElementCard : Container {
