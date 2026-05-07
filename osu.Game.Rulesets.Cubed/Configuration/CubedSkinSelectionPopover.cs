@@ -3,6 +3,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input.Events;
+using osu.Game.Graphics.Containers;
 using osu.Game.Graphics.UserInterfaceV2;
 using osuTK;
 using System;
@@ -14,12 +15,27 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
             Spacing = new Vector2(10),
         };
 
+        private readonly OsuScrollContainer scrollContainer;
+
         protected CubedSkinSelectionPopover() {
-            Child = Container;
+            Child = scrollContainer = new OsuScrollContainer(Direction.Vertical) {
+                // AutoSize calculations are messed up on the scroll direction, so I compute Height in Update()
+                AutoSizeAxes = Axes.X,
+                Child = Container
+            };
+            scrollContainer.ScrollContent.RelativeSizeAxes = Axes.None;
+            scrollContainer.ScrollContent.AutoSizeAxes = Axes.Both;
+
+            // Either the scrollbar overlaps content and it looks ugly
+            // Or you set scrollContainer.ScrollbarOverlapsContent = false;
+            // But they messed up padding so it looks ugly still
+            scrollContainer.ScrollbarVisible = false;
         }
 
-        protected override void Update() =>
+        protected override void Update() {
             Container.MaximumSize = Parent!.DrawSize;
+            scrollContainer.Height = float.Min(scrollContainer.ScrollContent.Height, Parent.DrawHeight);
+        }
 
         protected partial class SkinElementCard : Container {
             public Colour4 BackgroundColor {
