@@ -24,6 +24,7 @@ namespace osu.Game.Rulesets.Cubed.Tests.Skinning {
                 FillMode = FillMode.Fit,
                 FillAspectRatio = 1,
             });
+            Marker.ScaleDownToFit.Value = false;
             Add(new ClockDisplay(Marker.Clock));
         }
 
