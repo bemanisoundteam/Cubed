@@ -34,6 +34,10 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
     }
 
     public partial class DefaultMarker : CompositeDrawable, IMarker {
+        public osuTK.Vector2 PreviewScale => new (1f / ApproachScale.X, 1f / ApproachScale.Y);
+
+        private static readonly osuTK.Vector2 ApproachScale = new (2.5f);
+
         private readonly Drawable approach = new Approach();
         private readonly Drawable marker = new Box {
             RelativeSizeAxes = Axes.Both,
@@ -61,7 +65,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
                 Anchor = Anchor.Centre;
                 Origin = Anchor.Centre;
                 RelativeSizeAxes = Axes.Both;
-                Scale = new osuTK.Vector2(2.5f);
+                Scale = ApproachScale;
                 Masking = true;
                 BorderColour = Colour4.Red;
                 BorderThickness = 3;

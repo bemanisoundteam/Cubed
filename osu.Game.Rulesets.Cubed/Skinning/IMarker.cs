@@ -1,5 +1,6 @@
 using osu.Framework.Graphics;
 using osu.Game.Rulesets.Judgements;
+using osuTK;
 
 namespace osu.Game.Rulesets.Cubed.Skinning {
     public interface IMarker : IDrawable {
@@ -15,5 +16,11 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
         /// <param name="duration">Duration of transforms</param>
         /// <param name="judgement">Judgement resulting from the hit</param>
         public void AnimateHit(double duration, JudgementResult judgement);
+
+        /// <summary>
+        /// The scale at which the marker should be previewed at
+        /// Should be the inverse of the maximum scale this marker can reach
+        /// </summary>
+        public Vector2 PreviewScale => Vector2.One;
     }
 }

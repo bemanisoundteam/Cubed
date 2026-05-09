@@ -13,12 +13,17 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
         private double ApproachDuration => hitObject.TimePreempt;
         private double HitDuration => 1000;  // Exaggerated length so you have time to see
 
+        public override bool RemoveCompletedTransforms => false;
+
         public IMarker Marker {
             get => InternalChild as IMarker;
             set {
                 InternalChild = (Drawable) value;
                 InternalChild.RelativeSizeAxes = Axes.Both;
                 InternalChild.Size = Vector2.One;
+                InternalChild.Scale = Marker.PreviewScale;
+                InternalChild.Anchor = Anchor.Centre;
+                InternalChild.Origin = Anchor.Centre;
 
                 Scheduler.AddOnce(marker => {
                     using (BeginAbsoluteSequence(0))
