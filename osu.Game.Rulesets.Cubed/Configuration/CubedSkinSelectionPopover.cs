@@ -1,4 +1,5 @@
 ﻿using osu.Framework.Allocation;
+using osu.Framework.Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
@@ -19,6 +20,8 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
 
         private OsuScrollContainer scrollContainer;
 
+        private RoundedButton closeButton;
+
         [BackgroundDependencyLoader]
         private void load() {
             Child = scrollContainer = new OsuScrollContainer(Direction.Vertical) {
@@ -35,6 +38,11 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
             scrollContainer.ScrollbarVisible = false;
 
             Container.Children = CreateItemCards();
+
+            Container.Add(closeButton = new RoundedButton {
+                Text = "Close",
+                Action = this.HidePopover
+            });
         }
 
         protected abstract IReadOnlyList<SkinElementCard> CreateItemCards();
@@ -42,6 +50,13 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
         protected override void Update() {
             Container.MaximumSize = Parent!.DrawSize;
             scrollContainer.Height = float.Min(scrollContainer.ScrollContent.Height, Parent.DrawHeight - Content.Padding.TotalVertical);
+
+            // We hide the button when there is only one skin selection option
+            // It isn't even needed as there is largely enough space to click off the popover
+            // RoundedButton seems to have some sort of minimum width mechanism
+            // Which is causing the container to expand to it's max width
+            // Which completely bypasses the point of having it auto size to begin with
+            closeButton.Width = Container.Children.Count < 3 ? 0 : Container.Width;
         }
 
         protected partial class SkinElementCard : Container {
