@@ -6,11 +6,11 @@ using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
-using osu.Game.Overlays;
 using osu.Game.Rulesets.Cubed.Dependencies;
 using osu.Game.Rulesets.Cubed.Skinning;
 using osu.Game.Rulesets.Cubed.Skinning.CellGlows;
 using osuTK;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace osu.Game.Rulesets.Cubed.Configuration {
@@ -46,19 +46,11 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
                 return true;
             }
 
-            [BackgroundDependencyLoader]
-            private void load() =>
-                Container.Children = CubedSkinRegistry.CellGlows.Select(CreateCard).ToList();
+            protected override IReadOnlyList<SkinElementCard> CreateItemCards() =>
+                CubedSkinRegistry.CellGlows.Select(CreateCard).ToList();
 
-            [Resolved]
-            private OverlayColourProvider Colors { get; set; }
-
-            private Drawable CreateCard(CellGlowSkin skin) {
+            private SkinElementCard CreateCard(CellGlowSkin skin) {
                 var card = new SkinElementCard {
-                    Size = new Vector2(100),
-                    CornerRadius = 10,
-                    BorderThickness = 3,
-                    BackgroundColor = Colors.Background3,
                     Child = new CellGlowPreviewer {
                         RelativeSizeAxes = Axes.Both,
                         CellGlow = skin.CreateCellGlow()

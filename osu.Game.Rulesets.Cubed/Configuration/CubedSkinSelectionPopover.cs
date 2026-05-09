@@ -5,19 +5,22 @@ using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input.Events;
 using osu.Game.Graphics.Containers;
 using osu.Game.Graphics.UserInterfaceV2;
+using osu.Game.Overlays;
 using osuTK;
 using System;
+using System.Collections.Generic;
 
 namespace osu.Game.Rulesets.Cubed.Configuration {
     public abstract partial class CubedSkinSelectionPopover : OsuPopover {
-        protected readonly FillFlowContainer Container = new FillFlowContainer {
+        private readonly FillFlowContainer Container = new FillFlowContainer {
             AutoSizeAxes = Axes.Both,
             Spacing = new Vector2(10),
         };
 
-        private readonly OsuScrollContainer scrollContainer;
+        private OsuScrollContainer scrollContainer;
 
-        protected CubedSkinSelectionPopover() {
+        [BackgroundDependencyLoader]
+        private void load() {
             Child = scrollContainer = new OsuScrollContainer(Direction.Vertical) {
                 // AutoSize calculations are messed up on the scroll direction, so I compute Height in Update()
                 AutoSizeAxes = Axes.X,
@@ -30,7 +33,11 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
             // Or you set scrollContainer.ScrollbarOverlapsContent = false;
             // But they messed up padding so it looks ugly still
             scrollContainer.ScrollbarVisible = false;
+
+            Container.Children = CreateItemCards();
         }
+
+        protected abstract IReadOnlyList<SkinElementCard> CreateItemCards();
 
         protected override void Update() {
             Container.MaximumSize = Parent!.DrawSize;
@@ -59,7 +66,12 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
             private readonly Box bg = new Box { RelativeSizeAxes = Axes.Both };
 
             [BackgroundDependencyLoader]
-            private void load() {
+            private void load(OverlayColourProvider colors) {
+                Size = new Vector2(100);
+                CornerRadius = 10;
+                BorderThickness = 3;
+                BackgroundColor = colors.Background3;
+
                 Masking = true;
 
                 InternalChildren = [bg, Content];

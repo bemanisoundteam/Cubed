@@ -1,14 +1,12 @@
-﻿using osu.Framework.Allocation;
-using osu.Framework.Bindables;
+﻿using osu.Framework.Bindables;
 using osu.Framework.Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
-using osu.Game.Overlays;
 using osu.Game.Rulesets.Cubed.Skinning;
 using osu.Game.Rulesets.Cubed.Skinning.Gameplay;
-using osuTK;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace osu.Game.Rulesets.Cubed.Configuration {
@@ -32,19 +30,11 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
         private partial class MarkerSelectionPopover : CubedSkinSelectionPopover {
             public required Bindable<CubedGameplaySkin> MarkerSkin { get; init; }
 
-            [BackgroundDependencyLoader]
-            private void load() =>
-                Container.Children = CubedSkinRegistry.GameplaySkins.Select(CreateCard).ToList();
+            protected override IReadOnlyList<SkinElementCard> CreateItemCards() =>
+                CubedSkinRegistry.GameplaySkins.Select(CreateCard).ToList();
 
-            [Resolved]
-            private OverlayColourProvider Colors { get; set; }
-
-            private Drawable CreateCard(CubedGameplaySkin skin) {
+            private SkinElementCard CreateCard(CubedGameplaySkin skin) {
                 var card = new SkinElementCard {
-                    Size = new Vector2(100),
-                    CornerRadius = 10,
-                    BorderThickness = 3,
-                    BackgroundColor = Colors.Background3,
                     Child = new MarkerSkinPreviewer {
                         RelativeSizeAxes = Axes.Both,
                         Marker = (IMarker) skin.CreateComponent(CubedSkinComponents.Marker)
