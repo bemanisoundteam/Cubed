@@ -8,6 +8,9 @@ using osu.Game.Rulesets.Scoring;
 
 namespace osu.Game.Rulesets.Cubed.Skinning {
     public sealed partial class AnimatedMarker : CompositeDrawable, IMarker {
+        // Used so that I can only load Approach and Perfect when previewing
+        internal bool IsForPreview;
+
         private readonly TextureStore skinTextures;
         private readonly int perfectAt;
 
@@ -42,6 +45,10 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
                 ApproachTextures[i] = skinTextures.Get($"Approach{i}.png");
             for (int i = 0; i < PerfectTextures.Length; i++)
                 PerfectTextures[i] = skinTextures.Get($"Perfect{i}.png");
+
+            if (IsForPreview)
+                return;
+
             for (int i = 0; i < GreatTextures.Length; i++)
                 GreatTextures[i] = skinTextures.Get($"Great{i}.png");
             for (int i = 0; i < GoodTextures.Length; i++)

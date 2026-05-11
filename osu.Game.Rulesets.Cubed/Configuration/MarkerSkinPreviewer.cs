@@ -25,6 +25,9 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
         public IMarker Marker {
             get => InternalChild as IMarker;
             set {
+                if (value is AnimatedMarker animatedMarker)
+                    animatedMarker.IsForPreview = true;
+
                 InternalChild = (Drawable) value;
                 InternalChild.RelativeSizeAxes = Axes.Both;
                 InternalChild.Size = Vector2.One;
