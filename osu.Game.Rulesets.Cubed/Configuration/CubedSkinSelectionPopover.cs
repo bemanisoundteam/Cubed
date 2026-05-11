@@ -5,6 +5,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input.Events;
 using osu.Game.Graphics.Containers;
+using osu.Game.Graphics.UserInterface;
 using osu.Game.Graphics.UserInterfaceV2;
 using osu.Game.Overlays;
 using osuTK;
@@ -80,6 +81,8 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
 
             private readonly Box bg = new Box { RelativeSizeAxes = Axes.Both };
 
+            private readonly LoadingSpinner loading = new ();
+
             [BackgroundDependencyLoader]
             private void load(OverlayColourProvider colors) {
                 Size = new Vector2(100);
@@ -89,13 +92,29 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
 
                 Masking = true;
 
-                InternalChildren = [bg, Content];
+                InternalChildren = [bg, Content, loading];
             }
 
             protected override bool OnClick(ClickEvent e) {
                 OnSelection();
                 return true;
             }
+
+            #region Async Child Loading
+
+            public override void Clear(bool disposeChildren) {
+                base.Clear(disposeChildren);
+
+                loading.Show();
+            }
+
+            public override void Add(Drawable drawable) =>
+                Schedule(d => LoadComponentAsync(d, loaded => {
+                    base.Add(loaded);
+                    loading.Hide();
+                }), drawable);
+
+            #endregion
         }
     }
 }
