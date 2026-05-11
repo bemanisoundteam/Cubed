@@ -1,4 +1,5 @@
-﻿using osu.Framework.Graphics;
+﻿using osu.Framework.Allocation;
+using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
@@ -7,6 +8,7 @@ using osu.Game.Rulesets.Scoring;
 
 namespace osu.Game.Rulesets.Cubed.Skinning {
     public sealed partial class AnimatedMarker : CompositeDrawable, IMarker {
+        private readonly TextureStore skinTextures;
         private readonly int perfectAt;
 
         private readonly Texture[] ApproachTextures;
@@ -22,6 +24,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
         private double approachDuration;
 
         public AnimatedMarker(TextureStore textures, int approachCount, int tapAtFrame, int judgementCount) {
+            skinTextures = textures;
             perfectAt = tapAtFrame;
 
             ApproachTextures = new Texture[approachCount];
@@ -30,18 +33,21 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
             GoodTextures = new Texture[judgementCount];
             MehTextures = new Texture[judgementCount];
 
-            for (int i = 0; i < approachCount; i++)
-                ApproachTextures[i] = textures.Get($"Approach{i}.png");
-            for (int i = 0; i < judgementCount; i++)
-                PerfectTextures[i] = textures.Get($"Perfect{i}.png");
-            for (int i = 0; i < judgementCount; i++)
-                GreatTextures[i] = textures.Get($"Great{i}.png");
-            for (int i = 0; i < judgementCount; i++)
-                GoodTextures[i] = textures.Get($"Good{i}.png");
-            for (int i = 0; i < judgementCount; i++)
-                MehTextures[i] = textures.Get($"Meh{i}.png");
-
             AddInternal(TextureHolder);
+        }
+
+        [BackgroundDependencyLoader]
+        private void load() {
+            for (int i = 0; i < ApproachTextures.Length; i++)
+                ApproachTextures[i] = skinTextures.Get($"Approach{i}.png");
+            for (int i = 0; i < PerfectTextures.Length; i++)
+                PerfectTextures[i] = skinTextures.Get($"Perfect{i}.png");
+            for (int i = 0; i < GreatTextures.Length; i++)
+                GreatTextures[i] = skinTextures.Get($"Great{i}.png");
+            for (int i = 0; i < GoodTextures.Length; i++)
+                GoodTextures[i] = skinTextures.Get($"Good{i}.png");
+            for (int i = 0; i < MehTextures.Length; i++)
+                MehTextures[i] = skinTextures.Get($"Meh{i}.png");
         }
 
         public void AnimateApproach(double time) {
