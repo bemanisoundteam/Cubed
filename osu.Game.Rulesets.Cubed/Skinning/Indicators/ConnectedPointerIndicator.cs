@@ -100,7 +100,8 @@ namespace osu.Game.Rulesets.Cubed.Skinning.Indicators {
             pointer.Position = PointerPosition * (1f - (float) progress);
 
             if (line.Height != 0)
-                line.Scale = new Vector2(1, float.Lerp(line.Height, 0.5f, (float) progress) / line.Height);
+                line.Scale = progress >= 1 ? Vector2.Zero
+                                           : new Vector2(1, float.Lerp(line.Height, 0.5f, (float) progress) / line.Height);
         }
     }
 }
