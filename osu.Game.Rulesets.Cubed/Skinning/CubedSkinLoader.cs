@@ -42,7 +42,19 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
                 }
         }
 
-        private static void loadSkin(Stream manifest, string skinName, string skinNamespace, ResourceStore<byte[]> skinResources, GameHost host) {
+        public static void DiscoverSkins(Storage storage, GameHost host) {
+            foreach (string @namespace in storage.GetDirectories(""))
+            foreach (string directory in storage.GetDirectories(@namespace))
+                loadSkin(
+                    storage.GetStream($"{directory}/{SkinManifestFile}"),
+                    directory.Split(Path.DirectorySeparatorChar)[^1],
+                    @namespace,
+                    new StorageBackedResourceStore(storage.GetStorageForDirectory(directory)),
+                    host
+                );
+        }
+
+        private static void loadSkin(Stream manifest, string skinName, string skinNamespace, IResourceStore<byte[]> skinResources, GameHost host) {
             ArgumentNullException.ThrowIfNull(manifest, nameof(manifest));
             ArgumentException.ThrowIfNullOrWhiteSpace(skinName, nameof(skinName));
             ArgumentException.ThrowIfNullOrWhiteSpace(skinNamespace, nameof(skinNamespace));

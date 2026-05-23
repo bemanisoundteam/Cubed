@@ -20,7 +20,7 @@ namespace osu.Game.Rulesets.Cubed {
         private static bool UploadedToTheStores;
 
         [BackgroundDependencyLoader]
-        private void load(TextureStore textures, AudioManager audio, GameHost host) {
+        private void load(TextureStore textures, AudioManager audio, GameHost host, Storage storage) {
             if (!UploadedToTheStores) {
                 textures.AddTextureSource(host.CreateTextureLoaderStore(CubedRuleset.CreateNamespacedResourceStore("Textures")));
                 ResourceStore<byte[]> sampleStore = (ResourceStore<byte[]>) audio.GetSampleStore().GetType().
@@ -30,6 +30,7 @@ namespace osu.Game.Rulesets.Cubed {
                 EnsureWhitePixel(host.Renderer);
 
                 CubedSkinLoader.DiscoverSkins(CubedRuleset.CreateNamespacedResourceStore("Skins"), host);
+                CubedSkinLoader.DiscoverSkins(storage.GetStorageForDirectory("CubedSkins"), host);
 
                 UploadedToTheStores = true;
             }
