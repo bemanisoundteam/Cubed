@@ -16,12 +16,16 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
         private CubedSkinnableDrawable indicator;
         public IHoldIndicator Indicator => (IHoldIndicator) indicator.Drawable;
 
+        private CubedSkinnableDrawable judgement;
+        public IMarker JudgementMarker => (IMarker) judgement.Drawable;
+
         [BackgroundDependencyLoader]
         private void load() {
             // Order is important, Head above Receptor above Indicator
 
             AddInternal(indicator = new CubedSkinnableDrawable(CubedSkinComponents.Indicator));
             AddInternal(Receptor = new CubedSkinnableDrawable(CubedSkinComponents.Receptor));
+            AddInternal(judgement = new CubedSkinnableDrawable(CubedSkinComponents.Marker) { Alpha = 0 });
 
             AddInternal(headContainer = new Container { RelativeSizeAxes = Axes.Both });
         }
@@ -92,6 +96,15 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
             // Remove this check for the drake note experience, I dare you
             if (HitObject != null)
                 UpdateResult(true);
+        }
+
+        protected override void UpdateHitStateTransforms(ArmedState state) {
+            base.UpdateHitStateTransforms(state);
+
+            if (state == ArmedState.Hit) {
+                judgement.Show();
+                JudgementMarker.AnimateHit(TransformsDuration, Result);
+            }
         }
 
         protected override void Dispose(bool isDisposing) {
