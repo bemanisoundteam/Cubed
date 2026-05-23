@@ -9,7 +9,6 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
                 AddBindable(setting, bindable);
             }
 
-            bindable.Value = value;
             bindable.Default = value;
         }
 
@@ -19,7 +18,6 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
                 AddBindable(setting, bindable);
             }
 
-            bindable.Value = value;
             bindable.Default = value;
         }
     }
