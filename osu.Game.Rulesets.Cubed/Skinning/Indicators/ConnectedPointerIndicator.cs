@@ -97,8 +97,10 @@ namespace osu.Game.Rulesets.Cubed.Skinning.Indicators {
             // C# is retarded, I have to cast as the interface to use the default implementation...
             double progress = ((IHoldIndicator) this).ComputeProgress();
 
-            line.Scale = new Vector2(1, 1f - (float) progress);
             pointer.Position = PointerPosition * (1f - (float) progress);
+
+            if (line.Height != 0)
+                line.Scale = new Vector2(1, float.Lerp(line.Height, 0.5f, (float) progress) / line.Height);
         }
     }
 }
