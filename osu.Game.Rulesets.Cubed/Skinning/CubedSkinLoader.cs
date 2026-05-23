@@ -5,6 +5,7 @@ using osu.Framework.Graphics.Textures;
 using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
+using osu.Game.Rulesets.Cubed.Skinning.Indicators;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -119,7 +120,12 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
                 CubedSkinRegistry.RegisterCellGlow(new(skinName, skinNamespace), CellGlow(cellGlowConfig));
 
             if (componentConfigs.TryGetValue(CubedSkinComponents.Marker, out SkinConfig markerConfig))
-                CubedSkinRegistry.RegisterGameplaySkin(new(skinName, skinNamespace), Marker(markerConfig), () => null, () => null);
+                CubedSkinRegistry.RegisterGameplaySkin(
+                    new(skinName, skinNamespace),
+                    Marker(markerConfig),
+                    Receptor(),
+                    Indicator()
+                );
 
             return;
 
@@ -142,6 +148,30 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
                     ImplementationType.Null => () => new NullMarker(),
                     ImplementationType.Animation => () => new AnimatedMarker(skinTextures, config.FrameCount, config.TapAtFrame, config.JudgementFrameCount),
                     _ => throw new Exception($"Cubed: Error with skin {skinName} ({skinNamespace}): Invalid Marker Type")
+                };
+            }
+
+            Func<Drawable> Receptor() {
+                if (!componentConfigs.TryGetValue(CubedSkinComponents.Receptor, out SkinConfig config))
+                    return () => null;
+
+                return config.Type switch {
+                    ImplementationType.Null => Drawable.Empty,
+                    ImplementationType.Texture => () => new Sprite { Texture = skinTextures.Get("Receptor") },
+                    // ImplementationType.Animation => TODO,
+                    _ => throw new Exception($"Cubed: Error with skin {skinName} ({skinNamespace}): Invalid Receptor Type")
+                };
+            }
+
+            Func<Drawable> Indicator() {
+                if (!componentConfigs.TryGetValue(CubedSkinComponents.Indicator, out SkinConfig config))
+                    return () => null;
+
+                return config.Type switch {
+                    ImplementationType.Null => () => new NullIndicator(),
+                    ImplementationType.Texture => () => new SpriteIndicator(skinTextures),
+                    // ImplementationType.Animation => TODO,
+                    _ => throw new Exception($"Cubed: Error with skin {skinName} ({skinNamespace}): Invalid Indicator Type")
                 };
             }
         }
