@@ -84,7 +84,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
             double duration = isJudgement ? judgementDuration : approachDuration;
             Texture[] textures = isJudgement ? judgementTextures : ApproachTextures;
 
-            if (Time.Current < startTime || Time.Current >= startTime + duration)
+            if (Time.Current < startTime || Time.Current >= startTime + duration || textures.Length == 0)
                 SetTexture(null);
             else {
                 int currentFrame = (int) ((Time.Current - startTime) / duration * textures.Length);
