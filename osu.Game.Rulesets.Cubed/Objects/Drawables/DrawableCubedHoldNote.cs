@@ -5,6 +5,7 @@ using osu.Game.Rulesets.Cubed.Skinning;
 using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Scoring;
+using osu.Game.Skinning;
 
 namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
     public partial class DrawableCubedHoldNote(CubedHoldNote hold) : DrawableCubedHitObject(hold) {
@@ -28,13 +29,6 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
             AddInternal(judgement = new CubedSkinnableDrawable(CubedSkinComponents.Marker) { Alpha = 0 });
 
             AddInternal(headContainer = new Container { RelativeSizeAxes = Axes.Both });
-        }
-
-        protected override void LoadComplete() {
-            base.LoadComplete();
-
-            indicator.OnSkinChanged += RefreshIndicator;
-            Receptor.OnSkinChanged += RefreshReceptor;
         }
 
         private void RefreshIndicator() => Indicator.Apply(HitObject);
@@ -61,6 +55,14 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
         protected override void OnApply() {
             RefreshIndicator();
             RefreshReceptor();
+        }
+
+        protected override void ApplySkin(ISkinSource skin, bool allowFallback) {
+            if (HitObject == null)
+                return;
+
+            SchedulerAfterChildren.Add(RefreshIndicator);
+            SchedulerAfterChildren.Add(RefreshReceptor);
         }
 
         protected override void CheckForResult(bool userTriggered, double timeOffset) {
@@ -105,13 +107,6 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
                 judgement.Show();
                 JudgementMarker.AnimateHit(TransformsDuration, Result);
             }
-        }
-
-        protected override void Dispose(bool isDisposing) {
-            base.Dispose(isDisposing);
-
-            indicator.OnSkinChanged -= RefreshIndicator;
-            Receptor.OnSkinChanged -= RefreshReceptor;
         }
     }
 }
