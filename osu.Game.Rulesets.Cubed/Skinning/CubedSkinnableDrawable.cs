@@ -18,6 +18,8 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
         : SkinnableDrawable(new CubedSkinComponentLookup(lookup), DefaultFunction(lookup), ConfineMode.ScaleToFit) {
         protected override bool ApplySizeRestrictionsToDefault => true;
 
+        public void FlushPendingSkinChange() => FlushPendingSkinChanges();
+
         [BackgroundDependencyLoader]
         private void load() {
             Anchor = Anchor.Centre;

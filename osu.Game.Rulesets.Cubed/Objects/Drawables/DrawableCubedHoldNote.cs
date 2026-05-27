@@ -105,6 +105,7 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
 
             if (state == ArmedState.Hit) {
                 judgement.Show();
+                judgement.FlushPendingSkinChange();
                 JudgementMarker.AnimateHit(TransformsDuration, Result);
             }
         }
