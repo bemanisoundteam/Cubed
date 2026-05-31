@@ -12,8 +12,8 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
             SetDefault(CubedRulesetSetting.HighlightCells, false);
             SetDefault(CubedRulesetSetting.CellBorders, false);
 
-            SetDefault(CubedRulesetSetting.CurrentCellGlow, new CellGlowSkin(null, "Cubed"));
-            SetDefault(CubedRulesetSetting.CurrentGameplaySkin, new CubedGameplaySkin(null, "Cubed"));
+            SetDefault(CubedRulesetSetting.CurrentCellGlow, new CellGlowSkinInfo(null, "Cubed"));
+            SetDefault(CubedRulesetSetting.CurrentGameplaySkin, new CubedGameplaySkinInfo(null, "Cubed"));
         }
     }
 

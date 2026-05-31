@@ -3,18 +3,18 @@ using osu.Game.Rulesets.Cubed.Skinning.Gameplay;
 
 namespace osu.Game.Rulesets.Cubed.Configuration {
     public partial class CubedRulesetConfigManager {
-        private void SetDefault(CubedRulesetSetting setting, CellGlowSkin value) {
-            if (GetOriginalBindable<CellGlowSkin>(setting) is not BindableCellGlowSkin bindable) {
-                bindable = new BindableCellGlowSkin(value);
+        private void SetDefault(CubedRulesetSetting setting, CellGlowSkinInfo value) {
+            if (GetOriginalBindable<CellGlowSkinInfo>(setting) is not BindableCellGlowSkinInfo bindable) {
+                bindable = new BindableCellGlowSkinInfo(value);
                 AddBindable(setting, bindable);
             }
 
             bindable.Default = value;
         }
 
-        private void SetDefault(CubedRulesetSetting setting, CubedGameplaySkin value) {
-            if (GetOriginalBindable<CubedGameplaySkin>(setting) is not BindableCubedGameplaySkin bindable) {
-                bindable = new BindableCubedGameplaySkin(value);
+        private void SetDefault(CubedRulesetSetting setting, CubedGameplaySkinInfo value) {
+            if (GetOriginalBindable<CubedGameplaySkinInfo>(setting) is not BindableCubedGameplaySkinInfo bindable) {
+                bindable = new BindableCubedGameplaySkinInfo(value);
                 AddBindable(setting, bindable);
             }
 

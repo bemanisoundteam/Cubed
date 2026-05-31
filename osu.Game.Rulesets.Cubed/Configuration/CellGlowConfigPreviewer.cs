@@ -15,7 +15,7 @@ using System.Linq;
 
 namespace osu.Game.Rulesets.Cubed.Configuration {
     public partial class CellGlowConfigPreviewer : CellGlowPreviewer, IHasPopover {
-        private readonly Bindable<CellGlowSkin> currentSkin = new ();
+        private readonly Bindable<CellGlowSkinInfo> currentSkin = new ();
 
         public CellGlowConfigPreviewer(CubedRulesetConfigManager config) {
             config.BindWith(CubedRulesetSetting.CurrentCellGlow, currentSkin);
@@ -33,7 +33,7 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
         };
 
         private partial class CellGlowSelectionPopover : CubedSkinSelectionPopover {
-            public required Bindable<CellGlowSkin> CellGlowSkin { get; init; }
+            public required Bindable<CellGlowSkinInfo> CellGlowSkin { get; init; }
             public required CubedShaderManager Shaders { get; init; }
 
             [Cached]
@@ -49,7 +49,7 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
             protected override IReadOnlyList<SkinElementCard> CreateItemCards() =>
                 CubedSkinRegistry.CellGlows.Select(CreateCard).ToList();
 
-            private SkinElementCard CreateCard(CellGlowSkin skin) {
+            private SkinElementCard CreateCard(CellGlowSkinInfo skin) {
                 var card = new SkinElementCard {
                     Child = new CellGlowPreviewer {
                         RelativeSizeAxes = Axes.Both,

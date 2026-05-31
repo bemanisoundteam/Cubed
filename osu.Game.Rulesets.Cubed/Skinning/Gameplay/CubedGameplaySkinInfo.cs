@@ -4,7 +4,7 @@ using osu.Framework.Graphics;
 using System;
 
 namespace osu.Game.Rulesets.Cubed.Skinning.Gameplay {
-    public record CubedGameplaySkin(string Name, string Namespace) {
+    public record CubedGameplaySkinInfo(string Name, string Namespace) {
         public Drawable CreateComponent(CubedSkinComponents component) =>
             CubedSkinRegistry.CreateGameplayComponent(this, component);
 
@@ -13,17 +13,17 @@ namespace osu.Game.Rulesets.Cubed.Skinning.Gameplay {
             : Name ?? "Default";
     }
 
-    public class BindableCubedGameplaySkin(CubedGameplaySkin value = default) : Bindable<CubedGameplaySkin>(value) {
+    public class BindableCubedGameplaySkinInfo(CubedGameplaySkinInfo value = default) : Bindable<CubedGameplaySkinInfo>(value) {
         public override string ToString(string format, IFormatProvider formatProvider) =>
             JsonConvert.SerializeObject(Value);
 
         public override void Parse(object input, IFormatProvider provider) {
             if (input is string json)
-                Value = JsonConvert.DeserializeObject<CubedGameplaySkin>(json);
+                Value = JsonConvert.DeserializeObject<CubedGameplaySkinInfo>(json);
             else
                 base.Parse(input, provider);
         }
 
-        protected override Bindable<CubedGameplaySkin> CreateInstance() => new BindableCubedGameplaySkin();
+        protected override Bindable<CubedGameplaySkinInfo> CreateInstance() => new BindableCubedGameplaySkinInfo();
     }
 }

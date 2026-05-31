@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace osu.Game.Rulesets.Cubed.Configuration {
     public partial class MarkerSkinConfigPreviewer : MarkerSkinPreviewer, IHasPopover {
-        private readonly Bindable<CubedGameplaySkin> currentSkin = new();
+        private readonly Bindable<CubedGameplaySkinInfo> currentSkin = new();
 
         public MarkerSkinConfigPreviewer(CubedRulesetConfigManager config) {
             config.BindWith(CubedRulesetSetting.CurrentGameplaySkin, currentSkin);
@@ -28,12 +28,12 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
         };
 
         private partial class MarkerSelectionPopover : CubedSkinSelectionPopover {
-            public required Bindable<CubedGameplaySkin> MarkerSkin { get; init; }
+            public required Bindable<CubedGameplaySkinInfo> MarkerSkin { get; init; }
 
             protected override IReadOnlyList<SkinElementCard> CreateItemCards() =>
                 CubedSkinRegistry.GameplaySkins.Select(CreateCard).ToList();
 
-            private SkinElementCard CreateCard(CubedGameplaySkin skin) {
+            private SkinElementCard CreateCard(CubedGameplaySkinInfo skin) {
                 var card = new SkinElementCard {
                     Child = new MarkerSkinPreviewer {
                         RelativeSizeAxes = Axes.Both,

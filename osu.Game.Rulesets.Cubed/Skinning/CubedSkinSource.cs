@@ -18,15 +18,15 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
         public event Action? SourceChanged;
 
         private readonly ISkinSource parent;
-        private readonly Bindable<CubedGameplaySkin> currentGameplaySkin;
-        private readonly Bindable<CellGlowSkin> currentCellGlow;
+        private readonly Bindable<CubedGameplaySkinInfo> currentGameplaySkin;
+        private readonly Bindable<CellGlowSkinInfo> currentCellGlow;
 
         public CubedSkinSource(ISkinSource parent, CubedRulesetConfigManager config) {
             Debug.Assert(parent != null);
             this.parent = parent;
 
-            currentGameplaySkin = config.GetBindable<CubedGameplaySkin>(CubedRulesetSetting.CurrentGameplaySkin);
-            currentCellGlow = config.GetBindable<CellGlowSkin>(CubedRulesetSetting.CurrentCellGlow);
+            currentGameplaySkin = config.GetBindable<CubedGameplaySkinInfo>(CubedRulesetSetting.CurrentGameplaySkin);
+            currentCellGlow = config.GetBindable<CellGlowSkinInfo>(CubedRulesetSetting.CurrentCellGlow);
 
             currentGameplaySkin.ValueChanged += _ => SourceChanged?.Invoke();
             currentCellGlow.ValueChanged += _ => SourceChanged?.Invoke();

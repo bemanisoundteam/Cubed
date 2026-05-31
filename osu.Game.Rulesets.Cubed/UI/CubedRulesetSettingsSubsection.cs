@@ -21,16 +21,16 @@ namespace osu.Game.Rulesets.Cubed.UI {
 
             Children = [
                 new CubedConfigPaddedContainer(new MarkerSkinConfigPreviewer(config)),
-                new SettingsDropdown<CubedGameplaySkin> {
+                new SettingsDropdown<CubedGameplaySkinInfo> {
                     LabelText = "Skin",
-                    Current = config.GetBindable<CubedGameplaySkin>(CubedRulesetSetting.CurrentGameplaySkin),
+                    Current = config.GetBindable<CubedGameplaySkinInfo>(CubedRulesetSetting.CurrentGameplaySkin),
                     ItemSource = CubedSkinRegistry.GameplaySkins
                 },
 
                 new CubedConfigPaddedContainer(new CellGlowConfigPreviewer(config)),
-                new SettingsDropdown<CellGlowSkin> {
+                new SettingsDropdown<CellGlowSkinInfo> {
                     LabelText = "Cell glow",
-                    Current = config.GetBindable<CellGlowSkin>(CubedRulesetSetting.CurrentCellGlow),
+                    Current = config.GetBindable<CellGlowSkinInfo>(CubedRulesetSetting.CurrentCellGlow),
                     ItemSource = CubedSkinRegistry.CellGlows
                 },
 

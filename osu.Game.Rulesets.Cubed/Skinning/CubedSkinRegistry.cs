@@ -8,19 +8,19 @@ using System.Collections.Generic;
 
 namespace osu.Game.Rulesets.Cubed.Skinning {
     public static class CubedSkinRegistry {
-        public static IBindableList<CubedGameplaySkin> GameplaySkins => GameplaySkinsList;
-        public static IBindableList<CellGlowSkin> CellGlows => CellGlowsList;
+        public static IBindableList<CubedGameplaySkinInfo> GameplaySkins => GameplaySkinsList;
+        public static IBindableList<CellGlowSkinInfo> CellGlows => CellGlowsList;
 
-        private static readonly BindableList<CubedGameplaySkin> GameplaySkinsList = [new (null, "Cubed")];
-        private static readonly Dictionary<CubedGameplaySkin, GameplaySkinComponentFactories> GameplaySkinsDict = new() {
-            [new CubedGameplaySkin(null, "Cubed")] = null
+        private static readonly BindableList<CubedGameplaySkinInfo> GameplaySkinsList = [new (null, "Cubed")];
+        private static readonly Dictionary<CubedGameplaySkinInfo, GameplaySkinComponentFactories> GameplaySkinsDict = new() {
+            [new CubedGameplaySkinInfo(null, "Cubed")] = null
         };
-        private static readonly Dictionary<CellGlowSkin, Func<Drawable>> CellGlowsDict = new() {
-            [new CellGlowSkin(null, "Cubed")] = () => new DefaultCellGlow()
+        private static readonly Dictionary<CellGlowSkinInfo, Func<Drawable>> CellGlowsDict = new() {
+            [new CellGlowSkinInfo(null, "Cubed")] = () => new DefaultCellGlow()
         };
-        private static readonly BindableList<CellGlowSkin> CellGlowsList = [new(null, "Cubed")];
+        private static readonly BindableList<CellGlowSkinInfo> CellGlowsList = [new(null, "Cubed")];
 
-        public static void RegisterCellGlow(CellGlowSkin skinInfo, Func<Drawable> cellGlow) {
+        public static void RegisterCellGlow(CellGlowSkinInfo skinInfo, Func<Drawable> cellGlow) {
             ArgumentException.ThrowIfNullOrWhiteSpace(skinInfo.Name);
             ArgumentException.ThrowIfNullOrWhiteSpace(skinInfo.Namespace);
 
@@ -30,7 +30,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
             CellGlowsList.Add(skinInfo);
         }
 
-        public static void RegisterGameplaySkin(CubedGameplaySkin skinInfo, Func<Drawable> marker, Func<Drawable> receptor, Func<Drawable> indicator) {
+        public static void RegisterGameplaySkin(CubedGameplaySkinInfo skinInfo, Func<Drawable> marker, Func<Drawable> receptor, Func<Drawable> indicator) {
             ArgumentException.ThrowIfNullOrWhiteSpace(skinInfo.Name);
             ArgumentException.ThrowIfNullOrWhiteSpace(skinInfo.Namespace);
 
@@ -42,12 +42,12 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
             GameplaySkinsList.Add(skinInfo);
         }
 
-        public static Drawable CreateGameplayComponent(CubedGameplaySkin skin, CubedSkinComponents component) {
-            ArgumentNullException.ThrowIfNull(skin);
+        public static Drawable CreateGameplayComponent(CubedGameplaySkinInfo skinInfo, CubedSkinComponents component) {
+            ArgumentNullException.ThrowIfNull(skinInfo);
             if (component == CubedSkinComponents.CellGlow)
-                throw new ArgumentException($"Gameplay skins do not handle cell glows. Use {nameof(CreateCellGlow)} with {nameof(CellGlowSkin)} instead.");
+                throw new ArgumentException($"Gameplay skins do not handle cell glows. Use {nameof(CreateCellGlow)} with {nameof(CellGlowSkinInfo)} instead.");
 
-            GameplaySkinComponentFactories factory = GameplaySkinsDict[skin];
+            GameplaySkinComponentFactories factory = GameplaySkinsDict[skinInfo];
 
             return component switch {
                 CubedSkinComponents.Marker => factory?.Marker() ?? new DefaultMarker(),
@@ -57,10 +57,10 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
             };
         }
 
-        public static Drawable CreateCellGlow(CellGlowSkin skin) {
-            ArgumentNullException.ThrowIfNull(skin, nameof(skin));
+        public static Drawable CreateCellGlow(CellGlowSkinInfo skinInfo) {
+            ArgumentNullException.ThrowIfNull(skinInfo, nameof(skinInfo));
 
-            return CellGlowsDict[skin]();
+            return CellGlowsDict[skinInfo]();
         }
 
         private record GameplaySkinComponentFactories(Func<Drawable> Marker, Func<Drawable> Receptor, Func<Drawable> Indicator);
