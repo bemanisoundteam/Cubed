@@ -1,5 +1,4 @@
 ﻿using osu.Framework.Graphics;
-using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
@@ -7,6 +6,7 @@ using osu.Framework.Platform;
 using osu.Game.Rulesets.Cubed.Skinning.CellGlows;
 using osu.Game.Rulesets.Cubed.Skinning.Indicators;
 using osu.Game.Rulesets.Cubed.Skinning.Markers;
+using osu.Game.Rulesets.Cubed.Skinning.Receptors;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -165,8 +165,8 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
 
                 return config.Type switch {
                     ImplementationType.Null => Drawable.Empty,
-                    ImplementationType.Texture => () => new Sprite { Texture = skinTextures.Get("Receptor") },
-                    // ImplementationType.Animation => TODO,
+                    ImplementationType.Texture => () => new SpriteReceptor(1),
+                    ImplementationType.Animation => () => new SpriteReceptor(config.FrameCount),
                     _ => throw new Exception($"Cubed: Error with skin {skinName} ({skinNamespace}): Invalid Receptor Type")
                 };
             }
