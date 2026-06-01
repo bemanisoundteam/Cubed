@@ -1,10 +1,10 @@
 ﻿using osu.Framework.Graphics;
-using osu.Framework.Graphics.Animations;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
+using osu.Game.Rulesets.Cubed.Skinning.CellGlows;
 using osu.Game.Rulesets.Cubed.Skinning.Indicators;
 using osu.Game.Rulesets.Cubed.Skinning.Markers;
 using System;
@@ -145,14 +145,8 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
 
             Func<Drawable> CellGlow(SkinConfig config) {
                 return config.Type switch {
-                    ImplementationType.Texture => () => new Sprite { Texture = skinTextures.Get("CellGlow") },
-                    ImplementationType.Animation => () => {
-                        TextureAnimation animation = new(false);
-                        for (int i = 0; i < config.FrameCount; i++)
-                            animation.AddFrame(skinTextures.Get($"CellGlow{i}"), 1000 / config.Framerate);
-                        animation.Loop = true;
-                        return animation;
-                    },
+                    ImplementationType.Texture => () => new SpriteCellGlow(1),
+                    ImplementationType.Animation => () => new SpriteCellGlow(config.FrameCount, config.Framerate),
                     _ => throw new Exception($"Cubed: Error with skin {skinName} ({skinNamespace}): Invalid CellGlow Type")
                 };
             }
