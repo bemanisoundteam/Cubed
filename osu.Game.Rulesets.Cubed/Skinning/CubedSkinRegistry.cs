@@ -1,5 +1,6 @@
 ﻿using osu.Framework.Bindables;
 using osu.Framework.Graphics;
+using osu.Framework.IO.Stores;
 using osu.Game.Rulesets.Cubed.Skinning.CellGlows;
 using osu.Game.Rulesets.Cubed.Skinning.Gameplay;
 using osu.Game.Rulesets.Cubed.Skinning.Indicators;
@@ -12,15 +13,17 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
         public static IBindableList<CellGlowSkinInfo> CellGlows => CellGlowsList;
 
         private static readonly BindableList<CubedGameplaySkinInfo> GameplaySkinsList = [new (null, "Cubed")];
+        private static readonly Dictionary<CubedGameplaySkinInfo, IResourceStore<byte[]>> GameplaySkinResources = new();
         private static readonly Dictionary<CubedGameplaySkinInfo, GameplaySkinComponentFactories> GameplaySkinsDict = new() {
             [new CubedGameplaySkinInfo(null, "Cubed")] = null
         };
         private static readonly Dictionary<CellGlowSkinInfo, Func<Drawable>> CellGlowsDict = new() {
             [new CellGlowSkinInfo(null, "Cubed")] = () => new DefaultCellGlow()
         };
+        private static readonly Dictionary<CellGlowSkinInfo, IResourceStore<byte[]>> CellGlowSkinResources = new();
         private static readonly BindableList<CellGlowSkinInfo> CellGlowsList = [new(null, "Cubed")];
 
-        public static void RegisterCellGlow(CellGlowSkinInfo skinInfo, Func<Drawable> cellGlow) {
+        public static void RegisterCellGlow(CellGlowSkinInfo skinInfo, Func<Drawable> cellGlow, IResourceStore<byte[]> skinResources = null) {
             ArgumentException.ThrowIfNullOrWhiteSpace(skinInfo.Name);
             ArgumentException.ThrowIfNullOrWhiteSpace(skinInfo.Namespace);
 
@@ -28,9 +31,11 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
 
             CellGlowsDict.Add(skinInfo, cellGlow);
             CellGlowsList.Add(skinInfo);
+            if (skinResources != null)
+                CellGlowSkinResources.Add(skinInfo, skinResources);
         }
 
-        public static void RegisterGameplaySkin(CubedGameplaySkinInfo skinInfo, Func<Drawable> marker, Func<Drawable> receptor, Func<Drawable> indicator) {
+        public static void RegisterGameplaySkin(CubedGameplaySkinInfo skinInfo, Func<Drawable> marker, Func<Drawable> receptor, Func<Drawable> indicator, IResourceStore<byte[]> skinResources = null) {
             ArgumentException.ThrowIfNullOrWhiteSpace(skinInfo.Name);
             ArgumentException.ThrowIfNullOrWhiteSpace(skinInfo.Namespace);
 
@@ -40,6 +45,8 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
 
             GameplaySkinsDict.Add(skinInfo, new (marker, receptor, indicator));
             GameplaySkinsList.Add(skinInfo);
+            if (skinResources != null)
+                GameplaySkinResources.Add(skinInfo, skinResources);
         }
 
         public static Drawable CreateGameplayComponent(CubedGameplaySkinInfo skinInfo, CubedSkinComponents component) {
@@ -62,6 +69,12 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
 
             return CellGlowsDict[skinInfo]();
         }
+
+        public static IResourceStore<byte[]> GetSkinResources(CubedGameplaySkinInfo skinInfo) =>
+            GameplaySkinResources.GetValueOrDefault(skinInfo);
+
+        public static IResourceStore<byte[]> GetSkinResources(CellGlowSkinInfo skinInfo) =>
+            CellGlowSkinResources.GetValueOrDefault(skinInfo);
 
         private record GameplaySkinComponentFactories(Func<Drawable> Marker, Func<Drawable> Receptor, Func<Drawable> Indicator);
     }

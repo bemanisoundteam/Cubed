@@ -129,14 +129,15 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
             TextureStore skinTextures = new(host.Renderer, host.CreateTextureLoaderStore(skinResources));
 
             if (componentConfigs.TryGetValue(CubedSkinComponents.CellGlow, out SkinConfig cellGlowConfig) && cellGlowConfig.Type != ImplementationType.Null)
-                CubedSkinRegistry.RegisterCellGlow(new(skinName, skinNamespace), CellGlow(cellGlowConfig));
+                CubedSkinRegistry.RegisterCellGlow(new(skinName, skinNamespace), CellGlow(cellGlowConfig), skinResources);
 
             if (componentConfigs.TryGetValue(CubedSkinComponents.Marker, out SkinConfig markerConfig))
                 CubedSkinRegistry.RegisterGameplaySkin(
                     new(skinName, skinNamespace),
                     Marker(markerConfig),
                     Receptor(),
-                    Indicator()
+                    Indicator(),
+                    skinResources
                 );
 
             return;
