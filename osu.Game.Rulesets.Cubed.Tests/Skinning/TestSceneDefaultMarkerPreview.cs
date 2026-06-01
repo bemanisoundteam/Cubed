@@ -4,7 +4,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Timing;
 using osu.Game.Graphics.Sprites;
 using osu.Game.Rulesets.Cubed.Configuration;
-using osu.Game.Rulesets.Cubed.Skinning;
+using osu.Game.Rulesets.Cubed.Skinning.Markers;
 using osu.Game.Tests.Visual;
 using osuTK;
 

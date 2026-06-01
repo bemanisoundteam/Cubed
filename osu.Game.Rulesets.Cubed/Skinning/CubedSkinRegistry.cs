@@ -6,6 +6,8 @@ using osu.Framework.IO.Stores;
 using osu.Game.Rulesets.Cubed.Skinning.CellGlows;
 using osu.Game.Rulesets.Cubed.Skinning.Gameplay;
 using osu.Game.Rulesets.Cubed.Skinning.Indicators;
+using osu.Game.Rulesets.Cubed.Skinning.Markers;
+using osu.Game.Rulesets.Cubed.Skinning.Receptors;
 using System;
 using System.Collections.Generic;
 
