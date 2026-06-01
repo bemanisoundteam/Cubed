@@ -1,13 +1,9 @@
 ﻿using Newtonsoft.Json;
 using osu.Framework.Bindables;
-using osu.Framework.Graphics;
 using System;
 
 namespace osu.Game.Rulesets.Cubed.Skinning.Gameplay {
     public record CubedGameplaySkinInfo(string Name, string Namespace) {
-        public Drawable CreateComponent(CubedSkinComponents component) =>
-            CubedSkinRegistry.CreateGameplayComponent(this, component);
-
         public CubedGameplaySkin CreateSkin() => new(this);
 
         public override string ToString() => Namespace != "Cubed"
