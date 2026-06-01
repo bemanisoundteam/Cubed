@@ -116,5 +116,18 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
 
             #endregion
         }
+
+        protected partial class SkinElementCard<T>(T skin) : SkinElementCard where T : class, IDisposable {
+            protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) {
+                DependencyContainer deps = new(base.CreateChildDependencies(parent));
+                deps.CacheAs(skin);
+                return deps;
+            }
+
+            protected override void Dispose(bool isDisposing) {
+                base.Dispose(isDisposing);
+                skin.Dispose();
+            }
+        }
     }
 }

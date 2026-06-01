@@ -1,7 +1,9 @@
-﻿using osu.Framework.Bindables;
+﻿using osu.Framework.Allocation;
+using osu.Framework.Bindables;
 using osu.Framework.Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Cursor;
+using osu.Framework.Graphics.Textures;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
 using osu.Game.Rulesets.Cubed.Skinning;
@@ -10,11 +12,15 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace osu.Game.Rulesets.Cubed.Configuration {
-    public partial class MarkerSkinConfigPreviewer : MarkerSkinPreviewer, IHasPopover {
-        private readonly Bindable<CubedGameplaySkinInfo> currentSkin = new();
+    [Cached(typeof(ICubedGameplaySkin))]
+    public partial class MarkerSkinConfigPreviewer : MarkerSkinPreviewer, ICubedGameplaySkin, IHasPopover {
+        private readonly Bindable<CubedGameplaySkinInfo> currentSkinInfo = new();
+        private readonly IBindable<CubedGameplaySkin> currentSkin;
 
         public MarkerSkinConfigPreviewer(CubedRulesetConfigManager config) {
-            config.BindWith(CubedRulesetSetting.CurrentGameplaySkin, currentSkin);
+            config.BindWith(CubedRulesetSetting.CurrentGameplaySkin, currentSkinInfo);
+
+            currentSkin = config.GameplaySkin;
             currentSkin.BindValueChanged(e => Marker = (IMarker) e.NewValue.CreateComponent(CubedSkinComponents.Marker), true);
         }
 
@@ -24,24 +30,26 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
         }
 
         public Popover GetPopover() => new MarkerSelectionPopover {
-            MarkerSkin = currentSkin.GetBoundCopy()
+            MarkerSkin = currentSkinInfo.GetBoundCopy()
         };
+
+        public Texture GetTexture(string name, WrapMode wrapModeS, WrapMode wrapModeT) => currentSkin.Value.GetTexture(name, wrapModeS, wrapModeT);
 
         private partial class MarkerSelectionPopover : CubedSkinSelectionPopover {
             public required Bindable<CubedGameplaySkinInfo> MarkerSkin { get; init; }
 
             protected override IReadOnlyList<SkinElementCard> CreateItemCards() =>
-                CubedSkinRegistry.GameplaySkins.Select(CreateCard).ToList();
+                CubedSkinRegistry.GameplaySkins.Select(s => CreateCard(s.CreateSkin())).ToList();
 
-            private SkinElementCard CreateCard(CubedGameplaySkinInfo skin) {
-                var card = new SkinElementCard {
+            private SkinElementCard CreateCard(CubedGameplaySkin skin) {
+                var card = new SkinElementCard<ICubedGameplaySkin>(skin) {
                     Child = new MarkerSkinPreviewer {
                         RelativeSizeAxes = Axes.Both,
                         Marker = (IMarker) skin.CreateComponent(CubedSkinComponents.Marker)
                     },
-                    OnSelection = () => MarkerSkin.Value = skin
+                    OnSelection = () => MarkerSkin.Value = skin.SkinInfo
                 };
-                MarkerSkin.BindValueChanged(e => card.IsSelected = e.NewValue == skin, true);
+                MarkerSkin.BindValueChanged(e => card.IsSelected = e.NewValue == skin.SkinInfo, true);
                 return card;
             }
         }
