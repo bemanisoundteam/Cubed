@@ -7,6 +7,8 @@ namespace osu.Game.Rulesets.Cubed.Skinning.CellGlows {
     public record CellGlowSkinInfo(string Name, string Namespace) {
         public Drawable CreateCellGlow() => CubedSkinRegistry.CreateCellGlow(this);
 
+        public CellGlowSkin CreateSkin() => new (this);
+
         public override string ToString() => Namespace != "Cubed"
             ? $"{Name} ({Namespace})"
             : Name ?? "Default";

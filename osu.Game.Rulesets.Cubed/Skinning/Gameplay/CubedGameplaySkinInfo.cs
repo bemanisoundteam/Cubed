@@ -8,6 +8,8 @@ namespace osu.Game.Rulesets.Cubed.Skinning.Gameplay {
         public Drawable CreateComponent(CubedSkinComponents component) =>
             CubedSkinRegistry.CreateGameplayComponent(this, component);
 
+        public CubedGameplaySkin CreateSkin() => new(this);
+
         public override string ToString() => Namespace != "Cubed"
             ? $"{Name} ({Namespace})"
             : Name ?? "Default";
