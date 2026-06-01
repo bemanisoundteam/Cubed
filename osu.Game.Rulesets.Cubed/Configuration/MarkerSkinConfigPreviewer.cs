@@ -8,6 +8,7 @@ using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
 using osu.Game.Rulesets.Cubed.Skinning;
 using osu.Game.Rulesets.Cubed.Skinning.Gameplay;
+using osu.Game.Rulesets.Cubed.Skinning.Markers;
 using System.Collections.Generic;
 using System.Linq;
 

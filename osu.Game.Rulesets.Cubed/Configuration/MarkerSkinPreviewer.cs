@@ -3,7 +3,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Timing;
 using osu.Game.Rulesets.Cubed.Objects;
-using osu.Game.Rulesets.Cubed.Skinning;
+using osu.Game.Rulesets.Cubed.Skinning.Markers;
 using osu.Game.Rulesets.Judgements;
 using osu.Game.Rulesets.Scoring;
 using osuTK;

@@ -7,7 +7,7 @@ using osu.Game.Rulesets.Cubed.Skinning.Gameplay;
 using osu.Game.Rulesets.Judgements;
 using osu.Game.Rulesets.Scoring;
 
-namespace osu.Game.Rulesets.Cubed.Skinning {
+namespace osu.Game.Rulesets.Cubed.Skinning.Markers {
     public sealed partial class AnimatedMarker : CompositeDrawable, IMarker {
         // Used so that I can only load Approach and Perfect when previewing
         internal bool IsForPreview;

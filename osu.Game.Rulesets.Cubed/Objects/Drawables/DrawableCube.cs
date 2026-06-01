@@ -1,5 +1,6 @@
 using osu.Framework.Allocation;
 using osu.Game.Rulesets.Cubed.Skinning;
+using osu.Game.Rulesets.Cubed.Skinning.Markers;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Scoring;
 

@@ -2,7 +2,7 @@
 using osu.Game.Rulesets.Cubed.Objects;
 using System.Collections.Generic;
 
-namespace osu.Game.Rulesets.Cubed.Skinning {
+namespace osu.Game.Rulesets.Cubed.Skinning.Indicators {
     public interface IHoldIndicator : IDrawable {
         CubedHoldNote Object { get; set; }
 

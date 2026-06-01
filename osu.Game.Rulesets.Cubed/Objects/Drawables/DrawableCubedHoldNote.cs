@@ -2,6 +2,8 @@
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Game.Rulesets.Cubed.Skinning;
+using osu.Game.Rulesets.Cubed.Skinning.Indicators;
+using osu.Game.Rulesets.Cubed.Skinning.Markers;
 using osu.Game.Rulesets.Objects;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Scoring;

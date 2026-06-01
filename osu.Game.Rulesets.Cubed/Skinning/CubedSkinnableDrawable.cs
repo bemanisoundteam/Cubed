@@ -7,6 +7,7 @@ using osu.Framework.Graphics.Shapes;
 using osu.Game.Graphics;
 using osu.Game.Rulesets.Cubed.Skinning.CellGlows;
 using osu.Game.Rulesets.Cubed.Skinning.Indicators;
+using osu.Game.Rulesets.Cubed.Skinning.Markers;
 using osu.Game.Rulesets.Judgements;
 using osu.Game.Skinning;
 using System;

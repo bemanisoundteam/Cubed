@@ -2,7 +2,7 @@ using osu.Framework.Graphics;
 using osu.Game.Rulesets.Judgements;
 using osuTK;
 
-namespace osu.Game.Rulesets.Cubed.Skinning {
+namespace osu.Game.Rulesets.Cubed.Skinning.Markers {
     public interface IMarker : IDrawable {
         /// <summary>
         /// Transform this marker until HitObject's StartTime

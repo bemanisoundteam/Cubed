@@ -6,6 +6,7 @@ using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
 using osu.Game.Rulesets.Cubed.Skinning.Indicators;
+using osu.Game.Rulesets.Cubed.Skinning.Markers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
