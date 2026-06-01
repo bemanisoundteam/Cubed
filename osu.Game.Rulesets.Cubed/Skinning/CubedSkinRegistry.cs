@@ -1,5 +1,7 @@
 ﻿using osu.Framework.Bindables;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Rendering;
+using osu.Framework.Graphics.Textures;
 using osu.Framework.IO.Stores;
 using osu.Game.Rulesets.Cubed.Skinning.CellGlows;
 using osu.Game.Rulesets.Cubed.Skinning.Gameplay;
@@ -75,6 +77,21 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
 
         public static IResourceStore<byte[]> GetSkinResources(CellGlowSkinInfo skinInfo) =>
             CellGlowSkinResources.GetValueOrDefault(skinInfo);
+
+        public static TextureStore CreateTextureStore(IResourceStore<byte[]> resources) =>
+            new (Renderer, CreateTextureLoaderStore(resources));
+
+        #region Dependencies
+
+        private static IRenderer Renderer;
+        private static Func<IResourceStore<byte[]>, IResourceStore<TextureUpload>> CreateTextureLoaderStore;
+
+        internal static void InjectDependencies(IRenderer renderer, Func<IResourceStore<byte[]>, IResourceStore<TextureUpload>> createTextureLoaderStore) {
+            Renderer = renderer;
+            CreateTextureLoaderStore = createTextureLoaderStore;
+        }
+
+        #endregion
 
         private record GameplaySkinComponentFactories(Func<Drawable> Marker, Func<Drawable> Receptor, Func<Drawable> Indicator);
     }
