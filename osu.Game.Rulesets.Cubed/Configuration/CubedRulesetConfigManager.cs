@@ -4,8 +4,11 @@ using osu.Game.Rulesets.Cubed.Skinning.CellGlows;
 using osu.Game.Rulesets.Cubed.Skinning.Gameplay;
 
 namespace osu.Game.Rulesets.Cubed.Configuration {
-    public partial class CubedRulesetConfigManager(SettingsStore settings, RulesetInfo ruleset, int? variant = null)
-        : RulesetConfigManager<CubedRulesetSetting>(settings, ruleset, variant) {
+    public partial class CubedRulesetConfigManager : RulesetConfigManager<CubedRulesetSetting> {
+        public CubedRulesetConfigManager(SettingsStore settings, RulesetInfo ruleset, int? variant = null) : base(settings, ruleset, variant) {
+            InitializeSkinBindables();
+        }
+
         protected override void InitialiseDefaults() {
             base.InitialiseDefaults();
 
