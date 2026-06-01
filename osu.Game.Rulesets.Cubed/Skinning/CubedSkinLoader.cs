@@ -159,7 +159,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
             Func<Drawable> Marker(SkinConfig config) {
                 return config.Type switch {
                     ImplementationType.Null => () => new NullMarker(),
-                    ImplementationType.Animation => () => new AnimatedMarker(skinTextures, config.FrameCount, config.TapAtFrame, config.JudgementFrameCount),
+                    ImplementationType.Animation => () => new AnimatedMarker(config.FrameCount, config.TapAtFrame, config.JudgementFrameCount),
                     _ => throw new Exception($"Cubed: Error with skin {skinName} ({skinNamespace}): Invalid Marker Type")
                 };
             }
