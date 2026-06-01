@@ -13,7 +13,7 @@ using System.Diagnostics;
 using System.Linq;
 
 namespace osu.Game.Rulesets.Cubed.Skinning {
-    public sealed class CubedSkinSource : ISkinSource, IDisposable {
+    public sealed class CubedSkinSource : ISkinSource, ICubedGameplaySkin, ICellGlowSkin {
         #pragma warning disable CS8632  // Needed to mark Action nullable whilst not opening the NRT can-worm
         public event Action? SourceChanged;
 
@@ -49,6 +49,10 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
         public ISkin FindProvider(Func<ISkin, bool> lookupFunction) => AllSources.FirstOrDefault(lookupFunction);
 
         public IEnumerable<ISkin> AllSources => parent.AllSources.Prepend(this);
+
+        Texture ICubedGameplaySkin.GetTexture(string name, WrapMode wrapModeS, WrapMode wrapModeT) => currentGameplaySkin.Value.GetTexture(name, wrapModeS, wrapModeT);
+
+        Texture ICellGlowSkin.GetTexture(string name, WrapMode wrapModeS, WrapMode wrapModeT) => currentCellGlow.Value.GetTexture(name, wrapModeS, wrapModeT);
 
         #region Out of scope, stubbed to parent ISkinSource
 
