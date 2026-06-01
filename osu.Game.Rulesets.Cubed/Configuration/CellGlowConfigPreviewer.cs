@@ -57,7 +57,7 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
                 CubedSkinRegistry.CellGlows.Select(s => CreateCard(s.CreateSkin())).ToList();
 
             private SkinElementCard CreateCard(CellGlowSkin skin) {
-                var card = new SkinElementCard<CellGlowSkin>(skin) {
+                var card = new SkinElementCard<ICellGlowSkin>(skin) {
                     Child = new CellGlowPreviewer {
                         RelativeSizeAxes = Axes.Both,
                         CellGlow = skin.CreateCellGlow()
