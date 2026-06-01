@@ -31,13 +31,25 @@ namespace osu.Game.Rulesets.Cubed.UI {
 
         protected override PassThroughInputManager CreateInputManager() => new CubedInputManager(Ruleset?.RulesetInfo);
 
+        #region Injection of CubedSkinSource in child dependencies
+
+        private CubedSkinSource skinSource;
+
         protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) {
             var deps = new DependencyContainer(base.CreateChildDependencies(parent));
-            CubedSkinSource skinSource = new (deps.Get<ISkinSource>(), (CubedRulesetConfigManager) Config);
+            skinSource = new (deps.Get<ISkinSource>(), (CubedRulesetConfigManager) Config);
             deps.CacheAs<ISkinSource>(skinSource);
             deps.CacheAs<ICubedGameplaySkin>(skinSource);
             deps.CacheAs<ICellGlowSkin>(skinSource);
             return deps;
         }
+
+        protected override void Dispose(bool isDisposing) {
+            base.Dispose(isDisposing);
+
+            skinSource?.Dispose();
+        }
+
+        #endregion
     }
 }
