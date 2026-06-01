@@ -1,10 +1,10 @@
 ﻿using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Graphics.Textures;
+using osu.Game.Rulesets.Cubed.Skinning.Gameplay;
 
 namespace osu.Game.Rulesets.Cubed.Skinning.Indicators {
-    public partial class SpriteIndicator(TextureStore textures) : ConnectedPointerIndicator {
+    public partial class SpriteIndicator : ConnectedPointerIndicator {
         private readonly Sprite connection = new() {
             RelativeSizeAxes = Axes.Both
         };
@@ -18,9 +18,9 @@ namespace osu.Game.Rulesets.Cubed.Skinning.Indicators {
         protected override Drawable Pointer => pointer;
 
         [BackgroundDependencyLoader]
-        private void load() {
-            connection.Texture = textures.Get("Connection");
-            pointer.Texture = textures.Get("Pointer");
+        private void load(ICubedGameplaySkin skin) {
+            connection.Texture = skin.GetTexture("Connection");
+            pointer.Texture = skin.GetTexture("Pointer");
         }
     }
 }

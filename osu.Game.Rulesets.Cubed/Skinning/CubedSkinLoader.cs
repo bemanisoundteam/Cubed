@@ -177,7 +177,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
 
                 return config.Type switch {
                     ImplementationType.Null => () => new NullIndicator(),
-                    ImplementationType.Texture => () => new SpriteIndicator(skinTextures),
+                    ImplementationType.Texture => () => new SpriteIndicator(),
                     // ImplementationType.Animation => TODO,
                     _ => throw new Exception($"Cubed: Error with skin {skinName} ({skinNamespace}): Invalid Indicator Type")
                 };
