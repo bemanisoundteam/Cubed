@@ -34,6 +34,8 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
             MarkerSkin = currentSkinInfo.GetBoundCopy()
         };
 
+        public CubedGameplaySkinInfo SkinInfo => currentSkinInfo.Value;
+
         public Texture GetTexture(string name, WrapMode wrapModeS, WrapMode wrapModeT) => currentSkin.Value.GetTexture(name, wrapModeS, wrapModeT);
 
         private partial class MarkerSelectionPopover : CubedSkinSelectionPopover {

@@ -50,6 +50,10 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
 
         public IEnumerable<ISkin> AllSources => parent.AllSources.Prepend(this);
 
+        CubedGameplaySkinInfo ICubedGameplaySkin.SkinInfo => currentGameplaySkin.Value.SkinInfo;
+
+        CellGlowSkinInfo ICellGlowSkin.SkinInfo => currentCellGlow.Value.SkinInfo;
+
         Texture ICubedGameplaySkin.GetTexture(string name, WrapMode wrapModeS, WrapMode wrapModeT) => currentGameplaySkin.Value.GetTexture(name, wrapModeS, wrapModeT);
 
         Texture ICellGlowSkin.GetTexture(string name, WrapMode wrapModeS, WrapMode wrapModeT) => currentCellGlow.Value.GetTexture(name, wrapModeS, wrapModeT);

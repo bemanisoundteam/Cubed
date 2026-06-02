@@ -37,6 +37,8 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
             Shaders = Shaders
         };
 
+       public CellGlowSkinInfo SkinInfo => currentSkinInfo.Value;
+
         public Texture GetTexture(string name, WrapMode wrapModeS, WrapMode wrapModeT) => currentSkin.Value.GetTexture(name, wrapModeS, wrapModeT);
 
         private partial class CellGlowSelectionPopover : CubedSkinSelectionPopover {

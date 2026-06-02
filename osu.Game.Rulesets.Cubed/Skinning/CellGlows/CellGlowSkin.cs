@@ -4,7 +4,7 @@ using System;
 
 namespace osu.Game.Rulesets.Cubed.Skinning.CellGlows {
     public class CellGlowSkin(CellGlowSkinInfo skinInfo) : ICellGlowSkin {
-        public readonly CellGlowSkinInfo SkinInfo = skinInfo;
+        public CellGlowSkinInfo SkinInfo => skinInfo;
 
         // Lazy because SkinRegistry might not have received GameHost yet
         private readonly Lazy<TextureStore> textures = new(

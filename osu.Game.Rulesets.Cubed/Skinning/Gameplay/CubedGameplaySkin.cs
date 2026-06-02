@@ -4,7 +4,7 @@ using System;
 
 namespace osu.Game.Rulesets.Cubed.Skinning.Gameplay {
     public partial class CubedGameplaySkin(CubedGameplaySkinInfo skinInfo) : ICubedGameplaySkin {
-        public readonly CubedGameplaySkinInfo SkinInfo = skinInfo;
+        public CubedGameplaySkinInfo SkinInfo => skinInfo;
 
         // Lazy because SkinRegistry might not have received GameHost yet
         private readonly Lazy<TextureStore> textures = new(

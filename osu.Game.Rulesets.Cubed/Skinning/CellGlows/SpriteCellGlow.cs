@@ -11,8 +11,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning.CellGlows {
         private void load(ICellGlowSkin skin) {
             switch (frameCount) {
                 case 0:
-                    // Would have been nice to have SkinInfo here, but this is already helpful
-                    Logger.Log("CellGlow has 0 frames !");
+                    Logger.Log($"CellGlow \"{skin.SkinInfo}\" has 0 frames !");
                     return;
 
                 case 1:
