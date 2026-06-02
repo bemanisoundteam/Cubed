@@ -1,5 +1,4 @@
 ﻿using osu.Framework.Graphics;
-using osu.Framework.Graphics.Textures;
 using osu.Framework.IO.Stores;
 using osu.Framework.Logging;
 using osu.Framework.Platform;
@@ -17,7 +16,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
     public static class CubedSkinLoader {
         private const string SkinManifestFile = "skin.manifest";
 
-        public static void DiscoverSkins(ResourceStore<byte[]> store, GameHost host) {
+        public static void DiscoverSkins(ResourceStore<byte[]> store) {
             // Enumerate manifest files
             IEnumerable<string> skinManifests = store.GetAvailableResources().Where(s => s.EndsWith(SkinManifestFile, StringComparison.Ordinal));
 
@@ -34,7 +33,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
                         // Take into account separator, hence the - 1
                         new NamespacedResourceStore<byte[]>(store, manifest[..(manifest.Length - SkinManifestFile.Length - 1)]);
 
-                    loadSkin(store.GetStream(manifest), skinName, skinNamespace, skinResources, host);
+                    loadSkin(store.GetStream(manifest), skinName, skinNamespace, skinResources);
                 }
                 catch (Exception e) {
                     Logger.Error(e, e.Message.StartsWith("Cubed", StringComparison.Ordinal)
@@ -43,24 +42,22 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
                 }
         }
 
-        public static void DiscoverSkins(Storage storage, GameHost host) {
+        public static void DiscoverSkins(Storage storage) {
             foreach (string @namespace in storage.GetDirectories(""))
             foreach (string directory in storage.GetDirectories(@namespace))
                 loadSkin(
                     storage.GetStream($"{directory}/{SkinManifestFile}"),
                     directory.Split(Path.DirectorySeparatorChar)[^1],
                     @namespace,
-                    new StorageBackedResourceStore(storage.GetStorageForDirectory(directory)),
-                    host
+                    new StorageBackedResourceStore(storage.GetStorageForDirectory(directory))
                 );
         }
 
-        private static void loadSkin(Stream manifest, string skinName, string skinNamespace, IResourceStore<byte[]> skinResources, GameHost host) {
+        private static void loadSkin(Stream manifest, string skinName, string skinNamespace, IResourceStore<byte[]> skinResources) {
             ArgumentNullException.ThrowIfNull(manifest, nameof(manifest));
             ArgumentException.ThrowIfNullOrWhiteSpace(skinName, nameof(skinName));
             ArgumentException.ThrowIfNullOrWhiteSpace(skinNamespace, nameof(skinNamespace));
             ArgumentNullException.ThrowIfNull(skinResources, nameof(skinResources));
-            ArgumentNullException.ThrowIfNull(host, nameof(host));
 
             Dictionary<CubedSkinComponents, SkinConfig> componentConfigs = [];
 
@@ -126,8 +123,6 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
                     }
                 }
             }
-
-            TextureStore skinTextures = new(host.Renderer, host.CreateTextureLoaderStore(skinResources));
 
             if (componentConfigs.TryGetValue(CubedSkinComponents.CellGlow, out SkinConfig cellGlowConfig) && cellGlowConfig.Type != ImplementationType.Null)
                 CubedSkinRegistry.RegisterCellGlow(new(skinName, skinNamespace), CellGlow(cellGlowConfig), skinResources);

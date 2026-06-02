@@ -31,8 +31,8 @@ namespace osu.Game.Rulesets.Cubed {
 
                 CubedSkinRegistry.InjectDependencies(host.Renderer, host.CreateTextureLoaderStore);
 
-                CubedSkinLoader.DiscoverSkins(CubedRuleset.CreateNamespacedResourceStore("Skins"), host);
-                CubedSkinLoader.DiscoverSkins(storage.GetStorageForDirectory("CubedSkins"), host);
+                CubedSkinLoader.DiscoverSkins(CubedRuleset.CreateNamespacedResourceStore("Skins"));
+                CubedSkinLoader.DiscoverSkins(storage.GetStorageForDirectory("CubedSkins"));
 
                 UploadedToTheStores = true;
             }
