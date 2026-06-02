@@ -6,6 +6,7 @@ using osu.Framework.Graphics.Textures;
 using osu.Game.Rulesets.Cubed.Skinning.Gameplay;
 using osu.Game.Rulesets.Judgements;
 using osu.Game.Rulesets.Scoring;
+using System.Threading;
 
 namespace osu.Game.Rulesets.Cubed.Skinning.Markers {
     public sealed partial class AnimatedMarker : CompositeDrawable, IMarker {
@@ -39,20 +40,20 @@ namespace osu.Game.Rulesets.Cubed.Skinning.Markers {
         }
 
         [BackgroundDependencyLoader]
-        private void load(ICubedGameplaySkin skin) {
-            for (int i = 0; i < ApproachTextures.Length; i++)
+        private void load(ICubedGameplaySkin skin, CancellationToken cancellation) {
+            for (int i = 0; i < ApproachTextures.Length && !cancellation.IsCancellationRequested; i++)
                 ApproachTextures[i] = skin.GetTexture($"Approach{i}.png");
-            for (int i = 0; i < PerfectTextures.Length; i++)
+            for (int i = 0; i < PerfectTextures.Length && !cancellation.IsCancellationRequested; i++)
                 PerfectTextures[i] = skin.GetTexture($"Perfect{i}.png");
 
             if (IsForPreview)
                 return;
 
-            for (int i = 0; i < GreatTextures.Length; i++)
+            for (int i = 0; i < GreatTextures.Length && !cancellation.IsCancellationRequested; i++)
                 GreatTextures[i] = skin.GetTexture($"Great{i}.png");
-            for (int i = 0; i < GoodTextures.Length; i++)
+            for (int i = 0; i < GoodTextures.Length && !cancellation.IsCancellationRequested; i++)
                 GoodTextures[i] = skin.GetTexture($"Good{i}.png");
-            for (int i = 0; i < MehTextures.Length; i++)
+            for (int i = 0; i < MehTextures.Length && !cancellation.IsCancellationRequested; i++)
                 MehTextures[i] = skin.GetTexture($"Meh{i}.png");
         }
 

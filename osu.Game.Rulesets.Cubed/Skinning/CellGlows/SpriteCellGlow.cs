@@ -4,11 +4,12 @@ using osu.Framework.Graphics.Animations;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Logging;
+using System.Threading;
 
 namespace osu.Game.Rulesets.Cubed.Skinning.CellGlows {
     public partial class SpriteCellGlow(int frameCount, double framerate = default) : CompositeDrawable {
         [BackgroundDependencyLoader]
-        private void load(ICellGlowSkin skin) {
+        private void load(ICellGlowSkin skin, CancellationToken cancellation) {
             switch (frameCount) {
                 case 0:
                     Logger.Log($"CellGlow \"{skin.SkinInfo}\" has 0 frames !");
@@ -27,7 +28,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning.CellGlows {
                         Loop = true
                     };
 
-                    for (int i = 0; i < frameCount; i++)
+                    for (int i = 0; i < frameCount && !cancellation.IsCancellationRequested; i++)
                         animation.AddFrame(skin.GetTexture($"CellGlow{i}"), 1000 / framerate);
 
                     InternalChild = animation;
