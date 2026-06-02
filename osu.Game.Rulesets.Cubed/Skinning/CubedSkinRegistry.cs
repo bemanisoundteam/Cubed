@@ -58,7 +58,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
             if (component == CubedSkinComponents.CellGlow)
                 throw new ArgumentException($"Gameplay skins do not handle cell glows. Use {nameof(CreateCellGlow)} with {nameof(CellGlowSkinInfo)} instead.");
 
-            GameplaySkinComponentFactories factory = GameplaySkinsDict[skinInfo];
+            GameplaySkinComponentFactories factory = GameplaySkinsDict.GetValueOrDefault(skinInfo);
 
             return component switch {
                 CubedSkinComponents.Marker => factory?.Marker() ?? new DefaultMarker(),
@@ -71,7 +71,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
         public static Drawable CreateCellGlow(CellGlowSkinInfo skinInfo) {
             ArgumentNullException.ThrowIfNull(skinInfo, nameof(skinInfo));
 
-            return CellGlowsDict[skinInfo]();
+            return CellGlowsDict.GetValueOrDefault(skinInfo)?.Invoke() ?? new DefaultCellGlow();
         }
 
         public static IResourceStore<byte[]> GetSkinResources(CubedGameplaySkinInfo skinInfo) =>
