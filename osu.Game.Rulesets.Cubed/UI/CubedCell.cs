@@ -58,7 +58,7 @@ namespace osu.Game.Rulesets.Cubed.UI {
             AddInternal(borderContainer = new Container {
                 RelativeSizeAxes = Axes.Both,
                 Masking = true,
-                BorderColour = Colour4.Black,
+                BorderColour = Colour4.White,
                 BorderThickness = 3,
 
                 Child = new Box {
