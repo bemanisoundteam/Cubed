@@ -6,6 +6,6 @@ namespace osu.Game.Rulesets.Cubed.Edit.Blueprints.Pieces {
     public partial class CubePlacementPiece : Sprite {
         [BackgroundDependencyLoader]
         private void load(TextureStore textures) =>
-            Texture = textures.Get("Cubed-logo");
+            Texture = textures.Get("ruleset-icon");
     }
 }

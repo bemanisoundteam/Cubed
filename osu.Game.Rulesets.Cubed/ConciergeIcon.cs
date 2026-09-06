@@ -37,7 +37,7 @@ namespace osu.Game.Rulesets.Cubed {
                 UploadedToTheStores = true;
             }
 
-            Texture = textures.Get("Cubed-logo");
+            Texture = textures.Get("ruleset-icon");
         }
 
         public static void EnsureWhitePixel(IRenderer renderer) =>
