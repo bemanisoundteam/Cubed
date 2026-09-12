@@ -4,13 +4,11 @@ using osu.Framework.Graphics.Containers;
 using osu.Game.Rulesets.Cubed.Objects;
 using osu.Game.Rulesets.Cubed.UI;
 using osuTK;
-using System.Collections.Generic;
+using System;
 
 namespace osu.Game.Rulesets.Cubed.Skinning.Indicators {
     public abstract partial class ConnectedPointerIndicator : CompositeDrawable, IHoldIndicator {
-        public CubedHoldNote Object { get; set; }
-        [Resolved]
-        public Dictionary<CubedHoldNote, double> PressTimes { get; private set; }
+        public Func<double> ComputeProgress { private get; set; }
 
         // Pointer Starting Point
         private Vector2 PointerPosition;
@@ -94,8 +92,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning.Indicators {
 
         // Transforms being a mess forced my hand
         protected override void Update() {
-            // C# is retarded, I have to cast as the interface to use the default implementation...
-            double progress = ((IHoldIndicator) this).ComputeProgress();
+            double progress = ComputeProgress();
 
             pointer.Position = PointerPosition * (1f - (float) progress);
 

@@ -33,7 +33,12 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
             AddInternal(headContainer = new Container { RelativeSizeAxes = Axes.Both });
         }
 
-        private void RefreshIndicator() => Indicator.Apply(HitObject);
+        private void RefreshIndicator() => Indicator.Apply(HitObject, () => {
+            if (!head.Result.IsHit)
+                return 0;
+
+            return double.Clamp((Time.Current - head.Result.TimeAbsolute) / (HitObject.EndTime - head.Result.TimeAbsolute), 0, 1);
+        });
         private void RefreshReceptor() => Receptor.Rotation = (int) HitObject.Direction * 90;
 
         private DrawableCubedHoldHead head => (DrawableCubedHoldHead) headContainer.Child;
@@ -63,8 +68,8 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
             if (HitObject == null)
                 return;
 
-            SchedulerAfterChildren.Add(RefreshIndicator);
-            SchedulerAfterChildren.Add(RefreshReceptor);
+            indicator.FlushPendingSkinChange();
+            RefreshIndicator();
         }
 
         protected override void CheckForResult(bool userTriggered, double timeOffset) {
@@ -88,13 +93,7 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
             ApplyResult(result);
         }
 
-        public override bool OnHit() {
-            if (!head.OnHit())
-                return false;
-
-            Indicator.OnHit();
-            return true;
-        }
+        public override bool OnHit() => head.OnHit();
 
         public override void OnRelease() {
             // Remove this check for the drake note experience, I dare you

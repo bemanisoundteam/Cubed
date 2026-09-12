@@ -1,19 +1,13 @@
-﻿using osu.Framework.Allocation;
-using osu.Framework.Graphics;
+﻿using osu.Framework.Graphics;
 using osu.Game.Rulesets.Cubed.Objects;
-using System.Collections.Generic;
+using System;
 
-// ReSharper disable UnusedAutoPropertyAccessor.Global
 namespace osu.Game.Rulesets.Cubed.Skinning.Indicators {
     public partial class NullIndicator : Drawable, IHoldIndicator {
-        public HoldDirection Direction { get; set; }
+        public HoldDirection Direction { set {} }
 
-        public int Length { get; set; }
+        public int Length { set {} }
 
-        public CubedHoldNote Object { get; set; }
-
-        [Resolved]
-        public Dictionary<CubedHoldNote, double> PressTimes { get; private set; }
-
+        public Func<double> ComputeProgress { set {} }
     }
 }
