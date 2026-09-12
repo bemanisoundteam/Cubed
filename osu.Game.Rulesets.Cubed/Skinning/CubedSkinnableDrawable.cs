@@ -12,6 +12,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
         : SkinnableDrawable(new CubedSkinComponentLookup(lookup), DefaultFunction(lookup), ConfineMode.ScaleToFit) {
         protected override bool ApplySizeRestrictionsToDefault => true;
 
+        // This accessor allows me to refresh skin before applying HitObjects
         public void FlushPendingSkinChange() => FlushPendingSkinChanges();
 
         [BackgroundDependencyLoader]

@@ -70,6 +70,8 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
 
             indicator.FlushPendingSkinChange();
             RefreshIndicator();
+
+            judgement.FlushPendingSkinChange();
         }
 
         protected override void CheckForResult(bool userTriggered, double timeOffset) {
@@ -106,7 +108,6 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
 
             if (state == ArmedState.Hit) {
                 judgement.Show();
-                judgement.FlushPendingSkinChange();
                 JudgementMarker.AnimateHit(TransformsDuration, Result);
             }
         }

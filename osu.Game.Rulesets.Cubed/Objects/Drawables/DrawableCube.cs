@@ -3,6 +3,7 @@ using osu.Game.Rulesets.Cubed.Skinning;
 using osu.Game.Rulesets.Cubed.Skinning.Markers;
 using osu.Game.Rulesets.Objects.Drawables;
 using osu.Game.Rulesets.Scoring;
+using osu.Game.Skinning;
 
 namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
     public partial class DrawableCube(Cube cube) : DrawableCubedHitObject(cube) {
@@ -15,10 +16,11 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
         private void load() =>
             AddInternal(marker = new CubedSkinnableDrawable(CubedSkinComponents.Marker));
 
-        protected override void LoadComplete() {
-            base.LoadComplete();
+        protected override void ApplySkin(ISkinSource skin, bool allowFallback) {
+            if (HitObject == null)
+                return;
 
-            marker.OnSkinChanged += RefreshStateTransforms;
+            marker.FlushPendingSkinChange();
         }
 
         protected override void CheckForResult(bool userTriggered, double timeOffset) {
@@ -37,6 +39,7 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
 
         protected override void UpdateInitialTransforms() {
             base.UpdateInitialTransforms();
+
             Marker.AnimateApproach(InitialLifetimeOffset);
         }
 
@@ -45,12 +48,6 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
 
             if (state == ArmedState.Hit)
                 Marker.AnimateHit(TransformsDuration, Result);
-        }
-
-        protected override void Dispose(bool isDisposing) {
-            base.Dispose(isDisposing);
-
-            marker.OnSkinChanged -= RefreshStateTransforms;
         }
     }
 }
