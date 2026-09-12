@@ -45,12 +45,13 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
         public static void DiscoverSkins(Storage storage) {
             foreach (string @namespace in storage.GetDirectories(""))
             foreach (string directory in storage.GetDirectories(@namespace))
-                loadSkin(
-                    storage.GetStream($"{directory}/{SkinManifestFile}"),
-                    directory.Split(Path.DirectorySeparatorChar)[^1],
-                    @namespace,
-                    new StorageBackedResourceStore(storage.GetStorageForDirectory(directory))
-                );
+                if (storage.Exists($"{directory}/{SkinManifestFile}"))
+                    loadSkin(
+                        storage.GetStream($"{directory}/{SkinManifestFile}"),
+                        directory.Split(Path.DirectorySeparatorChar)[^1],
+                        @namespace,
+                        new StorageBackedResourceStore(storage.GetStorageForDirectory(directory))
+                    );
         }
 
         private static void loadSkin(Stream manifest, string skinName, string skinNamespace, IResourceStore<byte[]> skinResources) {
