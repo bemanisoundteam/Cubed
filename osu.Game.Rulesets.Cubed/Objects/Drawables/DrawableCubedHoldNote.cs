@@ -33,12 +33,18 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
             AddInternal(headContainer = new Container { RelativeSizeAxes = Axes.Both });
         }
 
-        private void RefreshIndicator() => Indicator.Apply(HitObject, () => {
-            if (!head.Result.IsHit)
-                return 0;
+        private void RefreshIndicator() {
+            Indicator.Direction = HitObject.Direction;
+            Indicator.Length = HitObject.TailLength;
 
-            return double.Clamp((Time.Current - head.Result.TimeAbsolute) / (HitObject.EndTime - head.Result.TimeAbsolute), 0, 1);
-        });
+            Indicator.ComputeProgress = () => {
+                if (!head.Result.IsHit)
+                    return 0;
+
+                return double.Clamp((Time.Current - head.Result.TimeAbsolute) / (HitObject.EndTime - head.Result.TimeAbsolute), 0, 1);
+            };
+        }
+
         private void RefreshReceptor() => Receptor.Rotation = (int) HitObject.Direction * 90;
 
         private DrawableCubedHoldHead head => (DrawableCubedHoldHead) headContainer.Child;

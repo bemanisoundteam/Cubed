@@ -9,12 +9,5 @@ namespace osu.Game.Rulesets.Cubed.Skinning.Indicators {
         int Length { set; }
 
         Func<double> ComputeProgress { set; }
-
-        void Apply(CubedHoldNote ho, Func<double> progress) {
-            ComputeProgress = progress;
-
-            Direction = ho.Direction;
-            Length = ho.TailLength;
-        }
     }
 }
