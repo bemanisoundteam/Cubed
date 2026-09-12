@@ -1,11 +1,11 @@
 ﻿using osu.Framework.Allocation;
-using osu.Framework.Graphics.Sprites;
-using osu.Framework.Graphics.Textures;
+using osu.Game.Rulesets.Cubed.Configuration;
+using osu.Game.Rulesets.Cubed.Skinning;
 
 namespace osu.Game.Rulesets.Cubed.Edit.Blueprints.Pieces {
-    public partial class CubePlacementPiece : Sprite {
+    public partial class CubePlacementPiece : CellGlowPreviewer {
         [BackgroundDependencyLoader]
-        private void load(TextureStore textures) =>
-            Texture = textures.Get("ruleset-icon");
+        private void load() =>
+            CellGlow = new CubedSkinnableDrawable(CubedSkinComponents.CellGlow);
     }
 }
