@@ -48,9 +48,13 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
             [Cached]
             private readonly Bindable<Vector2> ptrPos = new();
 
+            protected override bool OnMouseMove(MouseMoveEvent e) => OnMove(e);
+
+            protected override bool OnHover(HoverEvent e) => OnMove(e);
+
             protected override void OnHoverLost(HoverLostEvent e) => ptrPos.SetDefault();
 
-            protected override bool OnMouseMove(MouseMoveEvent e) {
+            private bool OnMove(MouseEvent e) {
                 ptrPos.Value = e.ScreenSpaceMousePosition;
                 return true;
             }

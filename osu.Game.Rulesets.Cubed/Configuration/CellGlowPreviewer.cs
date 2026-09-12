@@ -26,12 +26,16 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
 
         private bool handlePtrPos = true;
 
-        protected override bool OnMouseMove(MouseMoveEvent e) {
+        private bool OnMove(MouseEvent e) {
             if (handlePtrPos)
                 ptrPos.Value = e.ScreenSpaceMousePosition;
 
             return handlePtrPos;
         }
+
+        protected override bool OnMouseMove(MouseMoveEvent e) => OnMove(e);
+
+        protected override bool OnHover(HoverEvent e) => OnMove(e);
 
         protected override void OnHoverLost(HoverLostEvent e) {
             if (handlePtrPos)
