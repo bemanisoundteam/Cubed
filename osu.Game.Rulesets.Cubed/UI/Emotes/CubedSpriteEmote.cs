@@ -3,20 +3,21 @@ using osu.Framework.Graphics.Sprites;
 
 namespace osu.Game.Rulesets.Cubed.UI.Emotes {
     public abstract partial class CubedSpriteEmote : Sprite, ICubedEmote {
-        public ISample Sample { get; protected set; }
+        protected ISample Sample { get; set; }
 
         private SampleChannel channel;
+        private bool shouldExpire;
 
         public void Fire(bool expire) {
-            if (expire)
-                channel = Sample?.Play();
-            else
-                Sample?.Play();
+            shouldExpire = expire;
+            channel = Sample?.Play();
         }
 
+        public bool IsPlaying => channel?.Playing ?? false;
+
         protected override void Update() {
-            if (channel?.HasCompleted ?? false)
-                Expire();
+            if (shouldExpire && (channel?.HasCompleted ?? false))
+                Parent!.Expire();
         }
     }
 }

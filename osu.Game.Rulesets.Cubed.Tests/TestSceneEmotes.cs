@@ -57,7 +57,7 @@ namespace osu.Game.Rulesets.Cubed.Tests {
         public void TestLarry() {
             AddStep("Bird fucking screams", () => panel.PressKeys(LarryEmote.Trigger));
             AddAssert("Bird is actually fucking screaming", () => inputManager.ChildrenOfType<LarryEmote>().Any());
-            AddAssert("And you sadly can hear it...", () => inputManager.ChildrenOfType<LarryEmote>().First().Sample != null);
+            AddAssert("And you sadly can hear it...", () => inputManager.ChildrenOfType<LarryEmote>().First().IsPlaying);
             AddAssert("Bird is present", () => inputManager.ChildrenOfType<LarryEmote>().First().IsPresent);
             AddAssert("Bird is visible", () => inputManager.ChildrenOfType<LarryEmote>().First()?.Texture != null);
         }
@@ -66,7 +66,7 @@ namespace osu.Game.Rulesets.Cubed.Tests {
         public void TestEGadd() {
             AddStep("Trigger Elvin", () => panel.PressKeys(EGaddEmote.Trigger));
             AddAssert("Professor Elvin shows up", () => inputManager.ChildrenOfType<EGaddEmote>().Any());
-            AddAssert("Funny jingle plays", () => inputManager.ChildrenOfType<EGaddEmote>().First().Sample != null);
+            AddAssert("Funny jingle plays", () => inputManager.ChildrenOfType<EGaddEmote>().First().IsPlaying);
             AddAssert("Professor is present", () => inputManager.ChildrenOfType<EGaddEmote>().First().IsPresent);
             AddAssert("Professor is visible", () => inputManager.ChildrenOfType<EGaddEmote>().First().Texture != null);
         }
