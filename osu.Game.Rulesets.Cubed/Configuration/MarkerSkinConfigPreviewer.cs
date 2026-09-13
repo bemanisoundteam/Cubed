@@ -6,11 +6,13 @@ using osu.Framework.Graphics.Cursor;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
+using osu.Game.Graphics.UserInterface;
 using osu.Game.Rulesets.Cubed.Skinning;
 using osu.Game.Rulesets.Cubed.Skinning.Gameplay;
 using osu.Game.Rulesets.Cubed.Skinning.Markers;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace osu.Game.Rulesets.Cubed.Configuration {
     [Cached(typeof(ICubedGameplaySkin))]
@@ -18,11 +20,28 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
         private readonly Bindable<CubedGameplaySkinInfo> currentSkinInfo = new();
         private readonly IBindable<CubedGameplaySkin> currentSkin;
 
+        private CancellationTokenSource cts;
+
         public MarkerSkinConfigPreviewer(CubedRulesetConfigManager config) {
             config.BindWith(CubedRulesetSetting.CurrentGameplaySkin, currentSkinInfo);
 
             currentSkin = config.GameplaySkin;
-            currentSkin.BindValueChanged(e => Marker = (IMarker) e.NewValue.CreateComponent(CubedSkinComponents.Marker), true);
+            currentSkin.BindValueChanged(e => {
+                cts?.Cancel();
+                cts?.Dispose();
+                cts = null;
+
+                IMarker marker = (IMarker) e.NewValue.CreateComponent(CubedSkinComponents.Marker);
+
+                if (marker is AnimatedMarker animatedMarker) {
+                    cts = new CancellationTokenSource();
+
+                    animatedMarker.IsForPreview = true;
+                    LoadMarkerAsynchronously(animatedMarker, cts.Token);
+                }
+                else
+                    Marker = marker;
+            }, true);
         }
 
         protected override bool OnClick(ClickEvent e) {
@@ -33,6 +52,18 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
         public Popover GetPopover() => new MarkerSelectionPopover {
             MarkerSkin = currentSkinInfo.GetBoundCopy()
         };
+
+        private void LoadMarkerAsynchronously(Drawable marker, CancellationToken cancellationToken) =>
+            Scheduler.Add(p => {
+                var spinner = new LoadingSpinner(true);
+                spinner.Clock = p.Parent!.Clock;
+                spinner.Show();
+                InternalChild = spinner;
+
+                LoadComponentAsync(marker, loaded => {
+                    p.Marker = (IMarker) loaded;
+                }, cancellationToken);
+            }, this, false);
 
         public CubedGameplaySkinInfo SkinInfo => currentSkinInfo.Value;
 

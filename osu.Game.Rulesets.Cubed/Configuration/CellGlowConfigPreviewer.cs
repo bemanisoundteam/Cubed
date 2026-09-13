@@ -7,12 +7,14 @@ using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input.Events;
+using osu.Game.Graphics.UserInterface;
 using osu.Game.Rulesets.Cubed.Dependencies;
 using osu.Game.Rulesets.Cubed.Skinning;
 using osu.Game.Rulesets.Cubed.Skinning.CellGlows;
 using osuTK;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace osu.Game.Rulesets.Cubed.Configuration {
     [Cached(typeof(ICellGlowSkin))]
@@ -20,11 +22,26 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
         private readonly Bindable<CellGlowSkinInfo> currentSkinInfo = new ();
         private readonly IBindable<CellGlowSkin> currentSkin;
 
+        private CancellationTokenSource cts;
+
         public CellGlowConfigPreviewer(CubedRulesetConfigManager config) {
             config.BindWith(CubedRulesetSetting.CurrentCellGlow, currentSkinInfo);
 
             currentSkin = config.CellGlowSkin;
-            currentSkin.BindValueChanged(e => CellGlow = e.NewValue.CreateCellGlow(), true);
+            currentSkin.BindValueChanged(e => {
+                cts?.Cancel();
+                cts?.Dispose();
+                cts = null;
+
+                Drawable cg = e.NewValue.CreateCellGlow();
+                if (cg is SpriteCellGlow) {
+                    cts = new CancellationTokenSource();
+
+                    LoadCellGlowAsynchronously(cg, cts.Token);
+                }
+                else
+                    CellGlow = cg;
+            }, true);
         }
 
         protected override bool OnClick(ClickEvent e) {
@@ -36,6 +53,18 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
             CellGlowSkin = currentSkinInfo.GetBoundCopy(),
             Shaders = Shaders
         };
+
+        private void LoadCellGlowAsynchronously(Drawable drawable, CancellationToken cancellationToken) {
+            LoadingSpinner spinner = new (true);
+            spinner.Show();
+            InternalChild = spinner;
+
+            Scheduler.Add(p => {
+                LoadComponentAsync(drawable, loaded => {
+                    p.CellGlow = loaded;
+                }, cancellationToken);
+            }, this, false);
+        }
 
        public CellGlowSkinInfo SkinInfo => currentSkinInfo.Value;
 

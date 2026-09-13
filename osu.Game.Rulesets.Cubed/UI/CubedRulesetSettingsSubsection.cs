@@ -49,12 +49,8 @@ namespace osu.Game.Rulesets.Cubed.UI {
             public CubedConfigPaddedContainer(Drawable child) {
                 Size = new Vector2(SettingsPanel.PANEL_WIDTH, SettingsPanel.PANEL_WIDTH - SettingsPanel.CONTENT_MARGINS * 2);
                 Padding = new MarginPadding { Horizontal = SettingsPanel.CONTENT_MARGINS };
-                Child = new Container {
-                    RelativeSizeAxes = Axes.Both,
-                    Masking = true,
-                    Child = child
-                };
-                child.RelativeSizeAxes = Axes.Both;
+                Masking = true;
+                Child = child.With(c => c.RelativeSizeAxes = Axes.Both);
             }
         }
     }
