@@ -38,7 +38,8 @@ namespace osu.Game.Rulesets.Cubed.Objects.Drawables {
             Indicator.Length = HitObject.TailLength;
 
             Indicator.ComputeProgress = () => {
-                if (!head.Result.IsHit)
+                // ReSharper disable once CompareOfFloatsByEqualityOperator
+                if (head.Result.TimeAbsolute == HitObject.EndTime)
                     return 0;
 
                 return double.Clamp((Time.Current - head.Result.TimeAbsolute) / (HitObject.EndTime - head.Result.TimeAbsolute), 0, 1);
