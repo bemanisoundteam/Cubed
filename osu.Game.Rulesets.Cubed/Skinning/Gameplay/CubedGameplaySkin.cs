@@ -1,6 +1,7 @@
 ﻿using osu.Framework.Graphics;
 using osu.Framework.Graphics.Textures;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace osu.Game.Rulesets.Cubed.Skinning.Gameplay {
     public partial class CubedGameplaySkin(CubedGameplaySkinInfo skinInfo) : ICubedGameplaySkin {
@@ -13,6 +14,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning.Gameplay {
         public Drawable CreateComponent(CubedSkinComponents component) =>
             CubedSkinRegistry.CreateGameplayComponent(SkinInfo, component);
 
+        [SuppressMessage("ReSharper.DPA", "DPA0001: Memory allocation issues")]
         public Texture GetTexture(string name, WrapMode wrapModeS, WrapMode wrapModeT) =>
             textures.Value.Get(name, wrapModeS, wrapModeT);
 
