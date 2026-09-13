@@ -82,7 +82,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning.Components {
             // The obvious reason is thread safety (transforms must be made from the update thread)
             // But another important reason is that if it is run too early the transform will never happen
             // Don't ask me why I have no idea, just that it took me way too long to figure out
-            player?.IsBreakTime.BindValueChanged(e => Scheduler.Add(FadePanel, e.NewValue));
+            player?.IsBreakTime.BindValueChanged(e => Scheduler.AddOnce(FadePanel, e.NewValue), true);
         }
 
         private void FadePanel(bool isBreak) {
