@@ -127,7 +127,7 @@ namespace osu.Game.Rulesets.Cubed.UI {
                 return true;
             }
 
-            protected override void Update() {
+            protected override void LoadComplete() {
                 if (cellCornerRadius != null)
                     cellCornerRadius.MaxValue = DrawHeight * .5f;
             }
