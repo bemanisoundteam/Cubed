@@ -72,6 +72,8 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
         public void Dispose() {
             SourceChanged = null!;
 
+            currentGameplaySkin.UnbindAll();
+            currentCellGlow.UnbindAll();
             parent.SourceChanged -= TriggerSourceChange;
         }
     }
