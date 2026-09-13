@@ -45,9 +45,8 @@ namespace osu.Game.Rulesets.Cubed.UI {
         }
 
         protected override void Dispose(bool isDisposing) {
-            base.Dispose(isDisposing);
-
             skinSource?.Dispose();
+            base.Dispose(isDisposing);
         }
 
         #endregion
