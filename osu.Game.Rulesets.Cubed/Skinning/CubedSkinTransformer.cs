@@ -1,8 +1,6 @@
 ﻿using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Game.Rulesets.Cubed.Skinning.CellGlows;
 using osu.Game.Rulesets.Cubed.Skinning.Components;
-using osu.Game.Rulesets.Scoring;
 using osu.Game.Screens.Play.HUD;
 using osu.Game.Skinning;
 using osuTK;
@@ -12,28 +10,13 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
     public class CubedSkinTransformer(ISkin skin) : SkinTransformer(skin) {
         public override Drawable GetDrawableComponent(ISkinComponentLookup lookup) {
             switch (lookup) {
-                case SkinComponentLookup<HitResult> hitResult:
-                    // This should be a setting, or done at the skin level instead of me having to do this...
-                    if (Skin is ArgonProSkin && hitResult.Component is HitResult.Great or HitResult.Perfect)
-                        return Drawable.Empty();
-
-                    break;
-
-                case CubedSkinComponentLookup component:
-                    if (component.Component is CubedSkinComponents.CellGlow)
-                        return new PointerPositionAwareCellGlow();
-
-                    break;
-
-
                 case GlobalSkinnableContainerLookup containerLookup:
                     switch (containerLookup.Lookup) {
-                        // TODO This is wonky (aka will not hide keycounter for edited skins) and should implement apply defaults
                         case GlobalSkinnableContainers.MainHUDComponents:
                             Container components = (Container) base.GetDrawableComponent(lookup);
 
                             if (containerLookup.Ruleset != null) {
-                                components ??= new DefaultSkinComponentsContainer(_ => {});
+                                components ??= new DefaultSkinComponentsContainer(null!);
 
                                 // Stolen from ArgonSkin.cs
                                 const float padding = 10;
@@ -48,7 +31,8 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
                                 });
                             }
                             else
-                                // This will not hide it for edited skins sadly, will have to do with it for the moment...
+                                // This will not hide it for edited versions of default skins sadly
+                                // It seems I can't do anything about it...
                                 components?.OfType<KeyCounterDisplay>().FirstOrDefault()?.Hide();
 
                             return components;
