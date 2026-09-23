@@ -14,20 +14,17 @@ layout (location = 0) out vec4 fragColor;
 
 const float borderThickness = .01;
 const float glowRadius = .5;
+
 void main(void)
 {
-        highp vec2 resolution = v_TexRect.zw - v_TexRect.xy;
+    vec2 resolutionInverse = 1.0 / (v_TexRect.zw - v_TexRect.xy);
 
-        // Normalized pixel coordinates (from 0 to 1)
-        vec2 uv = (v_TexCoord - v_TexRect.xy) / resolution;
-        vec2 mouse = (v_PointerPosition - v_TexRect.xy) / resolution;
+    float glow = 1.0 - smoothstep(0.0, glowRadius, length((v_TexCoord - v_PointerPosition) * resolutionInverse));
 
-        float border = 0.5 * step(min(min(uv.x, uv.y), min(1.0 - uv.x, 1.0 - uv.y)), borderThickness);
+    vec2 distanceToCenter = abs((v_TexCoord - v_TexRect.xy) * resolutionInverse - .5);
+    float border = .5 * step(.5 - borderThickness, max(distanceToCenter.x, distanceToCenter.y));
 
-        vec4 glow = v_Colour * smoothstep(glowRadius, 0.0, distance(uv, mouse));
-        vec4 borderEffect = v_Colour * border;
-
-        fragColor = glow + borderEffect;
+    fragColor = (glow + border) * v_Colour;
 }
 
 #endif
