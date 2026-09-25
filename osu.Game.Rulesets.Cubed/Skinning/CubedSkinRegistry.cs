@@ -16,16 +16,28 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
         public static IBindableList<CubedGameplaySkinInfo> GameplaySkins => GameplaySkinsList;
         public static IBindableList<CellGlowSkinInfo> CellGlows => CellGlowsList;
 
-        private static readonly BindableList<CubedGameplaySkinInfo> GameplaySkinsList = [new (null, "Cubed")];
+        private static readonly BindableList<CubedGameplaySkinInfo> GameplaySkinsList = [
+            #if DEBUG
+            new (null, "Cubed")
+            #endif
+        ];
         private static readonly Dictionary<CubedGameplaySkinInfo, IResourceStore<byte[]>> GameplaySkinResources = new();
         private static readonly Dictionary<CubedGameplaySkinInfo, GameplaySkinComponentFactories> GameplaySkinsDict = new() {
+            #if DEBUG
             [new CubedGameplaySkinInfo(null, "Cubed")] = null
+            #endif
         };
         private static readonly Dictionary<CellGlowSkinInfo, Func<Drawable>> CellGlowsDict = new() {
+            #if DEBUG
             [new CellGlowSkinInfo(null, "Cubed")] = () => new DefaultCellGlow()
+            #endif
         };
         private static readonly Dictionary<CellGlowSkinInfo, IResourceStore<byte[]>> CellGlowSkinResources = new();
-        private static readonly BindableList<CellGlowSkinInfo> CellGlowsList = [new(null, "Cubed")];
+        private static readonly BindableList<CellGlowSkinInfo> CellGlowsList = [
+            #if DEBUG
+            new (null, "Cubed")
+            #endif
+        ];
 
         public static void RegisterCellGlow(CellGlowSkinInfo skinInfo, Func<Drawable> cellGlow, IResourceStore<byte[]> skinResources = null) {
             ArgumentException.ThrowIfNullOrWhiteSpace(skinInfo.Name);
