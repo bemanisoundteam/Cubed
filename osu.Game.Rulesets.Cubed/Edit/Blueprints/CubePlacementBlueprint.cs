@@ -2,10 +2,21 @@
 using osu.Framework.Input.Events;
 using osu.Game.Rulesets.Cubed.Edit.Blueprints.Pieces;
 using osu.Game.Rulesets.Cubed.Objects;
+using osu.Game.Rulesets.Cubed.Skinning.CellGlows;
 using osu.Game.Rulesets.Edit;
+using osu.Game.Rulesets.UI;
+using osu.Game.Skinning;
 
 namespace osu.Game.Rulesets.Cubed.Edit.Blueprints {
     public partial class CubePlacementBlueprint() : CubedPlacementBlueprint(new Cube()) {
+        protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) {
+            DependencyContainer dependencies = new (base.CreateChildDependencies(parent));
+            IReadOnlyDependencyContainer playfieldDependencies = dependencies.Get<Playfield>().Dependencies;
+            dependencies.CacheAs(playfieldDependencies.Get<ISkinSource>());
+            dependencies.CacheAs(playfieldDependencies.Get<ICellGlowSkin>());
+            return dependencies;
+        }
+
         [BackgroundDependencyLoader]
         private void load() => InternalChild = new CubePlacementPiece();
 
