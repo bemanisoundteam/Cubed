@@ -10,10 +10,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Download skins
+        uses: actions/checkout@v7
+        with:
+          repository: bemanisoundteam/Cubed-Skins
+          path: Cubed-Skins/
+          sparse-checkout-cone-mode: /Skins/
+
+      - name: Move skins to bundled resources
+        run: mv Cubed-Skins/Skins osu.Game.Rulesets.Cubed/Resources/
 
       - name: Setup .NET 8
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: 8.0.x
 
@@ -27,7 +38,9 @@ jobs:
         run: dotnet test -c Release --no-build --nologo --verbosity normal osu.Game.Rulesets.Cubed.Tests
 
       - name: Upload built artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
+          name: Ruleset DLL
           path: osu.Game.Rulesets.Cubed.Tests/bin/Release/net8.0/osu.Game.Rulesets.Cubed.dll
           if-no-files-found: 'error'
+          archive: 'false'
