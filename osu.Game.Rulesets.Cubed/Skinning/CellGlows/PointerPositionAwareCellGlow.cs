@@ -41,20 +41,21 @@ namespace osu.Game.Rulesets.Cubed.Skinning.CellGlows {
         }
 
         protected override void LoadComplete() => PtrPos.BindValueChanged(
-            e => PointerPosition = PtrPos.IsDefault ? DrawPosition + DrawSize / 2 : ToLocalSpace(e.NewValue), true);
+            e => PointerPosition = PtrPos.IsDefault
+                ? Vector2.One / 2
+                : Vector2.Divide(ToLocalSpace(e.NewValue) - DrawPosition, DrawSize)
+            , true);
 
         protected override DrawNode CreateDrawNode() => new PointerPositionAwareCellGlowDrawNode(this);
 
         private class PointerPositionAwareCellGlowDrawNode(PointerPositionAwareCellGlow source) : TexturedShaderDrawNode(source) {
             private Quad screenSpaceDrawQuad;
-            private RectangleF drawRectangle;
             private Vector2 pointerPosition;
 
             public override void ApplyState() {
                 base.ApplyState();
 
                 screenSpaceDrawQuad = source.ScreenSpaceDrawQuad;
-                drawRectangle = source.DrawRectangle;
                 pointerPosition = source.PointerPosition;
             }
 
@@ -65,7 +66,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning.CellGlows {
 
                 // Hack: Here blendRangeOverride only ends up changing the "Blend Range" value of the TexturedVertex2D,
                 // which the Texture_2 vs just passthroughs to my custom fs
-                renderer.DrawQuad(ConciergeIcon.WhitePixel, screenSpaceDrawQuad, DrawColourInfo.Colour, drawRectangle, blendRangeOverride: pointerPosition);
+                renderer.DrawQuad(ConciergeIcon.WhitePixel, screenSpaceDrawQuad, DrawColourInfo.Colour, new RectangleF(Vector2.Zero, Vector2.One), blendRangeOverride: pointerPosition);
 
                 UnbindTextureShader(renderer);
             }

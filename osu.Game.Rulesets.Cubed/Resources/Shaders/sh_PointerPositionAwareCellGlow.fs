@@ -17,11 +17,9 @@ const float glowRadius = .5;
 
 void main(void)
 {
-    vec2 resolutionInverse = 1.0 / (v_TexRect.zw - v_TexRect.xy);
+    float glow = 1.0 - smoothstep(0.0, glowRadius, length(v_TexCoord - v_PointerPosition));
 
-    float glow = 1.0 - smoothstep(0.0, glowRadius, length((v_TexCoord - v_PointerPosition) * resolutionInverse));
-
-    vec2 distanceToCenter = abs((v_TexCoord - v_TexRect.xy) * resolutionInverse - .5);
+    vec2 distanceToCenter = abs(v_TexCoord - .5);
     float border = .5 * step(.5 - borderThickness, max(distanceToCenter.x, distanceToCenter.y));
 
     fragColor = (glow + border) * v_Colour;
