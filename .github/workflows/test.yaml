@@ -40,7 +40,6 @@ jobs:
       - name: Upload built artifact
         uses: actions/upload-artifact@v7
         with:
-          name: Ruleset DLL
           path: osu.Game.Rulesets.Cubed.Tests/bin/Release/net8.0/osu.Game.Rulesets.Cubed.dll
           if-no-files-found: 'error'
           archive: 'false'
