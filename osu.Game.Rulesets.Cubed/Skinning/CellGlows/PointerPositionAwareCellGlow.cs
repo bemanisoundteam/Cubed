@@ -5,6 +5,7 @@ using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Shaders;
+using osu.Framework.Graphics.Textures;
 using osuTK;
 
 namespace osu.Game.Rulesets.Cubed.Skinning.CellGlows {
@@ -28,6 +29,8 @@ namespace osu.Game.Rulesets.Cubed.Skinning.CellGlows {
             }
         }
 
+        private Texture WhitePixelTexture;
+
         public IShader TextureShader { get; private set; }
 
         [BackgroundDependencyLoader]
@@ -37,7 +40,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning.CellGlows {
             Colour = ColourInfo.GradientHorizontal(Colour4.Cyan, Colour4.LimeGreen);
 
             TextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, "PointerPositionAwareCellGlow");
-            ConciergeIcon.EnsureWhitePixel(renderer);
+            WhitePixelTexture = new CubedDummyTexture(renderer.WhitePixel);
         }
 
         protected override void LoadComplete() => PtrPos.BindValueChanged(
@@ -51,12 +54,14 @@ namespace osu.Game.Rulesets.Cubed.Skinning.CellGlows {
         private class PointerPositionAwareCellGlowDrawNode(PointerPositionAwareCellGlow source) : TexturedShaderDrawNode(source) {
             private Quad screenSpaceDrawQuad;
             private Vector2 pointerPosition;
+            private Texture whitePixel;
 
             public override void ApplyState() {
                 base.ApplyState();
 
                 screenSpaceDrawQuad = source.ScreenSpaceDrawQuad;
                 pointerPosition = source.PointerPosition;
+                whitePixel = source.WhitePixelTexture;
             }
 
             protected override void Draw(IRenderer renderer) {
@@ -66,7 +71,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning.CellGlows {
 
                 // Hack: Here blendRangeOverride only ends up changing the "Blend Range" value of the TexturedVertex2D,
                 // which the Texture_2 vs just passthroughs to my custom fs
-                renderer.DrawQuad(ConciergeIcon.WhitePixel, screenSpaceDrawQuad, DrawColourInfo.Colour, new RectangleF(Vector2.Zero, Vector2.One), blendRangeOverride: pointerPosition);
+                renderer.DrawQuad(whitePixel, screenSpaceDrawQuad, DrawColourInfo.Colour, blendRangeOverride: pointerPosition);
 
                 UnbindTextureShader(renderer);
             }

@@ -1,7 +1,5 @@
 ﻿using osu.Framework.Allocation;
 using osu.Framework.Audio;
-using osu.Framework.Graphics;
-using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.IO.Stores;
@@ -11,12 +9,6 @@ using System.Reflection;
 
 namespace osu.Game.Rulesets.Cubed {
     public partial class ConciergeIcon : Sprite {
-        /// <summary>
-        /// A replacement for IRenderer.WhitePixel, that preserves base textRect size
-        /// </summary>
-        /// <remarks>Please inject and use Renderer.WhitePixel whenever possible instead</remarks>
-        public static Texture WhitePixel { get; private set; }
-
         private static bool UploadedToTheStores;
 
         [BackgroundDependencyLoader]
@@ -26,8 +18,6 @@ namespace osu.Game.Rulesets.Cubed {
                 ResourceStore<byte[]> sampleStore = (ResourceStore<byte[]>) audio.GetSampleStore().GetType().
                     GetField("store", BindingFlags.NonPublic | BindingFlags.Instance)!.GetValue(audio.GetSampleStore());
                 sampleStore!.AddStore(CubedRuleset.CreateNamespacedResourceStore("Samples"));
-
-                EnsureWhitePixel(host.Renderer);
 
                 CubedSkinRegistry.InjectDependencies(host.Renderer, host.CreateTextureLoaderStore);
 
@@ -39,8 +29,5 @@ namespace osu.Game.Rulesets.Cubed {
 
             Texture = textures.Get("ruleset-icon");
         }
-
-        public static void EnsureWhitePixel(IRenderer renderer) =>
-            WhitePixel ??= renderer.CreateTexture(1, 1, initialisationColour: Colour4.White);
     }
 }
