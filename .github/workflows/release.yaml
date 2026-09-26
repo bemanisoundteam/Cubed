@@ -14,6 +14,9 @@ jobs:
       contents: write
 
     steps:
+    - name: Checkout repo
+      uses: actions/checkout@v7
+
     - name: Download built ruleset
       uses: actions/download-artifact@v8
       with:
