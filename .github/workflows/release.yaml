@@ -22,4 +22,5 @@ jobs:
     - name: Upload ruleset to release
       run: gh release upload "$RELEASE" osu.Game.Rulesets.Cubed.dll
       env:
+        GITHUB_TOKEN: ${{ github.token }}
         RELEASE: ${{ github.event.release.tag_name }}
