@@ -69,9 +69,6 @@ namespace osu.Game.Rulesets.Cubed.UI {
             });
             CellBorders?.BindValueChanged(e => borderContainer.Alpha = e.NewValue ? 1 : 0, true);
 
-            AddInternal(glow = new CubedSkinnableDrawable(CellGlow) { Alpha = 0 });
-            GlowProxyContainer?.Add(glow.CreateProxy());
-
             // TODO put numbers that make sense for std (~6*) converts here
             // Or even just precompute initialSize using an injected map (capped still probably)
             RegisterPool<Cube, DrawableCube>(20, 100);
@@ -79,6 +76,9 @@ namespace osu.Game.Rulesets.Cubed.UI {
             RegisterPool<CubedHoldHead, DrawableCubedHoldHead>(20, 100);
 
             AddInternal(HitObjectContainer);
+
+            AddInternal(glow = new CubedSkinnableDrawable(CellGlow) { Alpha = 0 });
+            GlowProxyContainer?.Add(glow.CreateProxy());
         }
 
         protected override HitObjectLifetimeEntry CreateLifetimeEntry(HitObject hitObject) => new CubedHitObjectLifetimeEntry((CubedHitObject) hitObject);

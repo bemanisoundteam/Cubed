@@ -35,9 +35,6 @@ namespace osu.Game.Rulesets.Cubed.UI {
             // Proxied here to render below the notes
             AddInternal(emotes.CreateProxy());
 
-            // Used to have all cell glows in the same container, so that batching renders them in a single drawcall
-            AddInternal(cellGlowProxyContainer);
-
             for (int i = 0; i < 4; i++) {
                 Cells[i] = new CubedCell[4];
                 for (int j = 0; j < 4; j++)
@@ -58,6 +55,10 @@ namespace osu.Game.Rulesets.Cubed.UI {
                 RelativeSizeAxes = Axes.Both,
                 Content = Cells
             });
+
+            // Used to have all cell glows in the same container, so that batching renders them in a single drawcall
+            AddInternal(cellGlowProxyContainer);
+
             // This is placed here to catch inputs first, but as it has a proxy
             // It won't be rendered
             AddInternal(emotes);
