@@ -98,5 +98,7 @@ namespace osu.Game.Rulesets.Cubed.Beatmaps {
                 ;
             #endif
         }
+
+        protected override Beatmap<CubedHitObject> CreateBeatmap() => new CubedBeatmap();
     }
 }
