@@ -130,6 +130,10 @@ namespace osu.Game.Rulesets.Cubed {
             HitResult.Miss
         ];
 
+        public override IEnumerable<RulesetBeatmapAttribute> GetBeatmapAttributesForDisplay(IBeatmapInfo beatmapInfo, IReadOnlyCollection<Mod> mods) {
+            return [];
+        }
+
         public static ResourceStore<byte[]> CreateNamespacedResourceStore(string ns) =>
             new NamespacedResourceStore<byte[]>(new DllResourceStore(typeof(CubedRuleset).Assembly), "Resources/" + ns);
 
