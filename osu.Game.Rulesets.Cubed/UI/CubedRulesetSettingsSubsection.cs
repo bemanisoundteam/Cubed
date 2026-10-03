@@ -1,7 +1,6 @@
 ﻿using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Localisation;
 using osu.Game.Overlays;
 using osu.Game.Overlays.Settings;
 using osu.Game.Rulesets.Cubed.Configuration;
@@ -12,9 +11,6 @@ using osuTK;
 
 namespace osu.Game.Rulesets.Cubed.UI {
     public partial class CubedRulesetSettingsSubsection(Ruleset ruleset) : RulesetSettingsSubsection(ruleset) {
-        // Matches ruleset.Description, but I didn't want to make a field, and the compiler complains if I use ruleset directly
-        protected override LocalisableString Header => "Cubed";
-
         [BackgroundDependencyLoader]
         private void load() {
             var config = (CubedRulesetConfigManager) Config;

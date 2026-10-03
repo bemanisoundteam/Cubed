@@ -6,16 +6,16 @@
     <EmbeddedResource Include="Resources/**"/>
   </ItemGroup>
   <ItemGroup Label="Package References">
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
-    <PackageReference Include="NUnit" Version="3.14.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
+    <PackageReference Include="NUnit" Version="5.0.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="6.3.0" />
   </ItemGroup>
   <ItemGroup Label="Project Reference">
     <ProjectReference Include="..\osu.Game.Rulesets.Cubed\osu.Game.Rulesets.Cubed.csproj" />
   </ItemGroup>
   <PropertyGroup Label="Project">
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>osu.Game.Rulesets.Cubed.Tests</RootNamespace>
   </PropertyGroup>
 </Project>

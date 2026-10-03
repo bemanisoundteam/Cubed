@@ -7,7 +7,7 @@ using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Game.Rulesets.Cubed.Skinning.CellGlows {
-    public partial class DefaultCellGlow() : BufferedContainer(null, true, true) {
+    public partial class DefaultCellGlow() : BufferedContainer(pixelSnapping: true, cachedFrameBuffer: true) {
         [BackgroundDependencyLoader]
         private void hugeHack() {
             RelativeSizeAxes = Axes.Both;

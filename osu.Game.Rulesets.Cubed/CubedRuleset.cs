@@ -122,7 +122,7 @@ namespace osu.Game.Rulesets.Cubed {
             new KeyBinding(InputKey.M, CubedAction.X3Y3)
         };
 
-        protected override IEnumerable<HitResult> GetValidHitResults() => [
+        public override IEnumerable<HitResult> GetValidHitResults() => [
             HitResult.Perfect,
             HitResult.Great,
             HitResult.Good,

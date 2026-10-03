@@ -6,7 +6,7 @@ using osu.Game.Overlays;
 using osu.Game.Rulesets.Cubed.Objects;
 using osu.Game.Rulesets.Scoring;
 using osu.Game.Scoring;
-using osu.Game.Screens.SelectV2;
+using osu.Game.Screens.Select;
 using System;
 using System.Collections.Generic;
 
