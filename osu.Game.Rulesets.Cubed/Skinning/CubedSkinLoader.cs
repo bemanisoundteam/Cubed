@@ -55,10 +55,10 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
         }
 
         private static void loadSkin(Stream manifest, string skinName, string skinNamespace, IResourceStore<byte[]> skinResources) {
-            ArgumentNullException.ThrowIfNull(manifest, nameof(manifest));
-            ArgumentException.ThrowIfNullOrWhiteSpace(skinName, nameof(skinName));
-            ArgumentException.ThrowIfNullOrWhiteSpace(skinNamespace, nameof(skinNamespace));
-            ArgumentNullException.ThrowIfNull(skinResources, nameof(skinResources));
+            ArgumentNullException.ThrowIfNull(manifest);
+            ArgumentException.ThrowIfNullOrWhiteSpace(skinName);
+            ArgumentException.ThrowIfNullOrWhiteSpace(skinNamespace);
+            ArgumentNullException.ThrowIfNull(skinResources);
 
             Dictionary<CubedSkinComponents, SkinConfig> componentConfigs = [];
 

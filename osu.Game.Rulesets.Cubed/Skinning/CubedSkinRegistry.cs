@@ -81,7 +81,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
         }
 
         public static Drawable CreateCellGlow(CellGlowSkinInfo skinInfo) {
-            ArgumentNullException.ThrowIfNull(skinInfo, nameof(skinInfo));
+            ArgumentNullException.ThrowIfNull(skinInfo);
 
             return CellGlowsDict.GetValueOrDefault(skinInfo)?.Invoke() ?? new DefaultCellGlow();
         }
