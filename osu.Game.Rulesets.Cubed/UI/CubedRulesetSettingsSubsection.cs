@@ -1,6 +1,7 @@
 ﻿using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Game.Graphics.UserInterfaceV2;
 using osu.Game.Overlays;
 using osu.Game.Overlays.Settings;
 using osu.Game.Rulesets.Cubed.Configuration;
@@ -17,27 +18,27 @@ namespace osu.Game.Rulesets.Cubed.UI {
 
             Children = [
                 new CubedConfigPaddedContainer(new MarkerSkinConfigPreviewer(config)),
-                new SettingsDropdown<CubedGameplaySkinInfo> {
-                    LabelText = "Skin",
+                new SettingsItemV2(new FormDropdown<CubedGameplaySkinInfo> {
+                    Caption = "Skin",
                     Current = config.GetBindable<CubedGameplaySkinInfo>(CubedRulesetSetting.CurrentGameplaySkin),
                     ItemSource = CubedSkinRegistry.GameplaySkins
-                },
+                }),
 
                 new CubedConfigPaddedContainer(new CellGlowConfigPreviewer(config)),
-                new SettingsDropdown<CellGlowSkinInfo> {
-                    LabelText = "Cell glow",
+                new SettingsItemV2(new FormDropdown<CellGlowSkinInfo> {
+                    Caption = "Cell glow",
                     Current = config.GetBindable<CellGlowSkinInfo>(CubedRulesetSetting.CurrentCellGlow),
                     ItemSource = CubedSkinRegistry.CellGlows
-                },
+                }),
 
-                new SettingsCheckbox {
-                    LabelText = "Cell borders",
+                new SettingsItemV2(new FormCheckBox {
+                    Caption = "Cell borders",
                     Current = config.GetBindable<bool>(CubedRulesetSetting.CellBorders)
-                },
-                new SettingsCheckbox {
-                    LabelText = "Highlight cells",
+                }),
+                new SettingsItemV2(new FormCheckBox {
+                    Caption = "Highlight cells",
                     Current = config.GetBindable<bool>(CubedRulesetSetting.HighlightCells)
-                },
+                }),
             ];
         }
 
