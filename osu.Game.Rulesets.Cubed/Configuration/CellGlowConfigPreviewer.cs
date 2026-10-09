@@ -49,6 +49,11 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
             return true;
         }
 
+        protected override bool OnMove(MouseEvent e) {
+            base.OnMove(e);
+            return false;
+        }
+
         public Popover GetPopover() => new CellGlowSelectionPopover {
             CellGlowSkin = currentSkinInfo.GetBoundCopy(),
             Shaders = Shaders

@@ -26,7 +26,7 @@ namespace osu.Game.Rulesets.Cubed.Configuration {
 
         private bool handlePtrPos = true;
 
-        private bool OnMove(MouseEvent e) {
+        protected virtual bool OnMove(MouseEvent e) {
             if (handlePtrPos)
                 ptrPos.Value = e.ScreenSpaceMousePosition;
 

@@ -1,6 +1,7 @@
 ﻿using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Input.Events;
 using osu.Game.Graphics.UserInterfaceV2;
 using osu.Game.Overlays;
 using osu.Game.Overlays.Settings;
@@ -43,12 +44,29 @@ namespace osu.Game.Rulesets.Cubed.UI {
         }
 
         private sealed partial class CubedConfigPaddedContainer : Container {
+            private readonly FormControlBackground bg;
+
             public CubedConfigPaddedContainer(Drawable child) {
-                Size = new Vector2(SettingsPanel.PANEL_WIDTH, SettingsPanel.PANEL_WIDTH - SettingsPanel.CONTENT_MARGINS * 2);
-                Padding = new MarginPadding { Horizontal = SettingsPanel.CONTENT_MARGINS };
+                Size = new Vector2(SettingsPanel.PANEL_WIDTH, SettingsPanel.PANEL_WIDTH - SettingsPanel.CONTENT_MARGINS);
+                Padding = new MarginPadding { Horizontal = SettingsPanel.CONTENT_MARGINS / 2 };
                 Masking = true;
-                Child = child.With(c => c.RelativeSizeAxes = Axes.Both);
+                Children = [
+                    bg = new FormControlBackground(),
+                    new Container {
+                        RelativeSizeAxes = Axes.Both,
+                        Padding = new MarginPadding(SettingsPanel.CONTENT_MARGINS / 2),
+                        Child = child.With(c => c.RelativeSizeAxes = Axes.Both)
+                    }
+                ];
             }
+
+            protected override bool OnHover(HoverEvent e) {
+                bg.VisualStyle = VisualStyle.Hovered;
+                return true;
+            }
+
+            protected override void OnHoverLost(HoverLostEvent e) =>
+                bg.VisualStyle = VisualStyle.Normal;
         }
     }
 }
