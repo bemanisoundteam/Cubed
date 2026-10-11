@@ -69,11 +69,9 @@ namespace osu.Game.Rulesets.Cubed.UI {
             });
             CellBorders?.BindValueChanged(e => borderContainer.Alpha = e.NewValue ? 1 : 0, true);
 
-            // TODO put numbers that make sense for std (~6*) converts here
-            // Or even just precompute initialSize using an injected map (capped still probably)
-            RegisterPool<Cube, DrawableCube>(20, 100);
-            RegisterPool<CubedHoldNote, DrawableCubedHoldNote>(20, 100);
-            RegisterPool<CubedHoldHead, DrawableCubedHoldHead>(20, 100);
+            RegisterPool<Cube, DrawableCube>(10, 50);
+            RegisterPool<CubedHoldNote, DrawableCubedHoldNote>(10, 50);
+            RegisterPool<CubedHoldHead, DrawableCubedHoldHead>(10, 50);
 
             AddInternal(HitObjectContainer);
 
