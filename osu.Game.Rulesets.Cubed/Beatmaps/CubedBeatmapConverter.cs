@@ -70,12 +70,15 @@ namespace osu.Game.Rulesets.Cubed.Beatmaps {
 
                 }
 
+                var NodeSamples = (hitObject as IHasRepeats)?.NodeSamples;
+
                 #if KEEP_ONLY_NONZERO_HOLDS
                 if (length >= 1)
                 #endif
                 // Make sure nothing replaces this gap, or goes between it, else the if breaks
                 yield return new CubedHoldNote {
-                    Samples = hitObject.Samples,
+                    Samples = NodeSamples?[^1] ?? hitObject.Samples,
+                    HeadSamples = NodeSamples?[0] ?? hitObject.Samples,
                     StartTime = hitObject.StartTime,
                     EndTime = objDur.EndTime,
                     Column = Column,

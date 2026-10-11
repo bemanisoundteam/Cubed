@@ -1,8 +1,8 @@
-﻿using osu.Game.Rulesets.Objects.Types;
+﻿using osu.Game.Audio;
+using osu.Game.Rulesets.Objects.Types;
+using System.Collections.Generic;
 
 namespace osu.Game.Rulesets.Cubed.Objects {
-    // TODO I didn't understand what Samples does, and I just need this shipped already,
-    // in case I'm brave enough to tackle this, don't forget about the nested HitObject's samples
     public class CubedHoldNote : CubedHitObject, IHasDuration {
         private CubedHoldHead Head;
 
@@ -41,11 +41,22 @@ namespace osu.Game.Rulesets.Cubed.Objects {
             }
         }
 
+        public IList<HitSampleInfo> HeadSamples {
+            get;
+            set {
+                if (Equals(field, value))
+                    return;
+
+                field = value;
+                Head?.Samples = value;
+            }
+        } = [];
+
         protected override void CreateNestedHitObjects(System.Threading.CancellationToken cancellationToken) =>
             AddNested(Head = new CubedHoldHead {
                 StartTime = StartTime,
                 // Action doesn't need to be populated, as positioning logic doesn't run in nested objects
-                Samples = Samples
+                Samples = HeadSamples
             });
     }
 
