@@ -1,13 +1,19 @@
 ﻿using osu.Framework.Allocation;
-using osu.Framework.Graphics;
 using osu.Framework.Graphics.Animations;
-using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Sprites;
 using osu.Framework.Logging;
 using System.Threading;
 
 namespace osu.Game.Rulesets.Cubed.Skinning.CellGlows {
-    public partial class SpriteCellGlow(int frameCount, double framerate = default) : CompositeDrawable {
+    public partial class SpriteCellGlow : TextureAnimation {
+        private readonly int frameCount;
+
+        public SpriteCellGlow(int frameCount, double framerate = 0) : base(false) {
+            this.frameCount = frameCount;
+
+            // FP Division gives Infinity in case framerate is 0
+            DefaultFrameLength = 1000 / framerate;
+        }
+
         [BackgroundDependencyLoader]
         private void load(ICellGlowSkin skin, CancellationToken cancellation) {
             switch (frameCount) {
@@ -16,22 +22,12 @@ namespace osu.Game.Rulesets.Cubed.Skinning.CellGlows {
                     return;
 
                 case 1:
-                    InternalChild = new Sprite {
-                        RelativeSizeAxes = Axes.Both,
-                        Texture = skin.GetTexture("CellGlow") ?? skin.GetTexture("CellGlow0")
-                    };
+                    AddFrame(skin.GetTexture("CellGlow") ?? skin.GetTexture("CellGlow0"));
                     return;
 
                 default:
-                    TextureAnimation animation = new(false) {
-                        RelativeSizeAxes = Axes.Both,
-                        Loop = true
-                    };
-
                     for (int i = 0; i < frameCount && !cancellation.IsCancellationRequested; i++)
-                        animation.AddFrame(skin.GetTexture($"CellGlow{i}"), 1000 / framerate);
-
-                    InternalChild = animation;
+                        AddFrame(skin.GetTexture("CellGlow" + i));
                     return;
             }
         }
