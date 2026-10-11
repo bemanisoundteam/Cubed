@@ -1,29 +1,34 @@
 ﻿using osu.Framework.Allocation;
-using osu.Framework.Graphics.Sprites;
-using osu.Framework.Graphics.Textures;
+using osu.Framework.Graphics.Animations;
 using osu.Framework.Logging;
 using osu.Game.Rulesets.Cubed.Skinning.Gameplay;
 
 namespace osu.Game.Rulesets.Cubed.Skinning.Receptors {
-    public partial class SpriteReceptor(int frameCount) : Sprite {
-        private readonly Texture[] textures = new Texture[frameCount];
+    public partial class SpriteReceptor : TextureAnimation {
+        private readonly int frameCount;
+
+        public SpriteReceptor(int frameCount, double framerate = 0) {
+            this.frameCount = frameCount;
+
+            // FP Division gives Infinity in case framerate is 0
+            DefaultFrameLength = 1000 / framerate;
+        }
 
         [BackgroundDependencyLoader]
         private void load(ICubedGameplaySkin skin) {
             switch (frameCount) {
                 case 0:
-                    Logger.Log($"CellGlow \"{skin.SkinInfo}\" has 0 frames !");
+                    Logger.Log($"Receptor \"{skin.SkinInfo}\" has 0 frames !");
                     return;
 
                 case 1:
-                    textures[0] = skin.GetTexture("Receptor") ?? skin.GetTexture("Receptor0");
-                    Texture = textures[0];
+                    AddFrame(skin.GetTexture("Receptor") ?? skin.GetTexture("Receptor0"));
                     return;
 
                 default:
-                    // What is cracking my brochacho, if you're watching this diff right now
-                    // That means you've been selected for https://www.youtube.com/watch?v=dpXaBVKO8r8
-                    throw new System.NotImplementedException("Animations coming soon on Video and DVD");
+                    for (int x = 0; x < FrameCount; x++)
+                        AddFrame(skin.GetTexture("Receptor" + x));
+                    return;
             }
         }
     }
