@@ -37,7 +37,7 @@ namespace osu.Game.Rulesets.Cubed.Tests {
             AddToggleStep("Toggle manual input", e => inputManager.UseParentInput = e);
 
             // Add custom TextureStore for use in debug emotes
-            textures.AddTextureSource(new TextureLoaderStore(new NamespacedResourceStore<byte[]>(new DllResourceStore(GetType().Assembly), "Resources/Textures/Emotes")));
+            textures.AddTextureSource(new TextureLoaderStore(new NamespacedResourceStore<byte[]>(new DllResourceStore(typeof(TestSceneEmotes).Assembly), "Resources/Textures/Emotes")));
         }
 
         private void bindPanelToInputManager() {

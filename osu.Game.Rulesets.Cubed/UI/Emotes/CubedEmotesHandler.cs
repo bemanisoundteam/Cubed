@@ -19,7 +19,8 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
         [BackgroundDependencyLoader(permitNulls: true)]
         private void load(Player player, CubedInputManager manager) {
             if (manager == null)
-                throw new DependencyNotRegisteredException(this.GetType(), typeof(CubedInputManager));
+                throw new DependencyNotRegisteredException(typeof(CubedEmotesHandler), typeof(CubedInputManager));
+
             pressedActions = manager.KeyBindingContainer.PressedActions;
             if (player != null)
                 Enabled.BindTarget = player.IsBreakTime;
