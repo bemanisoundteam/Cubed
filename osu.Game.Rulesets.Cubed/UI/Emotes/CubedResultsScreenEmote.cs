@@ -1,4 +1,6 @@
 ﻿using osu.Framework.Allocation;
+using osu.Framework.Audio;
+using osu.Framework.Audio.Sample;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Cursor;
@@ -14,6 +16,9 @@ using System.Linq;
 namespace osu.Game.Rulesets.Cubed.UI.Emotes {
     public partial class CubedResultsScreenEmote : CompositeDrawable, IHasCustomTooltip<uint> {
         internal static readonly Dictionary<CubedEmoteLookup, Tuple<String, uint>> Messages = new();
+
+        private ISampleStore samples;
+
         private readonly FillFlowContainer container = new() {
             RelativeSizeAxes = Axes.Both,
             Direction = FillDirection.Vertical,
@@ -45,6 +50,13 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
             PickRandomEmote();
         }
 
+        protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) {
+            DependencyContainer deps = new (base.CreateChildDependencies(parent));
+            samples = deps.Get<AudioManager>().GetSampleStore(CubedRuleset.CreateNamespacedResourceStore("Samples"));
+            deps.CacheAs(samples);
+            return deps;
+        }
+
         public void PickRandomEmote() =>
             PickEmote(Messages.Keys.ElementAt(new Random().Next(0, Messages.Count)));
 
@@ -68,5 +80,11 @@ namespace osu.Game.Rulesets.Cubed.UI.Emotes {
         public ITooltip<uint> GetCustomTooltip() => new CubedPanelTooltip();
 
         public uint TooltipContent => CurrentTrigger;
+
+        protected override void Dispose(bool isDisposing) {
+            base.Dispose(isDisposing);
+
+            samples?.Dispose();
+        }
     }
 }
