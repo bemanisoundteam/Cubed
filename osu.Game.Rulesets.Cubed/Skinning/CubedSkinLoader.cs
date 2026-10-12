@@ -161,8 +161,7 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
 
                 return config.Type switch {
                     ImplementationType.Null => Drawable.Empty,
-                    ImplementationType.Texture => () => new SpriteReceptor(1),
-                    ImplementationType.Animation => () => new SpriteReceptor(config.FrameCount, config.Framerate),
+                    ImplementationType.Texture => () => new SpriteReceptor(),
                     _ => throw new Exception($"Cubed: Error with skin {skinName} ({skinNamespace}): Invalid Receptor Type")
                 };
             }
@@ -174,7 +173,6 @@ namespace osu.Game.Rulesets.Cubed.Skinning {
                 return config.Type switch {
                     ImplementationType.Null => () => new NullIndicator(),
                     ImplementationType.Texture => () => new SpriteIndicator(),
-                    // ImplementationType.Animation => TODO,
                     _ => throw new Exception($"Cubed: Error with skin {skinName} ({skinNamespace}): Invalid Indicator Type")
                 };
             }
