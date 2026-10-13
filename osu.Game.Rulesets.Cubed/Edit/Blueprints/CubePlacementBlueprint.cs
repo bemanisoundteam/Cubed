@@ -18,7 +18,7 @@ namespace osu.Game.Rulesets.Cubed.Edit.Blueprints {
         }
 
         [BackgroundDependencyLoader]
-        private void load() => InternalChild = new CubePlacementPiece();
+        private void load() => Child = new CubePlacementPiece();
 
         protected override bool OnMouseDown(MouseDownEvent e) {
             if (base.OnMouseDown(e) == false)
@@ -31,12 +31,13 @@ namespace osu.Game.Rulesets.Cubed.Edit.Blueprints {
         public override SnapResult UpdateTimeAndPosition(osuTK.Vector2 screenSpacePosition, double time) {
             SnapResult result = base.UpdateTimeAndPosition(screenSpacePosition, time);
 
-            InternalChild.Alpha = 0;
-            if (result.Playfield != null) {
-                InternalChild.Alpha = 1;
-                InternalChild.Size = result.Playfield.DrawSize;
-                InternalChild.Scale = result.Playfield.Scale;
-                InternalChild.Position = result.Playfield.ToSpaceOfOtherDrawable(result.Playfield.Position, this);
+            if (result.Playfield == null)
+                Child.Alpha = 0;
+            else {
+                Child.Alpha = 1;
+                Child.Size = result.Playfield.DrawSize;
+                Child.Scale = result.Playfield.Scale;
+                Child.Position = result.Playfield.ToSpaceOfOtherDrawable(result.Playfield.Position, this);
             }
 
             return result;
