@@ -1,8 +1,13 @@
-﻿using osu.Framework.Graphics;
+﻿using osu.Framework.Extensions;
+using osu.Framework.Graphics;
 using osu.Framework.Input.Bindings;
 using osu.Framework.IO.Stores;
+using osu.Framework.Localisation;
 using osu.Game.Beatmaps;
 using osu.Game.Configuration;
+using osu.Game.Graphics;
+using osu.Game.Localisation;
+using osu.Game.Localisation.Mania;
 using osu.Game.Overlays.Settings;
 using osu.Game.Rulesets.Configuration;
 using osu.Game.Rulesets.Cubed.Beatmaps;
@@ -131,7 +136,22 @@ namespace osu.Game.Rulesets.Cubed {
         ];
 
         public override IEnumerable<RulesetBeatmapAttribute> GetBeatmapAttributesForDisplay(IBeatmapInfo beatmapInfo, IReadOnlyCollection<Mod> mods) {
-            return [];
+            var osuColours = new OsuColour();
+            var hitWindows = new CubedHitWindows();
+
+            yield return new RulesetBeatmapAttribute(SongSelectStrings.Accuracy, "OD", -42, -42, -42) {
+                Description = ManiaRulesetStrings.AccuracyDescription,
+                AdditionalMetrics = [..
+                    hitWindows.GetAllAvailableWindows()
+                              .Reverse()
+                              .Select(window => new RulesetBeatmapAttribute.AdditionalMetric(
+                                  SongSelectStrings.HitResultWindow(window.result.GetDescription().ToUpperInvariant()),
+                                  LocalisableString.Interpolate($"±{hitWindows.WindowFor(window.result):0.##} ms"),
+                                  osuColours.ForHitResult(window.result)
+                              )
+                    )
+                ]
+            };
         }
 
         public static ResourceStore<byte[]> CreateNamespacedResourceStore(string ns) =>

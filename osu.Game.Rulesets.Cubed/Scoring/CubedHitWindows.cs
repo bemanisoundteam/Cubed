@@ -2,7 +2,7 @@ using osu.Game.Rulesets.Scoring;
 
 namespace osu.Game.Rulesets.Cubed.Scoring {
     public class CubedHitWindows : HitWindows {
-        public static bool HitResultAllowed(HitResult result) {
+        public override bool IsHitResultAllowed(HitResult result) {
             switch (result) {
                 case HitResult.Perfect:
                 case HitResult.Great:
@@ -13,8 +13,6 @@ namespace osu.Game.Rulesets.Cubed.Scoring {
             }
             return false;
         }
-
-        public override bool IsHitResultAllowed(HitResult result) => HitResultAllowed(result);
 
         public override void SetDifficulty(double difficulty) {  /* NO-OP */  }
 
