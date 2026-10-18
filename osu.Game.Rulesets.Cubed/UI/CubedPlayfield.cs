@@ -64,6 +64,8 @@ namespace osu.Game.Rulesets.Cubed.UI {
             AddInternal(emotes);
         }
 
+        public override bool ReceivePositionalInputAt(Vector2 screenSpacePos) => GetCell(screenSpacePos) != null;
+
         public CubedCell GetCell(Vector2 pos) {
             foreach (CubedCell[] c in Cells)
                 foreach (CubedCell cell in c)

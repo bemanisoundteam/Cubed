@@ -34,10 +34,7 @@ namespace osu.Game.Rulesets.Cubed.Edit.Blueprints {
         public override SnapResult UpdateTimeAndPosition(osuTK.Vector2 screenSpacePosition, double time) {
             SnapResult result = base.UpdateTimeAndPosition(screenSpacePosition, time);
 
-            if (result.Playfield == null)
-                Child.Alpha = 0;
-            else {
-                Child.Alpha = 1;
+            if (result.Playfield != null) {
                 Child.Size = result.Playfield.DrawSize;
                 Child.Scale = result.Playfield.Scale;
                 Child.Position = result.Playfield.ToSpaceOfOtherDrawable(result.Playfield.Position, this);
