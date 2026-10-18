@@ -5,10 +5,9 @@ using osu.Game.Rulesets.Cubed.UI;
 using osu.Game.Rulesets.Edit;
 using osu.Game.Rulesets.Objects;
 using osu.Game.Screens.Edit.Compose.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-
-// ReSharper disable PossibleInvalidCastExceptionInForeachLoop
 
 namespace osu.Game.Rulesets.Cubed.Edit {
     public partial class CubedSelectionHandler : EditorSelectionHandler {
@@ -19,39 +18,42 @@ namespace osu.Game.Rulesets.Cubed.Edit {
             playfield = (CubedPlayfield) composer.Playfield;
 
         protected override void OnSelectionChanged() {
-            SelectionBox.CanFlipX = canFlipX(SelectedItems);
-            SelectionBox.CanFlipY = canFlipY(SelectedItems);
+            SelectionBox.CanFlipX = canFlipX(SelectedItems.Cast<CubedHitObject>());
+            SelectionBox.CanFlipY = canFlipY(SelectedItems.Cast<CubedHitObject>());
         }
 
-        private static bool canFlipX(IReadOnlyList<HitObject> selected) => selected.Select(obj => ((CubedHitObject) obj).Column).Distinct().Count() > 1;
-        private static bool canFlipY(IReadOnlyList<HitObject> selected) => selected.Select(obj => ((CubedHitObject) obj).Row).Distinct().Count() > 1;
+        private static bool canFlipX(IEnumerable<CubedHitObject> selection) =>
+            selection.Select(obj => obj.Column).Distinct().Count() > 1;
+
+        private static bool canFlipY(IEnumerable<CubedHitObject> selection) =>
+            selection.Select(obj => obj.Row).Distinct().Count() > 1;
 
         public override bool HandleMovement(MoveSelectionEvent<HitObject> moveEvent) {
-            CubedHitObject BlueprintItem = (CubedHitObject) moveEvent.Blueprint.Item;
+            // We do not know where did the move start from, best we can do is to abuse ScreenSpaceSelectionPoint
             CubedCell cell = playfield.GetCell(moveEvent.Blueprint.ScreenSpaceSelectionPoint + moveEvent.ScreenSpaceDelta);
+
             if (cell == null)
                 return false;
 
-            int deltaCol = cell.Column - BlueprintItem.Column;
-            int deltaRow = cell.Row - BlueprintItem.Row;
+            var referenceObject = (CubedHitObject) moveEvent.Blueprint.Item;
+            CubedHitObject[] selectedObjects = [.. SelectedItems.Cast<CubedHitObject>()];
+
+            int deltaCol = int.Clamp(cell.Column - referenceObject.Column,
+                - selectedObjects.Min(obj => obj.Column),
+                3 - selectedObjects.Max(obj => obj.Column)
+            );
+            int deltaRow = int.Clamp(cell.Row - referenceObject.Row,
+                - selectedObjects.Min(obj => obj.Row),
+                3 - selectedObjects.Max(obj => obj.Row)
+            );
+
             if (deltaCol == 0 && deltaRow == 0)
                 return false;
 
-            deltaCol = System.Math.Clamp(deltaCol,
-                -SelectedItems.Min(obj => ((CubedHitObject) obj).Column),
-                3 - SelectedItems.Max(obj => ((CubedHitObject) obj).Column));
-            deltaRow = System.Math.Clamp(deltaRow,
-                -SelectedItems.Min(obj => ((CubedHitObject) obj).Row),
-                3 - SelectedItems.Max(obj => ((CubedHitObject) obj).Row));
-            if (deltaCol == 0 && deltaRow == 0)
-                return false;
-
-            foreach (CubedHitObject hitObject in SelectedItems) {
-                playfield.Remove(hitObject);
+            updateSelection(selectedObjects, hitObject => {
                 hitObject.Column += deltaCol;
                 hitObject.Row += deltaRow;
-                playfield.Add(hitObject);
-            }
+            });
 
             return true;
         }
@@ -60,39 +62,40 @@ namespace osu.Game.Rulesets.Cubed.Edit {
             if (SelectedItems.Count == 0)
                 return false;
 
-            switch (direction) {
-                case Direction.Horizontal:
-                    if (canFlipX(SelectedItems) == false)
-                        return false;
+            CubedHitObject[] selectedObjects = [.. SelectedItems.Cast<CubedHitObject>()];
 
-                    int minCol = flipOverOrigin ? 0 : SelectedItems.Min(obj => ((CubedHitObject) obj).Column);
-                    int maxCol = flipOverOrigin ? 3 : SelectedItems.Max(obj => ((CubedHitObject) obj).Column);
+            if (direction == Direction.Horizontal) {
+                if (!canFlipX(selectedObjects))
+                    return false;
 
-                    foreach (CubedHitObject hitObject in SelectedItems) {
-                        playfield.Remove(hitObject);
-                        hitObject.Column = minCol + (maxCol - hitObject.Column);
-                        playfield.Add(hitObject);
-                    }
+                int minCol = flipOverOrigin ? 0 : selectedObjects.Min(obj => obj.Column);
+                int maxCol = flipOverOrigin ? 3 : selectedObjects.Max(obj => obj.Column);
 
-                    break;
+                updateSelection(selectedObjects, hitObject =>
+                    hitObject.Column = minCol + (maxCol - hitObject.Column)
+                );
+            }
+            else if (direction == Direction.Vertical) {
+                if (!canFlipY(selectedObjects))
+                    return false;
 
-                case Direction.Vertical:
-                    if (canFlipY(SelectedItems) == false)
-                        return false;
+                int minRow = flipOverOrigin ? 0 : selectedObjects.Min(obj => obj.Row);
+                int maxRow = flipOverOrigin ? 3 : selectedObjects.Max(obj => obj.Row);
 
-                    int minRow = flipOverOrigin ? 0 : SelectedItems.Min(obj => ((CubedHitObject) obj).Row);
-                    int maxRow = flipOverOrigin ? 3 : SelectedItems.Max(obj => ((CubedHitObject) obj).Row);
-
-                    foreach (CubedHitObject hitObject in SelectedItems) {
-                        playfield.Remove(hitObject);
-                        hitObject.Row = minRow + (maxRow - hitObject.Row);
-                        playfield.Add(hitObject);
-                    }
-
-                    break;
+                updateSelection(selectedObjects, hitObject =>
+                    hitObject.Row = minRow + (maxRow - hitObject.Row)
+                );
             }
 
             return true;
+        }
+
+        private void updateSelection(CubedHitObject[] selectedObjects, Action<CubedHitObject> updateObject) {
+            foreach (CubedHitObject hitObject in selectedObjects) {
+                playfield.Remove(hitObject);
+                updateObject(hitObject);
+                playfield.Add(hitObject);
+            }
         }
     }
 }

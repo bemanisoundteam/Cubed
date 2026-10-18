@@ -20,11 +20,11 @@ namespace osu.Game.Rulesets.Cubed.Edit {
         public override Bindable<TernaryState> SelectionNewComboState => null;
 
         protected override DrawableRuleset<CubedHitObject> CreateDrawableRuleset(Ruleset ruleset, IBeatmap beatmap, IReadOnlyList<Mod> mods)
-            => new DrawableCubedRuleset((CubedRuleset) ruleset, beatmap, mods, true);
+            => new DrawableCubedRuleset((CubedRuleset) ruleset, beatmap, mods, isEditor: true);
 
         protected override ComposeBlueprintContainer CreateBlueprintContainer() => new CubedBlueprintContainer(this);
 
         protected override Playfield PlayfieldAtScreenSpacePosition(Vector2 screenSpacePosition) =>
-            (DrawableRuleset.Playfield as CubedPlayfield)!.GetCell(screenSpacePosition);
+            ((CubedPlayfield) DrawableRuleset.Playfield).GetCell(screenSpacePosition);
     }
 }

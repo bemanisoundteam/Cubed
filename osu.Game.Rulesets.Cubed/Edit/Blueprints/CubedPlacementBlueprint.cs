@@ -7,18 +7,21 @@ using osuTK.Input;
 
 namespace osu.Game.Rulesets.Cubed.Edit.Blueprints {
     public abstract partial class CubedPlacementBlueprint(CubedHitObject hitObject) : HitObjectPlacementBlueprint(hitObject) {
-        [Resolved]
-        private HitObjectComposer composer { get; set; }
-        private CubedPlayfield playfield => (CubedPlayfield) composer.Playfield;
+        private CubedPlayfield playfield;
 
-        private CubedCell cell;
+        [BackgroundDependencyLoader]
+        private void load(HitObjectComposer composer) =>
+            playfield = (CubedPlayfield) composer.Playfield;
+
         protected CubedCell Cell {
-            get => cell;
+            get;
             set {
-                if (value == cell) return;
+                if (value == field)
+                    return;
 
-                cell = value;
-                ((CubedHitObject) HitObject).Action = cell.Action;
+                field = value;
+                if (field != null)
+                    hitObject.Action = field.Action;
             }
         }
 
@@ -32,12 +35,12 @@ namespace osu.Game.Rulesets.Cubed.Edit.Blueprints {
 
         public override SnapResult UpdateTimeAndPosition(osuTK.Vector2 screenSpacePosition, double time) {
             base.UpdateTimeAndPosition(screenSpacePosition, time);
-            SnapResult result = new (screenSpacePosition, time, playfield.GetCell(screenSpacePosition));
+            var targetCell = playfield.GetCell(screenSpacePosition);
 
-            if (result.Playfield is CubedCell targetCell && PlacementActive == PlacementState.Waiting)
+            if (PlacementActive == PlacementState.Waiting)
                 Cell = targetCell;
 
-            return result;
+            return new SnapResult(screenSpacePosition, time, targetCell);
         }
     }
 }

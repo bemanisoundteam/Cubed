@@ -17,9 +17,9 @@ using osu.Game.Skinning;
 using System.Collections.Generic;
 
 namespace osu.Game.Rulesets.Cubed.UI {
-    public partial class DrawableCubedRuleset(CubedRuleset ruleset, IBeatmap beatmap, IReadOnlyList<Mod> mods = null, bool editor = false)
+    public partial class DrawableCubedRuleset(CubedRuleset ruleset, IBeatmap beatmap, IReadOnlyList<Mod> mods = null, bool isEditor = false)
         : DrawableRuleset<CubedHitObject>(ruleset, beatmap, mods) {
-        protected override Playfield CreatePlayfield() => new CubedPlayfield { isEditor = editor };
+        protected override Playfield CreatePlayfield() => new CubedPlayfield(isEditor);
 
         public override PlayfieldAdjustmentContainer CreatePlayfieldAdjustmentContainer() => new CubedPlayfieldAdjustmentContainer();
 

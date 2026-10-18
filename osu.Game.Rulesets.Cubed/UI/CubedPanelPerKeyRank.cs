@@ -22,9 +22,13 @@ namespace osu.Game.Rulesets.Cubed.UI {
                     scoreProcessors[i].Mods.Value = scoreInfo.Mods;
             }
 
-            foreach (HitEvent e in hitEvents)
-                scoreProcessors[(int) (e.HitObject as CubedHitObject)!.Action].ApplyResult(
-                    new(e.HitObject, e.HitObject.CreateJudgement()) { Type = e.Result });
+            foreach (HitEvent e in hitEvents) {
+                CubedHitObject hitObject = (CubedHitObject) e.HitObject;
+
+                scoreProcessors[(int) hitObject.Action].ApplyResult(
+                    new (hitObject, hitObject.Judgement) { Type = e.Result }
+                );
+            }
 
             this.scoreInfo = scoreInfo;
         }

@@ -10,18 +10,21 @@ using osu.Game.Skinning;
 namespace osu.Game.Rulesets.Cubed.Edit.Blueprints {
     public partial class CubePlacementBlueprint() : CubedPlacementBlueprint(new Cube()) {
         protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) {
-            DependencyContainer dependencies = new (base.CreateChildDependencies(parent));
-            IReadOnlyDependencyContainer playfieldDependencies = dependencies.Get<Playfield>().Dependencies;
+            var dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
+            var playfieldDependencies = dependencies.Get<Playfield>().Dependencies;
+
             dependencies.CacheAs(playfieldDependencies.Get<ISkinSource>());
             dependencies.CacheAs(playfieldDependencies.Get<ICellGlowSkin>());
+
             return dependencies;
         }
 
         [BackgroundDependencyLoader]
-        private void load() => Child = new CubePlacementPiece();
+        private void load() =>
+            Child = new CubePlacementPiece();
 
         protected override bool OnMouseDown(MouseDownEvent e) {
-            if (base.OnMouseDown(e) == false)
+            if (!base.OnMouseDown(e))
                 return false;
 
             EndPlacement(true);
