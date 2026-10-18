@@ -3,6 +3,7 @@ using osu.Framework.Input.Events;
 using osu.Game.Rulesets.Cubed.Objects;
 using osu.Game.Rulesets.Cubed.UI;
 using osu.Game.Rulesets.Edit;
+using osu.Game.Rulesets.Objects;
 using osuTK.Input;
 
 namespace osu.Game.Rulesets.Cubed.Edit.Blueprints {
@@ -32,6 +33,9 @@ namespace osu.Game.Rulesets.Cubed.Edit.Blueprints {
             BeginPlacement(true);
             return true;
         }
+
+        public override bool ReplacesExistingObject(HitObject existing) =>
+            base.ReplacesExistingObject(existing) && hitObject.Action == ((CubedHitObject) existing).Action;
 
         public override SnapResult UpdateTimeAndPosition(osuTK.Vector2 screenSpacePosition, double time) {
             base.UpdateTimeAndPosition(screenSpacePosition, time);
