@@ -1,14 +1,29 @@
 ﻿using osu.Framework.Allocation;
 using osu.Framework.Input.Events;
 using osu.Game.Rulesets.Cubed.Objects;
+using osu.Game.Rulesets.Cubed.Skinning.CellGlows;
+using osu.Game.Rulesets.Cubed.Skinning.Gameplay;
 using osu.Game.Rulesets.Cubed.UI;
 using osu.Game.Rulesets.Edit;
 using osu.Game.Rulesets.Objects;
+using osu.Game.Rulesets.UI;
+using osu.Game.Skinning;
 using osuTK.Input;
 
 namespace osu.Game.Rulesets.Cubed.Edit.Blueprints {
     public abstract partial class CubedPlacementBlueprint(CubedHitObject hitObject) : HitObjectPlacementBlueprint(hitObject) {
         private CubedPlayfield playfield;
+
+        protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) {
+            var dependencies = new DependencyContainer(base.CreateChildDependencies(parent));
+            var playfieldDependencies = dependencies.Get<Playfield>().Dependencies;
+
+            dependencies.CacheAs(playfieldDependencies.Get<ISkinSource>());
+            dependencies.CacheAs(playfieldDependencies.Get<ICubedGameplaySkin>());
+            dependencies.CacheAs(playfieldDependencies.Get<ICellGlowSkin>());
+
+            return dependencies;
+        }
 
         [BackgroundDependencyLoader]
         private void load(HitObjectComposer composer) =>
