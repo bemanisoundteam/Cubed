@@ -5,7 +5,7 @@ using osu.Game.Rulesets.Cubed.Objects;
 using osu.Game.Rulesets.Edit;
 
 namespace osu.Game.Rulesets.Cubed.Edit.Blueprints {
-    public partial class CubePlacementBlueprint() : CubedPlacementBlueprint(new Cube()) {
+    public partial class CubePlacementBlueprint() : CubedPlacementBlueprint<Cube>(new Cube()) {
         [BackgroundDependencyLoader]
         private void load() =>
             Child = new CubePlacementPiece();

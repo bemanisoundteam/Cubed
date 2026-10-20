@@ -11,7 +11,11 @@ using osu.Game.Skinning;
 using osuTK.Input;
 
 namespace osu.Game.Rulesets.Cubed.Edit.Blueprints {
-    public abstract partial class CubedPlacementBlueprint(CubedHitObject hitObject) : HitObjectPlacementBlueprint(hitObject) {
+    public abstract partial class CubedPlacementBlueprint<T>(T hitObject) : HitObjectPlacementBlueprint(hitObject)
+        where T : CubedHitObject
+    {
+        protected new T HitObject => hitObject;
+
         private CubedPlayfield playfield;
 
         protected override IReadOnlyDependencyContainer CreateChildDependencies(IReadOnlyDependencyContainer parent) {
@@ -50,7 +54,7 @@ namespace osu.Game.Rulesets.Cubed.Edit.Blueprints {
         }
 
         public override bool ReplacesExistingObject(HitObject existing) =>
-            base.ReplacesExistingObject(existing) && hitObject.Action == ((CubedHitObject) existing).Action;
+            base.ReplacesExistingObject(existing) && HitObject.Action == ((CubedHitObject) existing).Action;
 
         public override SnapResult UpdateTimeAndPosition(osuTK.Vector2 screenSpacePosition, double time) {
             base.UpdateTimeAndPosition(screenSpacePosition, time);
