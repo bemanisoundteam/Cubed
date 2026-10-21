@@ -12,6 +12,7 @@ namespace osu.Game.Rulesets.Cubed.Edit {
     public partial class CubedBlueprintContainer(HitObjectComposer composer) : ComposeBlueprintContainer(composer) {
         public override HitObjectSelectionBlueprint CreateHitObjectBlueprintFor(HitObject hitObject) => hitObject switch {
             Cube cube => new CubeSelectionBlueprint(cube),
+            CubedHoldNote hold => new HoldSelectionBlueprint(hold),
             _ => base.CreateHitObjectBlueprintFor(hitObject)
         };
 

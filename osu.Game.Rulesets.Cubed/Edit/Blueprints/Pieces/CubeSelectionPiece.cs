@@ -9,9 +9,11 @@ namespace osu.Game.Rulesets.Cubed.Edit.Blueprints.Pieces {
     public partial class CubeSelectionPiece : Container {
         [BackgroundDependencyLoader]
         private void load(OsuColour colors) {
+            RelativeSizeAxes = Axes.Both;
+            RelativePositionAxes = Axes.Both;
+
             Anchor = Anchor.Centre;
             Origin = Anchor.Centre;
-            RelativeSizeAxes = Axes.Both;
 
             Child = new Box {
                 RelativeSizeAxes = Axes.Both,
