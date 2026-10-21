@@ -35,13 +35,23 @@ namespace osu.Game.Rulesets.Cubed.Edit.Blueprints {
 
         protected CubedCell Cell {
             get;
-            set {
+            private set {
                 if (value == field)
                     return;
 
                 field = value;
                 if (field != null)
-                    hitObject.Action = field.Action;
+                    ApplyCell(value);
+            }
+        }
+
+        private void ApplyCell(CubedCell cell) {
+            HitObject.Action = cell.Action;
+
+            foreach (var child in Children) {
+                child.Size = cell.DrawSize;
+                child.Scale = cell.Scale;
+                child.Position = cell.ToSpaceOfOtherDrawable(cell.Position, this);
             }
         }
 
