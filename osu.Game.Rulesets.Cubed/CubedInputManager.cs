@@ -27,6 +27,11 @@ namespace osu.Game.Rulesets.Cubed {
         [Description("13 - Row 4, Column 1")] X0Y3,
         [Description("14 - Row 4, Column 2")] X1Y3,
         [Description("15 - Row 4, Column 3")] X2Y3,
-        [Description("16 - Row 4, Column 4")] X3Y3
+        [Description("16 - Row 4, Column 4")] X3Y3,
+
+        [Description("Cube")]
+        EditorCubeTool = 1116,
+        [Description("Hold")]
+        EditorHoldTool
     }
 }

@@ -5,7 +5,11 @@ using osu.Game.Rulesets.Edit;
 using osu.Game.Rulesets.Edit.Tools;
 
 namespace osu.Game.Rulesets.Cubed.Edit {
-    public class HoldCompositionTool() : CompositionTool<CubedAction>("Hold") {
+    public class HoldCompositionTool : CompositionTool<CubedAction> {
+        public HoldCompositionTool() : base("Hold") {
+            Action = CubedAction.EditorHoldTool;
+        }
+
         public override Drawable CreateIcon() => new BeatmapStatisticIcon(BeatmapStatisticsIconType.Sliders);
 
         public override PlacementBlueprint CreatePlacementBlueprint() => new HoldPlacementBlueprint();
