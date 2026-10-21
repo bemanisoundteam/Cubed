@@ -15,6 +15,7 @@ namespace osu.Game.Rulesets.Cubed.Edit {
     public partial class CubedHitObjectComposer(Ruleset ruleset) : HitObjectComposer<CubedHitObject, CubedAction>(ruleset) {
         protected override IReadOnlyList<CompositionTool<CubedAction>> CompositionTools => [
             new CubeCompositionTool(),
+            new HoldCompositionTool()
         ];
 
         public override Bindable<TernaryState> SelectionNewComboState => null;
